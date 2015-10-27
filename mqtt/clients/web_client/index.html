@@ -1,0 +1,121 @@
+<html>
+
+<head>
+<title>MQTT Client</title>
+
+<script type="text/javascript" src="./mqttws31.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+
+<script>
+var client, connect, options, update_client, publish, subscribe;
+
+$(document).ready(function(){
+
+	update_client = function(host, port, id_client){
+		 //Using the HiveMQ public Broker, with a random client Id
+		 client = new Paho.MQTT.Client($('#host').val(), parseInt($('#port').val()), $('#username').val());
+
+		 //Gets  called if the websocket/mqtt connection gets disconnected for any reason
+		 client.onConnectionLost = function (responseObject) {
+			 //Depending on your scenario you could implement a reconnect logic here
+			 alert("connection lost: " + responseObject.errorMessage);
+		 };
+
+		 //Gets called whenever you receive a message for your subscriptions
+		 client.onMessageArrived = function (message) {
+			 //Do something with the push message you received
+			 $('#messages').append('<span>Topic: ' + message.destinationName + '  | ' + message.payloadString + '</span><br/>');
+		 };
+	};
+
+	update_client($('#host').val(), $('#port').val(), $('#username').val());
+	
+	 //Connect Options
+	 options = {
+		 userName: $('#username').val(),
+		 password: $('#password').val(),
+		 timeout: 3,
+		 //Gets Called if the connection has sucessfully been established
+		 onSuccess: function () {
+			 alert("Connected");
+		 },
+		 //Gets Called if the connection could not be established
+		 onFailure: function (message) {
+			 alert("Connection failed: " + message.errorMessage);
+		 }
+	 };
+
+	 // Connect function
+	 connect = function(){
+		options.userName = $('#username').val();
+		options.password = $('#password').val();
+		update_client($('#host').val(), $('#port').val(), $('#username').val());
+		client.connect(options);
+	 }
+	 
+	 //Creates a new Paho.MQTT.Message Object and sends it to the HiveMQ MQTT Broker
+	 publish = function (payload, topic, qos) {
+		 //Send your message (also possible to serialize it as JSON or protobuf or just use a string, no limitations)
+		 var message = new Paho.MQTT.Message(payload);
+		 message.destinationName = topic;
+		 message.qos = qos;
+		 client.send(message);
+		 console.log("Inviato: "+message);
+	 }
+	
+	 // Subscribe function
+	 subscribe = function(){
+	 	var subscribeOptions = {
+			qos: parseInt($('#qos').val()),
+			onSuccess: function(){
+				alert('Subscribed!');
+				console.log("Subscribed to: "+$('#topic').val());
+			},
+			onFailure: function(response){
+				alert('error: '+ response.errorCode);
+			}
+		};
+
+		client.subscribe($('#topic').val(), subscribeOptions);
+		
+
+	 }
+
+	 
+	 });
+
+
+</script>
+
+</head>
+
+<body>
+
+<h1>MQTT Web Client</h1>
+
+<hr/>
+Username: <input type="text" id="username" placeholder="Username" />
+<br/>
+Password: <input type="text" id="password" placeholder="Password" />
+<br/>
+Host: <input type="text" id="host" value="192.168.1.6" placeholder="host" /> - Port: <input type="number" id="port" placeholder="port" value="3000" />
+<br/>
+Topic: <input type="text" id="topic" placeholder="topic" /> - qos: <input type="number" id="qos" placeholder="qos" value="0" />
+<br/>
+Messaggio: <input type="text" id="message" placeholder="Data..." />
+<br/>
+<br/>
+
+	<button onclick="connect()">1. Connect</button>
+	<button onclick="subscribe()">2. Subscribe</button>
+	<button onclick="publish($('#message').val(),$('#topic').val(),parseInt($('#qos').val()));">3. Publish</button>
+	<button onclick="client.disconnect();">(4. Disconnect)</button>
+	<div id="messages"></div>
+	
+	
+	
+</body>
+
+
+
+</html>

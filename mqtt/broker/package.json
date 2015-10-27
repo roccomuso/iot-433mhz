@@ -1,0 +1,15 @@
+{
+  "name": "rpi-broker",
+  "version": "1.0.0",
+  "description": "mqtt broker for RPi",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Rocco Musolino",
+  "license": "ISC",
+  "dependencies": {
+    "mosca": "^0.32.1",
+    "mqtt": "^1.4.3"
+  }
+}

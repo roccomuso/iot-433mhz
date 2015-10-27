@@ -1,0 +1,2 @@
+Tue Jul 21 2015 19:26:23 GMT+0200 (ora legale Europa occidentale) - Motion detected - board: legolas pir: ON
+Tue Jul 21 2015 19:26:52 GMT+0200 (ora legale Europa occidentale) - Motion detected - board: minitron pir: ON

@@ -1,0 +1,43 @@
+La gerarchia dei topics è così definita:
+
+sensors/COMPUTER_NAME/temperature
+sensors/COMPUTER_NAME/
+
+Una sottoiscrizione può comprendere dei caratteri jolly (wildcards), in questo caso,
+un'unica sottoiscrizione ingloberà più topic!
+
+sensors/+/temperature
+
+
+--------
+
+Ogni board ha la propria room, e delle stanze in comune:
+
+
+# 		<-- Tutti i topic esistenti
+
+esp8266/minitron
+esp8266/legolas
+esp8266/frankestein
+
+PC è sottoscritto alle seguenti stanze:
+
+pc/comandi
+
+e pubblica informazioni d'uso comune nelle stanze:
+
+pc/status  ({acceso: 1, spento: 0})
+
+
+place/house/room
+
+graveyard/   <-- topic dove si lasciano i messaggi di morte.
+
+(interessante, il fatto che due sensori possono reciprocamente sottoscriversi al topic 'cimitero' e se uno dei due muore, l'altro prende il posto del morto)
+
+- App Android (fa da client), si connette al broker e si registra a vari topic,
+in questo modo può aggiornare le varie icone dell'app (widget).
+
+- Prima dell'app android magari è meglio realizzare una web interface, che comunica direttamente con il Broker MQTT e sull'interfaccia web aggiorna gli stati (temperatura, icone etc..) e da la possibilità di mandare comandi (alle room).
+
+

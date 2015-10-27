@@ -1,0 +1,14 @@
+{
+  "name": "pc",
+  "version": "1.0.0",
+  "description": "mqtt client for PC",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Rocco Musolino",
+  "license": "ISC",
+  "dependencies": {
+    "mqtt": "^1.4.3"
+  }
+}
