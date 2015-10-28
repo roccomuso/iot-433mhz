@@ -24,7 +24,7 @@ $(document).ready(function(){
 		 //Gets called whenever you receive a message for your subscriptions
 		 client.onMessageArrived = function (message) {
 			 //Do something with the push message you received
-			 $('#messages').append('<span>Topic: ' + message.destinationName + '  | ' + message.payloadString + '</span><br/>');
+			 $('#messages').prepend('<span>Topic: ' + message.destinationName + '  | ' + message.payloadString + '</span><br/>');
 		 };
 	};
 

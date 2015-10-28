@@ -14,29 +14,28 @@
 // Connect a 10K resistor from pin 2 (data) to pin 1 (power) of the sensor
 
 // Initialize DHT sensor.
-// Note that older versions of this library took an optional third parameter to
-// tweak the timings for faster processors.  This parameter is no longer needed
-// as the current DHT reading algorithm adjusts itself to work on faster procs.
+
 DHT dht(DHTPIN, DHTTYPE);
 
 // Wifi credentials and MQTT broker
 const char* ssid = "Vodafone-PensioneDiVece";
 const char* password = "dodide1333912";
-const char* mqtt_server = "iot.eclipse.org";
+const char* mqtt_server = "broker.hivemq.com";
+int mqtt_port = 1883;
 const char* BrokerUsername = "...";
 const char* BrokerPassword = "...";
 
 WiFiClient espClient;
 PubSubClient client(espClient);
 long lastMsg = 0;
-char msg[50];
+char msg[128];
 
 
 void setup() {
   pinMode(BUILTIN_LED, OUTPUT);     // Initialize the BUILTIN_LED pin as an output
   Serial.begin(115200);
   setup_wifi();
-  client.setServer(mqtt_server, 1883);
+  client.setServer(mqtt_server, mqtt_port);
   client.setCallback(callback);
   
   dht.begin();
@@ -104,9 +103,13 @@ void reconnect() {
   }
 }
 
+
+char hum[10];
+char temp[10];
+    
 void loop() {
   // Wait a few seconds between measurements.
-  delay(2000);
+  delay(5000);
 
   
   // Reading temperature or humidity takes about 250 milliseconds!
@@ -115,18 +118,18 @@ void loop() {
   // Read temperature as Celsius (the default)
   float t = dht.readTemperature();
   // Read temperature as Fahrenheit (isFahrenheit = true)
-  float f = dht.readTemperature(true);
+  //float f = dht.readTemperature(true);
 
   // Check if any reads failed and exit early (to try again).
-  if (isnan(h) || isnan(t) || isnan(f)) {
+  if (isnan(h) || isnan(t)) { // || isnan(f)
     Serial.println("Failed to read from DHT sensor!");
     return;
-  }
+  }else{
+    // Convert to String the values to be sent with mqtt
+        dtostrf(h,4,2,hum);
+        dtostrf(t,4,2,temp);
+   }
 
-  // Compute heat index in Fahrenheit (the default)
-  float hif = dht.computeHeatIndex(f, h);
-  // Compute heat index in Celsius (isFahreheit = false)
-  float hic = dht.computeHeatIndex(t, h, false);
 
 // START MQTT
   if (!client.connected()) {
@@ -135,10 +138,11 @@ void loop() {
   client.loop();
 
   long now = millis();
-  if (now - lastMsg > 2000) {
+  if (now - lastMsg > 5000) { // se son trascorsi più di 5 secondi
     lastMsg = now;
-    
-    snprintf (msg, 75, "{\"humidity\": %f, \"temp_celsius\": %f, \"temp_fahren\": %f, \"heat_index_c\" : %f }", h, t, f, hic); // buffer, max. numero di caratteri, testo
+
+    // NB. msg e' definito come un array di 128 caratteri. Aumentare se necessario.
+    sprintf (msg, "{\"humidity\": %s, \"temp_celsius\": %s }", hum, temp); // message formatting
     Serial.print("Publish message: ");
     Serial.println(msg);
     client.publish("esp8266/temperature", msg, true); // retained message
@@ -151,11 +155,7 @@ void loop() {
   Serial.print("Temperature: ");
   Serial.print(t);
   Serial.print(" *C ");
-  Serial.print(f);
-  Serial.print(" *F\t");
-  Serial.print("Heat index: ");
-  Serial.print(hic);
-  Serial.print(" *C ");
-  Serial.print(hif);
-  Serial.println(" *F");
+  //Serial.print(f);
+  //Serial.print(" *F\t");
+
 }
