@@ -108,10 +108,20 @@ char hum[10];
 char temp[10];
     
 void loop() {
-  // Wait a few seconds between measurements.
-  delay(5000);
+  // Wait a bit between measurements.
+  delay(500);
 
-  
+
+// START MQTT
+  if (!client.connected()) {
+    reconnect();
+  }
+  client.loop();
+
+  long now = millis();
+  if (now - lastMsg > 5000) { // se son trascorsi più di 5 secondi, lettura temperatura e invio mqtt
+    lastMsg = now;
+
   // Reading temperature or humidity takes about 250 milliseconds!
   // Sensor readings may also be up to 2 seconds 'old' (its a very slow sensor)
   float h = dht.readHumidity();
@@ -129,33 +139,17 @@ void loop() {
         dtostrf(h,4,2,hum);
         dtostrf(t,4,2,temp);
    }
-
-
-// START MQTT
-  if (!client.connected()) {
-    reconnect();
-  }
-  client.loop();
-
-  long now = millis();
-  if (now - lastMsg > 5000) { // se son trascorsi più di 5 secondi
-    lastMsg = now;
-
+   
     // NB. msg e' definito come un array di 128 caratteri. Aumentare se necessario.
     sprintf (msg, "{\"humidity\": %s, \"temp_celsius\": %s }", hum, temp); // message formatting
     Serial.print("Publish message: ");
     Serial.println(msg);
     client.publish("esp8266/temperature", msg, true); // retained message
+  
+
   }
 // END MQTT
 
-  Serial.print("Humidity: ");
-  Serial.print(h);
-  Serial.print(" %\t");
-  Serial.print("Temperature: ");
-  Serial.print(t);
-  Serial.print(" *C ");
-  //Serial.print(f);
-  //Serial.print(" *F\t");
+
 
 }
