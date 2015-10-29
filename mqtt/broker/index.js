@@ -24,6 +24,7 @@ var server = new mosca.Server(settings);
 var db = new mosca.persistence.LevelUp({ path: "./db_levelup" }); // DB storing retained messages
 db.wire(server);
 
+var auth_required = auth.credentials.auth_required; // se true necessario LOGGARSI
 
 // fired when a client connects
 server.on('clientConnected', function(client) {
@@ -72,9 +73,11 @@ server.on('ready', setup);
 // fired when the mqtt server is ready
 function setup() {
 	// colleghiamo le funzioni d'autenticazione e autorizzazione a Mosca
-	server.authenticate = auth.authenticate;
-	server.authorizePublish = auth.authorizePublish;
-	server.authorizeSubscribe = auth.authorizeSubscribe;
+	if (auth_required){
+		server.authenticate = auth.authenticate;
+		server.authorizePublish = auth.authorizePublish;
+		server.authorizeSubscribe = auth.authorizeSubscribe;
+	}
 	// ready
 	console.log('Mosca MQTT server is up and running');
 }
