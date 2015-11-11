@@ -20,20 +20,40 @@ esp8266/minitron
 esp8266/legolas
 esp8266/frankestein
 
-PC è sottoscritto alle seguenti stanze:
+Client PC sottoscritti alle seguenti stanze:
 
-pc/comandi
+pc/xps/comandi
+pc/wendy/comandi
 
 e pubblica informazioni d'uso comune nelle stanze:
 
-pc/status  ({acceso: 1, spento: 0})
+pc/xps/status  ({acceso: 1, spento: 0})
 
 
 place/house/room
 
-graveyard/   <-- topic dove si lasciano i messaggi di morte.
 
-(interessante, il fatto che due sensori possono reciprocamente sottoscriversi al topic 'cimitero' e se uno dei due muore, l'altro prende il posto del morto)
+
+Il broker inva un messaggio Retained alla connessione di nuovi client o alla disconnessione di un client, con informazioni su di essi, su un topic:
+
+newsfeed/  <-- topic dove il broker annuncia periodicamente vecchi e nuovi client connessi (solo il broker puo' pubblicarci su).
+
+graveyard/   <-- topic dove si lasciano i messaggi di testamento. (chiunque puo' pubblicarci su).
+
+
+Il broker, ogni connessione/disconnessione, pubblica sul topic newsfeed/ la lista di device attualmente connessi e le informazioni ad essi associate.
+
+Ex. di un msg sul newsfeed da parte del Broker:
+
+{
+	"minitron": {"board_name": "minitron", "local_ip": "192.168.1.112", "active": true, "last_contact": "2015-11-10 02:11:45", "type": "actuator"},
+	"frankestein": {"board_name": "frankestein", "local_ip": "192.168.1.113", "active": true, "last_contact": "2015-11-10 22:10:30", "type": "sensor"},
+	"<RandomID>": {},
+}
+
+NB. E' da considerare attentamente le informazioni che una board invia al Broker. Le board basate su ESP8266 con firmware Arduino hanno un limite sulla dimensione dei dati che è possibile mandare.
+
+
 
 - App Android (fa da client), si connette al broker e si registra a vari topic,
 in questo modo può aggiornare le varie icone dell'app (widget).
