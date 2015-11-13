@@ -13,7 +13,7 @@ $(document).ready(function(){
 
 	update_client = function(host, port, id_client){
 		 //Using the HiveMQ public Broker, with a random client Id
-		 client = new Paho.MQTT.Client($('#host').val(), parseInt($('#port').val()), $('#username').val());
+		 client = new Paho.MQTT.Client(host, parseInt(port), id_client);
 
 		 //Gets  called if the websocket/mqtt connection gets disconnected for any reason
 		 client.onConnectionLost = function (responseObject) {
@@ -35,11 +35,11 @@ $(document).ready(function(){
 		 userName: $('#username').val(),
 		 password: $('#password').val(),
 		 timeout: 3,
-		 //Gets Called if the connection has sucessfully been established
+		 // Gets Called if the connection has sucessfully been established
 		 onSuccess: function () {
 			 alert("Connected");
 		 },
-		 //Gets Called if the connection could not be established
+		 // Gets Called if the connection could not be established
 		 onFailure: function (message) {
 			 alert("Connection failed: " + message.errorMessage);
 		 }
