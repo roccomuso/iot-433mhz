@@ -79,7 +79,8 @@ function setup() {
 		server.authorizeSubscribe = auth.authorizeSubscribe;
 	}
 	// ready
-	console.log('Mosca MQTT server is up and running');
+	console.log('- Mosca MQTT server is up and running on port:', settings.port);
+	console.log('- WebSocket server on port:', settings.http.port);
 }
 
 
