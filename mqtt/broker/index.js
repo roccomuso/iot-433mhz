@@ -21,7 +21,7 @@ var regular_topics = ['test/topic', 'test', 'iot', 'mosquitto', 'all']; // TOPIC
 
 var server = new mosca.Server(settings);
 
-var db = new mosca.persistence.LevelUp({ path: "./db_levelup" }); // DB storing retained messages
+var db = new mosca.persistence.LevelUp({ path: './db_levelup' }); // DB storing retained messages
 db.wire(server);
 
 var auth_required = auth.credentials.auth_required; // se true necessario LOGGARSI
@@ -40,11 +40,11 @@ server.on('clientDisconnected', function(client) {
 server.on('published', function(packet, client) {
 	
 	if (regular_topics.indexOf(packet.topic) > -1){
-		console.log("topic regolare."); // se il topic e' presente in regular_topics
+		console.log('topic regolare.'); // se il topic e' presente in regular_topics
 	}
-	if (packet.topic.indexOf("$SYS") == -1){ // non stampiamo i messaggi 'di sistema'
+	if (packet.topic.indexOf('$SYS') == -1){ // non stampiamo i messaggi 'di sistema'
 		console.log('Published - Messaggio:\n', packet); // packet.payload.toString('utf8')
-		if (client != null)
+		if (client !== null)
 			console.log('Client:', client.id);
 	}
 	
