@@ -20,9 +20,10 @@ int mqtt_port = 1883;
 const char* clientUsername = "minitron";
 const char* clientPassword = "ciao123456";
 const char* handshakeTopic = "dashboard/handshake/";
-// TODO: specificare willTopic e willMessage secondo il protocollo implementato
-const char* willTopic = "...";
-const char* willMessage = "...";
+const char* willTopic = "graveyard/";
+const char* willMessage = clientUsername;
+// vars
+char currentIp[24];
 WiFiClient espClient;
 PubSubClient client(espClient);
 long lastMsg = 0;
@@ -64,6 +65,8 @@ void setup() {
 
   // if you get here you have connected to the WiFi
   Serial.println("connected!");
+  IPAddress myIp = WiFi.localIP(); // NB. not from WiFiManager lib
+  sprintf(currentIp, "%d.%d.%d.%d", myIp[0], myIp[1], myIp[2], myIp[3]);
 
   client.setServer(mqtt_server, mqtt_port);
   client.setCallback(message_arrived);
@@ -74,8 +77,16 @@ void setup() {
 
 const char* handshake_msg(){
   // return the JSON handshake message.
-  // TODO:
-  return "prova";
+
+  String mex = "{\"board_name\": \""+String(clientUsername)+"\", \"local_ip\": \""+currentIp+"\","
+"\"topics\": [{\"topic\": \"home/bedroom/temperature\", \"type\": \"graph\", \"size\":\"large\", \"title\":\"Bedroom Temperature\", \"body_content\":\"Temperature sensor:\", \"background_color\":\"#c1c8cc\"},"
+"{\"topic\": \"home/bedroom/humidity\", \"type\": \"graph\", \"size\":\"large\", \"title\":\"Bedroom Humidity\", \"body_content\":\"Temperature sensor:\", \"background_color\":\"#c1c8cc\"}]";
+
+  int str_len = mex.length() + 1; 
+  char* char_buf = (char*)malloc(str_len); // Prepare the character array (the buffer) 
+  mex.toCharArray(char_buf, str_len); // Copy it over 
+
+  return char_buf;
 }
 
 void reconnect() {
@@ -116,7 +127,7 @@ void action(){
   // Read temperature as Celsius (the default)
   float t = dht.readTemperature();
   // Read temperature as Fahrenheit (isFahrenheit = true)
-  //float f = dht.readTemperature(true);
+  // float f = dht.readTemperature(true);
 
   // Check if any reads failed and exit early (to try again).
   if (isnan(h) || isnan(t)) { // || isnan(f)
@@ -132,7 +143,8 @@ void action(){
     sprintf (msg, "{\"humidity\": %s, \"temp_celsius\": %s }", hum, temp); // message formatting
     Serial.print("Publish message: ");
     Serial.println(msg);
-    client.publish("esp8266/temperature", msg, true); // retained message
+    client.publish("home/bedroom/humidity", hum, true); // retained message
+    client.publish("home/bedroom/temperature", temp, true); // retained message
   
 
 }
