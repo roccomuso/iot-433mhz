@@ -6,6 +6,7 @@
 #include <DHT.h>
 #include <PubSubClient.h>
 
+#include <ArduinoJson.h>
 
 // Digital Temperature Sensor
 #define DHTPIN 2     // what digital pin we're connected to
@@ -30,7 +31,25 @@ long lastMsg = 0;
 char msg[256];
 
 
-void message_arrived(char* topic, byte* payload, unsigned int length) {
+
+
+const char* handshake_msg(){
+  // return the JSON handshake message.
+
+  String mex = "{\"board_name\": \""+String(clientUsername)+"\", \"local_ip\": \""+currentIp+"\","
+"\"topics\": [{\"topic\": \"home/bedroom/temperature\", \"type\": \"graph\", \"size\":\"large\", \"title\":\"Bedroom Temperature\", \"body_content\":\"Temperature sensor:\", \"background_color\":\"#c1c8cc\"},"
+"{\"topic\": \"home/bedroom/humidity\", \"type\": \"graph\", \"size\":\"large\", \"title\":\"Bedroom Humidity\", \"body_content\":\"Temperature sensor:\", \"background_color\":\"#c1c8cc\"}]";
+
+  int str_len = mex.length() + 1; 
+  char* char_buf = (char*)malloc(str_len); // Prepare the character array (the buffer) 
+  mex.toCharArray(char_buf, str_len); // Copy it over 
+
+  return char_buf;
+}
+
+
+
+void message_received(char* topic, byte* payload, unsigned int length) {
   Serial.print("Message arrived [");
   Serial.print(topic);
   Serial.print("] ");
@@ -43,7 +62,26 @@ void message_arrived(char* topic, byte* payload, unsigned int length) {
   Serial.print(mex);
 
   // Switch command received and process it:
-  // TODO    ...if ()
+
+  const int BUFFER_SIZE = JSON_OBJECT_SIZE(1); // ex. {"cmd": "self_advertise"}
+  StaticJsonBuffer<BUFFER_SIZE> jsonBuffer;
+
+  // Deserialize the JSON string
+  JsonObject& root = jsonBuffer.parseObject(mex);
+
+  if (!root.success()){
+    Serial.println("ArduinoJson parseObject() failed");
+  }else{
+
+      // Retrieve the values
+      const char* cmd = root["cmd"];
+      if (strcmp (cmd, "self_advertise") == 0) {
+        client.publish(handshakeTopic, handshake_msg());
+
+      }
+
+  }
+
 
 }
 
@@ -69,25 +107,12 @@ void setup() {
   sprintf(currentIp, "%d.%d.%d.%d", myIp[0], myIp[1], myIp[2], myIp[3]);
 
   client.setServer(mqtt_server, mqtt_port);
-  client.setCallback(message_arrived);
+  client.setCallback(message_received);
   
   dht.begin();
   
 }
 
-const char* handshake_msg(){
-  // return the JSON handshake message.
-
-  String mex = "{\"board_name\": \""+String(clientUsername)+"\", \"local_ip\": \""+currentIp+"\","
-"\"topics\": [{\"topic\": \"home/bedroom/temperature\", \"type\": \"graph\", \"size\":\"large\", \"title\":\"Bedroom Temperature\", \"body_content\":\"Temperature sensor:\", \"background_color\":\"#c1c8cc\"},"
-"{\"topic\": \"home/bedroom/humidity\", \"type\": \"graph\", \"size\":\"large\", \"title\":\"Bedroom Humidity\", \"body_content\":\"Temperature sensor:\", \"background_color\":\"#c1c8cc\"}]";
-
-  int str_len = mex.length() + 1; 
-  char* char_buf = (char*)malloc(str_len); // Prepare the character array (the buffer) 
-  mex.toCharArray(char_buf, str_len); // Copy it over 
-
-  return char_buf;
-}
 
 void reconnect() {
   // Loop until we're reconnected
