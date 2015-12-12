@@ -54,9 +54,9 @@ void message_received(char* topic, byte* payload, unsigned int length) {
   Serial.print(topic);
   Serial.print("] ");
 
-  String mex = "";
+  char mex[length];
   for (int i = 0; i < length; i++) {
-    mex += (char)payload[i]; //Serial.print((char)payload[i]);
+    mex[i] = (char)payload[i]; //Serial.print((char)payload[i]);
   }
   Serial.print(" - Messaggio: ");
   Serial.print(mex);
@@ -73,7 +73,7 @@ void message_received(char* topic, byte* payload, unsigned int length) {
     Serial.println("ArduinoJson parseObject() failed");
   }else{
 
-      // Retrieve the values
+      // Sending response
       const char* cmd = root["cmd"];
       if (strcmp (cmd, "self_advertise") == 0) {
         client.publish(handshakeTopic, handshake_msg());
@@ -166,7 +166,7 @@ void action(){
    
     // NB. msg e' definito come un array di 256 caratteri. Aumentare anche all'interno della libreria PubSubClient.h se necessario.
     sprintf (msg, "{\"humidity\": %s, \"temp_celsius\": %s }", hum, temp); // message formatting
-    Serial.print("Publish message: ");
+    Serial.print("Info sent: ");
     Serial.println(msg);
     client.publish("home/bedroom/humidity", hum, true); // retained message
     client.publish("home/bedroom/temperature", temp, true); // retained message
