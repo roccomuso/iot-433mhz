@@ -1,0 +1,15 @@
+{
+  "name": "iot-433mhz",
+  "version": "1.0.0",
+  "description": "Node server to handle 433mhz outlets and sensors.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Rocco Musolino",
+  "license": "ISC",
+  "dependencies": {
+    "async": "^1.5.0",
+    "serialport": "^2.0.5"
+  }
+}

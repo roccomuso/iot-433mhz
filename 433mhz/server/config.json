@@ -1,0 +1,15 @@
+{
+	"rpi": {
+		"snif-pin": 2,
+		"debounce-delay": 500
+	},
+	"windows": {
+
+	},
+	"linux": {
+
+	},
+	"mac":{
+
+	}
+}
