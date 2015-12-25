@@ -1,15 +1,18 @@
 {
-	"rpi": {
-		"snif-pin": 2,
-		"debounce-delay": 500
-	},
-	"windows": {
+	"app_title": "IoT-433Mhz",
+	"platforms":{
+		"rpi": {
+			"snif-pin": 2,
+			"debounce-delay": 500
+		},
+		"windows": {
 
-	},
-	"linux": {
+		},
+		"linux": {
 
-	},
-	"mac":{
+		},
+		"mac":{
 
+		}
 	}
 }
