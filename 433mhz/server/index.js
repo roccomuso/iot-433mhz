@@ -3,7 +3,10 @@
 var fs = require('fs');
 var async = require('async');
 var config = require('./config.json');
+var main_logo = require('./main_logo.js');
 var platform = require('./platform.js');
+
+
 
 /*
 
