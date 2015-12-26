@@ -2,9 +2,9 @@
   Example for receiving
   
   http://code.google.com/p/rc-switch/
+
+  How to connect the 433mhz receiver to arduino: GND - 5V - D2
   
-  If you want to visualize a telegram copy the raw data and 
-  paste it into http://test.sui.li/oszi/
 */
 
 #include <RCSwitch.h>
