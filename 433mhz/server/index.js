@@ -1,11 +1,12 @@
 // On Raspberry Pi make sure to execute with SUDO.
+// On Windows platform make sure to have Visual Studio Express 2013 installed (https://github.com/voodootikigod/node-serialport)
 
 var fs = require('fs');
 var async = require('async');
 var config = require('./config.json');
 
-// TODO, magari meglio creare un oggetto e popolarlo?
-var SERIAL_PORT, rf433mhz;
+// Radio Frequency Class platform-independent
+var rf433mhz;
 
 // Starting Flow
 async.series({
@@ -17,7 +18,6 @@ async.series({
     },
     platform: function(callback){
     	require('./platform.js')(function(rf){
-    		// SERIAL_PORT = serial_port;
     		rf433mhz = rf; // platform independent class
     		callback(null, rf433mhz);
     	});
@@ -48,7 +48,6 @@ async.series({
     		//else console.log(out); //Should display 5201 
 
     	});
-    	
 
     },
     server: function(){
