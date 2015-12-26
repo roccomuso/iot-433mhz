@@ -5,7 +5,7 @@ var async = require('async');
 var config = require('./config.json');
 
 // TODO, magari meglio creare un oggetto e popolarlo?
-var SERIAL_PORT;
+var SERIAL_PORT, rf433mhz;
 
 // Starting Flow
 async.series({
@@ -16,16 +16,41 @@ async.series({
     	}); 
     },
     platform: function(callback){
-    	require('./platform.js')(function(serial_port){
-    		SERIAL_PORT = serial_port
-    		callback(null, serial_port);
+    	require('./platform.js')(function(rf){
+    		// SERIAL_PORT = serial_port;
+    		rf433mhz = rf; // platform independent class
+    		callback(null, rf433mhz);
     	});
     	
     },
-    serial_listen: function(callback){
-    	// TODO...
-    	console.log('Got it! ', SERIAL_PORT);
-    	callback(null, 3);
+    init_rf: function(callback){
+    	// Listen on Arduino Serial Port or RF433Mhz chip if on RPi platform.
+    	rf433mhz.openSerialPort(function(){
+    		
+    		setTimeout(function (){
+    			callback(null, 1);
+    		}, 2000); // Arduino AutoReset requires to wait a few seconds before sending data!
+    		
+    	});
+    	
+    },
+    rf_ready: function(){
+    	// Serial port ready
+    	rf433mhz.on(function (code) {
+				  console.log('Code received: '+code);
+			});
+
+    	rf433mhz.send(5204, function(err, out){
+    			if(!err) console.log(out); //Should display 5201 
+    			else console.log(err);
+    		});
+
+    },
+    server: function(){
+    	// Start the server interface
+    	// TODO... server.. se arriva su POST il codice x, mandalo su RF...
+    	
+    	callback(null, 1);
     }
    
 },
@@ -36,28 +61,3 @@ function(err, results) {
 
 });
 
-
-
-
-/*
-
-// For RPi
-rpi433.sniffer(config.platforms.rpi['snif-pin'], config.platforms.rpi['debounce-delay']); //Snif on PIN 2 with a 500ms debounce delay 
-rpi433.sendCode;
-
-*/
-
-/*
-
-
-// Receive
-rfSniffer.on('codes', function (code) {
-  console.log('Code received: '+code);
-});
- 
-// Send 
-rfSend(1234, 0, function(error, stdout) {   //Send 1234 
-  if(!error) console.log(stdout); //Should display 1234 
-});
-
-*/

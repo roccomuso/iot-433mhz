@@ -21,13 +21,13 @@ void invia(){
      if (Serial.available() > 0){
       
         String val = Serial.readStringUntil('\n');
-        
+
         Serial.println(val);
         if (val)
         {
 
            mySwitch.send(val.toInt(), 24);
-           Serial.println("inviato!");
+           Serial.println(val+" inviato!");
           /* MODI DISPONIBILI D'INVIO */
            /* See Example: TypeA_WithDIPSwitches */
             //mySwitch.switchOn("11111", "00100");
@@ -59,7 +59,24 @@ void invia(){
 
 
 void loop() {
+  
   invia();
+
+
+/*
+String content = "";
+  char character;
+
+  while(Serial.available()) {
+      character = Serial.read();
+      content.concat(character);
+      delay(15);
+  }
+
+  if (content != "") {
+    Serial.println(content);
+  }
+*/
 
 }
 

@@ -1,5 +1,7 @@
 {
 	"app_title": "IoT-433Mhz",
+	"DEBUG": true,
+	"arduino_baudrate": 9600,
 	"platforms":{
 		"rpi": {
 			"snif-pin": 2,
