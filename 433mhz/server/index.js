@@ -37,13 +37,18 @@ async.series({
     rf_ready: function(){
     	// Serial port ready
     	rf433mhz.on(function (code) {
-				  console.log('Code received: '+code);
-			});
+    		console.log(code);
+    		var data = JSON.parse(code);
+			console.log('data received: ', data);
+		});
 
+    	
     	rf433mhz.send(5204, function(err, out){
-    			if(!err) console.log(out); //Should display 5201 
-    			else console.log(err);
-    		});
+    		if(err) console.log('Error:', err); 
+    		//else console.log(out); //Should display 5201 
+
+    	});
+    	
 
     },
     server: function(){

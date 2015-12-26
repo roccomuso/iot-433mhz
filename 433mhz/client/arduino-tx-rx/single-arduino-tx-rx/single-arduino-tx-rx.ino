@@ -49,6 +49,7 @@ void invia(){
           
           
           root.printTo(Serial);
+          Serial.println(); // send a \n
 
           //Serial.println("@ "+val+" sent!");
 
@@ -98,6 +99,7 @@ if (mySwitch.available()) {
       root["protocol"] = mySwitch.getReceivedProtocol();
       
       root.printTo(Serial);
+      Serial.println(); // send a \n
     
     } else {
 
@@ -110,6 +112,7 @@ if (mySwitch.available()) {
           root["protocol"] = mySwitch.getReceivedProtocol();
           
           root.printTo(Serial);
+          Serial.println(); // send a \n
           
     }
 
