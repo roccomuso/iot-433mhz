@@ -34,7 +34,7 @@ async.series({
     	});
     	
     },
-    rf_ready: function(){
+    rf_ready: function(callback){
     	// Serial port ready
     	rf433mhz.on(function (code) {
     		var data = JSON.parse(code);
@@ -48,8 +48,9 @@ async.series({
 
     	});
 
+    	callback(null, 1);
     },
-    server: function(){
+    server: function(callback){
     	// Start the server interface
     	// TODO... server.. se arriva su POST il codice x, mandalo su RF...
     	
@@ -64,3 +65,31 @@ function(err, results) {
 
 });
 
+
+// (Ctrl + C) - Handler
+if (process.platform === "win32") {
+  var rl = require("readline").createInterface({
+    input: process.stdin,
+    output: process.stdout
+  });
+
+  rl.on("SIGINT", function () {
+    process.emit("SIGINT");
+  });
+
+  rl.close(); // without it we have conflict with the Prompt Module.
+}
+
+process.on("SIGINT", function () {
+	console.log('Closing...');
+	if (typeof rf433mhz !== 'undefined'){ // Close Serial Port
+		rf433mhz.close(function(err){
+			if (err) console.log('Error: ', err);
+			else console.log('Serial Port closed.');
+			//graceful shutdown
+  			process.exit();
+		});
+		
+	}else process.exit();
+  	
+});

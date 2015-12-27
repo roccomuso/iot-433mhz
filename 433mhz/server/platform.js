@@ -8,32 +8,30 @@ var rf433mhz = function(board){
 
 	var type;
 	// serialport module
-	this.port = undefined;
-	this.serial = undefined; // require('serialport');
+	var port;
+	var serial; // require('serialport');
 	// rpi-433 module
-	this.rpi433 = undefined; // require('rpi-433');
-	this.rfSniffer = undefined;
-	this.rfSend = undefined;
+	var rpi433; // require('rpi-433');
+	var rfSniffer, rfSend;
 
-	var self = this;
 
 	function _constructor(){
 		if (typeof board === 'undefined') throw new Error('No parameter passed to rf433mhz class');
 
 		type = (board.platform == 'rpi') ? 'rpi' : 'arduino';
 		if (type === 'arduino'){
-			self.port = board.port;
+			port = board.port;
 			var serialport = require('serialport');
 			var SerialPort = serialport.SerialPort; // localize object constructor
 
-			self.serial = new SerialPort(board.port, {
+			serial = new SerialPort(board.port, {
   				parser: serialport.parsers.readline("\n"),
   				baudRate: config.arduino_baudrate
 			}, false); // openImmediately flag set to false
 
 		}else{
 			// rpi
-			self.rpi433 = require('rpi-433');
+			rpi433 = require('rpi-433');
     		
 		}
 
@@ -42,7 +40,7 @@ var rf433mhz = function(board){
 
 	this.openSerialPort = function (onOpen){
 	  if (type === 'arduino') // arduino
-		self.serial.open(function (error) {
+		serial.open(function (error) {
 		  if ( error ) {
 		    console.log('failed to open: '+error);
 		  } else {
@@ -52,16 +50,16 @@ var rf433mhz = function(board){
 		});
 	  else{ // rpi
 	  	// initialize rpi-433 module
-	  	self.rfSniffer = rpi433.sniffer(config.platforms.rpi['sniff-pin'], config.platforms.rpi['debounce-delay']), //Snif on PIN 2 with a 500ms debounce delay 
-    	self.rfSend    = rpi433.sendCode;
+	  	rfSniffer = rpi433.sniffer(config.platforms.rpi['sniff-pin'], config.platforms.rpi['debounce-delay']), //Snif on PIN 2 with a 500ms debounce delay 
+    	rfSend    = rpi433.sendCode;
 	  }
-	}
+	};
 
 	this.on = function(callback){ // Receiving RF Code
 		if (type === 'rpi'){ // rpi
-			self.rfSniffer.on('codes', callback);
+			rfSniffer.on('codes', callback);
 		}else{ // arduino through serial
-			self.serial.on('data', callback);
+			serial.on('data', callback);
 		}
 	
 	};
@@ -69,10 +67,10 @@ var rf433mhz = function(board){
 	this.send = function(code, callback){
 		
 		if (type === 'rpi'){ // rpi
-			self.rfSend(code, config.platforms.rpi['transmitter-pin'], callback);
+			rfSend(code, config.platforms.rpi['transmitter-pin'], callback);
 		}else{ // arduino through serial
-			if (self.serial.isOpen()){
-				self.serial.write(String(code), callback);
+			if (serial.isOpen()){
+				serial.write(String(code), callback);
 			}else{
 				console.log('SerialPort not open!');
 			}
@@ -81,9 +79,17 @@ var rf433mhz = function(board){
 
 	this.isSerialOpen = function(){
 		if (type==='arduino'){
-			return self.serial.isOpen();
+			return serial.isOpen();
 		}
-	}
+	};
+
+	this.close = function(callback){
+		if (type==='arduino'){
+			serial.close(callback); // release the Serial Port
+		}else{
+			// Do nothing, no need to handle that on RPi
+		}
+	};
 
 }
 
