@@ -37,7 +37,6 @@ async.series({
     rf_ready: function(){
     	// Serial port ready
     	rf433mhz.on(function (code) {
-    		console.log(code);
     		var data = JSON.parse(code);
 			console.log('data received: ', data);
 		});

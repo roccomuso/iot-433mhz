@@ -63,7 +63,7 @@ var rf433mhz = function(board){
 			board.send(code, callback);
 		}else{ // arduino through serial
 			if (self.serial.isOpen()){
-				self.serial.write(code+'\r', callback);
+				self.serial.write(String(code), callback);
 			}else{
 				console.log('SerialPort not open!');
 			}
