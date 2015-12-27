@@ -4,7 +4,8 @@
 	"arduino_baudrate": 9600,
 	"platforms":{
 		"rpi": {
-			"snif-pin": 2,
+			"sniff-pin": 2,
+			"transmitter-pin": 0,
 			"debounce-delay": 500
 		},
 		"windows": {

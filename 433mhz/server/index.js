@@ -42,7 +42,7 @@ async.series({
 		});
 
     	
-    	rf433mhz.send(5204, function(err, out){
+    	rf433mhz.send(5201, function(err, out){
     		if(err) console.log('Error:', err); 
     		//else console.log(out); //Should display 5201 
 
