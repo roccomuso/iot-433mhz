@@ -42,8 +42,6 @@ async.series({
 			console.log('data received: ', data);
 		});
 
-    
-
     	callback(null, 1);
     },
     server: function(callback){

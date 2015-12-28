@@ -1,32 +1,235 @@
 
 <html>
 <head>
-	<script src="/socket.io/socket.io.js"></script>
-	<script>
-	// set up your socket
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="IoT 433Mhz Dashboard">
+    <meta name="author" content="Rocco Musolino">
 
-	var socket = io.connect('http://' + location.host, {
-		'reconnect': true,
-		'reconnection delay': 50,
-		'max reconnection attempts': 300
-	});
+<link href="assets/img/favicon.ico" rel="icon" type="image/x-icon" />
 
-	// receiving data
-	socket.on('news', function(data){
-		document.getElementById('_data').innerHTML += data+'<br/>';
-	});
+<title>IoT 433Mhz</title>
 
-	// send data over the socket
-	socket.emit('example', {'hello': 'my name is roc'});
+    <!--  Bootstrap dependencies -->
+    <link rel="stylesheet" href="dist/css/bootstrap/bootstrap.css" />
+    <!--  / Bootstrap dependencies -->
 
+    <!-- Custom styles -->
+    <link rel="stylesheet" href="css/dashboard-style.css" />
+    <!-- Hover.css -->
+    <link rel="stylesheet" href="dist/css/hover.css" />
+	
+    <!-- Custom Fonts -->
+    <link rel="stylesheet" href="dist/css/font-awesome.min.css">
 
-	</script>
+    <!-- Bootstrap Material Design -->
+    <link rel="stylesheet" href="dist/css/bootstrap-material-design/roboto.min.css">
+    <link rel="stylesheet" href="dist/css/bootstrap-material-design/material.css">
+    <link rel="stylesheet" href="dist/css/bootstrap-material-design/ripples.min.css">
+
 
 </head>
 
 <body>
-Dashboard under construction ... Web Socket...<br/>
-<div id="_data"></div>
+
+
+    <div id="logo" class="pull-left hvr-buzz">
+        <img src="./assets/img/logo.png" height="100" width="100" alt="MQTT Dashboard"/>
+    </div>
+
+    <div class="container" id="mainBody">
+        
+         <div id="_data">TODO..</div>
+
+<!-- CARDS -->
+
+<div class="row">
+    <div class="col-md-4 text-center">
+        <h3>Order by</h3>
+        <button class="btn btn-flat btn-primary sort active" data-sort="default">Data</button>
+        <button class="btn btn-flat btn-primary sort" data-sort="random">Random</button>
+    </div>
+    <div class="col-md-8 text-center">
+        <h3>Filter by</h3>
+        <button class="btn btn-flat btn-primary active filter" data-filter="all">Show All</button>
+        <button class="btn btn-flat btn-primary filter" data-filter=".type_on_off">on_off</button>
+        <button class="btn btn-flat btn-primary filter" data-filter=".type_info">info</button>
+        <button class="btn btn-flat btn-primary filter" data-filter=".type_graph">graph</button>
+        <button class="btn btn-flat btn-primary filter" data-filter=".type_custom">custom</button>
+
+    </div>
+</div>
+
+<!-- Devices cards  -->
+
+<div id="cards_container">
+
+    <div class="card pin mix type_info" style="background-color: #9CCC65;">
+
+            <div class="card-content">
+
+                <div class="card-body">
+                    <p>qui dolorem ipsum, quia dolor sit, amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt, ut labore et dolore magnam aliquam quaerat voluptatem.</p>
+                </div>
+
+                <footer class="card-footer">
+                    <button class="btn btn-flat">Share</button>
+                    <button class="btn btn-flat btn-warning">Learn More</button>
+                </footer>
+
+            </div>
+
+        </div>
+
+
+        <div class="card pin mix type_on_off" style="background-color: #E2E26D;">
+
+            <div class="card-content">
+
+                <div class="card-image">
+                    <img src="./assets/demo_img/bedroom1.jpg" alt="Image">
+                    <h3 class="card-image-headline">Stanza da letto</h3>
+                </div>
+
+                <div class="card-body">
+                    <p>Altra card ricevuta.... qui dolorem ipsum, quia dolor sit, amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt, ut labore et dolore magnam aliquam quaerat voluptatem.</p>
+                </div>
+
+                <footer class="card-footer">
+                    <button class="btn btn-flat">Share</button>
+                    <button class="btn btn-flat btn-warning">Learn More</button>
+                </footer>
+
+            </div>
+
+        </div>
+
+
+        <div class="card pin mix type_graph" style="background-color: #5C6BC0;">
+
+            <div class="card-content">
+
+                <div class="card-image">
+                    <img src="./assets/demo_img/livingroom1.jpg" alt="Image">
+                    <h3 class="card-image-headline">Soggiorno</h3>
+                </div>
+
+                <div class="card-body">
+                    <p>qui dolorem ipsum, quia dolor sit, amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt, ut labore et dolore magnam aliquam quaerat voluptatem.</p>
+                </div>
+
+                <footer class="card-footer">
+                    <button class="btn btn-flat">Share</button>
+                    <button class="btn btn-flat btn-warning">Learn More</button>
+                </footer>
+
+            </div>
+
+        </div>
+
+        <div class="card pin mix type_info" style="background-color: #c1c8cc;">
+
+            <div class="card-content">
+
+                <div class="card-image">
+                    <img src="./assets/demo_img/galileo1.jpg" alt="Image">
+                    <h3 class="card-image-headline">Sismografo</h3>
+                </div>
+
+                <div class="card-body">
+                    <p>[type: info] qui dolorem ipsum, quia dolor sit, amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt, ut labore et dolore magnam aliquam quaerat voluptatem. [data ultimo contatto]</p>
+                </div>
+
+                <footer class="card-footer">
+                    <button class="btn btn-flat">Share</button>
+                    <button class="btn btn-flat btn-warning">Learn More</button>
+                </footer>
+
+            </div>
+
+        </div>
+
+        <div class="card pin mix type_custom">
+
+            <div class="card-content">
+
+                <div class="card-image">
+                    <img src="./assets/demo_img/kitchen1.jpg" alt="Image">
+                    <h3 class="card-image-headline">Cucina</h3>
+                </div>
+
+                <div class="card-body">
+                    <p>[type_custom] qui dolorem ipsum, quia dolor sit, amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt, ut labore et dolore magnam aliquam quaerat voluptatem.</p>
+                </div>
+
+                <footer class="card-footer">
+                    <button class="btn btn-flat">Share</button>
+                    <button class="btn btn-flat btn-warning">Learn More</button>
+                </footer>
+
+            </div>
+
+        </div>
+
+ 
+
+</div>
+
+<!-- / CARDS -->
+        
+    </div>
+
+
+    <div id="modalDiv">
+    </div>
+
+    <footer class="footer" style="margin-top: 25px;">
+      <div class="container">
+        <p class="text-muted text-center">
+           © 2015 - 2016 <a href="http://twitter.com/roccomuso" target="_new">Rocco Musolino</a>. All rights reserved.<br/>
+           Handcrafted with <span class="doc-heart"><i class="fa fa-heart" style='color:red;'></i></span> and a lot of <i class="fa fa-coffee"></i><br/>
+           <a href="https://www.paypal.me/RoccoMusolino" target="_new">Support the project <i class="fa fa-paypal"></i></a>
+       </p>
+      </div>
+    </footer>
+
+
+
+
+
+
+
+<!-- JS Dependencies -->
+
+<!-- Socket.io for Web Socket -->
+<script src="/socket.io/socket.io.js"></script>
+
+<!-- jQuery -->
+<script src="dist/js/jquery.min.js"></script>
+
+<!-- jQuery Form validation plugin -->
+<script src="dist/js/form-validator/jquery.form-validator.min.js"></script>
+
+<!-- MixItUp -->
+<script src="dist/js/jquery.mixitup.min.js"></script>
+
+<!--  Bootstrap, Bootstrap compiled plugins (below) -->
+<script src="dist/js/bootstrap.min.js"></script>
+
+<!-- Notie.js for in-app notification -->
+<script src="dist/js/notie.js"></script>
+
+<!-- Bootstrap Material Design -->
+<script src="dist/js/bootstrap-material-design/ripples.min.js"></script>
+<script src="dist/js/arrive.min.js"></script>
+<script src="dist/js/bootstrap-material-design/material.min.js"></script>
+
+<!-- JS Files -->
+<script src="js/socketing.js"></script>
+<script src="js/main.js"></script>
+
 </body>
+
 
 </html>
