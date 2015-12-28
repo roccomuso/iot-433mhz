@@ -2,6 +2,7 @@
 	"app_title": "IoT-433Mhz",
 	"DEBUG": true,
 	"arduino_baudrate": 9600,
+	"server_port": 8080,
 	"platforms":{
 		"rpi": {
 			"sniff-pin": 2,

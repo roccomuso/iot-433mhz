@@ -3,6 +3,7 @@
 
 var fs = require('fs');
 var async = require('async');
+var express = require('express');
 var config = require('./config.json');
 
 // Radio Frequency Class platform-independent
@@ -41,18 +42,42 @@ async.series({
 			console.log('data received: ', data);
 		});
 
-    	
-    	rf433mhz.send(5201, function(err, out){
-    		if(err) console.log('Error:', err); 
-    		//else console.log(out); //Should display 5201 
-
-    	});
+    
 
     	callback(null, 1);
     },
     server: function(callback){
-    	// Start the server interface
-    	// TODO... server.. se arriva su POST il codice x, mandalo su RF...
+    	// Starting HTTP Server, API, and Web Socket
+    	var server = require('./server.js')(function(app){
+    		  // Handling routes
+
+			  app.route('/rfcode/:code')
+			    .get(function(req, res) {
+			    	if (typeof req.params.code !== 'undefined'){
+			    		rf433mhz.send(req.params.code, function(err, out){
+				    		if(err) console.log('Error:', err);  
+				    		res.send(JSON.stringify({'status': 'ok'}));
+				    	});
+			      		
+			      	}else
+			      		res.send(JSON.stringify({'status': 'error'}));
+			    })
+			    .post(function(req, res) {
+			      res.send('TODO...');
+			    });
+
+			  // serve as static all the other routes
+			  app.get('*', express.static('www'));
+			  // TODO page 404.
+
+			}, function(socket){ // Web Socket handler
+    		
+    		  socket.emit('news', { hello: 'world' });
+
+			  socket.on('example', function (data) {
+			    console.log('Socket (example) data incoming: ', data);
+			  });
+    	});
     	
     	callback(null, 1);
     }

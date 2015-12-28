@@ -67,6 +67,7 @@ var rf433mhz = function(board){
 	this.send = function(code, callback){
 		
 		if (type === 'rpi'){ // rpi
+			// WATCH OUT code CASTING, it has to be a number type. Just check on RPi.
 			rfSend(code, config.platforms.rpi['transmitter-pin'], callback);
 		}else{ // arduino through serial
 			if (serial.isOpen()){
