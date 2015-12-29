@@ -6,7 +6,11 @@ html {
 }
 
 body{
-	background-image: url(../assets/img/background-repeat-pattern.png);
+  /*background-image: url(../assets/img/background-repeat-pattern.png);*/
+	background: linear-gradient(
+      rgba(0, 0, 0, 0.7), 
+      rgba(0, 0, 0, 0.7)
+    ), url(../assets/img/background-repeat-pattern.png);
 	height: 100%;
 }
 
