@@ -7361,14 +7361,18 @@ icon-material-blue-grey {
   font-size: 2em;
 }
 .card .card-body {
-  height: 25%; /* on chrome app 35% */
-  padding: 18px;
+  min-height: 15%; /* on chrome app height: 35% */ 
+  padding: 18px; 
   border: 0;
   /*border-top: 1px solid #eee;*/ /* nessun bordo fra img e body */
 }
 .card .card-footer {
-  height: 15%;
-  padding: 18px;
+  height: 10%;
+  padding-top: 10px;
+  padding-left: 18px;
+  padding-right: 18px;
+  padding-bottom: 10px;
+
 }
 .card .card-footer button {
   margin: 0 !important;
