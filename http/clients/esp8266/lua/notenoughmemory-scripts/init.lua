@@ -1,1 +1,0 @@
-dofile('basic.lc')
