@@ -20,6 +20,20 @@ Inspired by https://www.npmjs.com/package/pimatic-homeduino-dst-dev this is a pr
 
 TODO
 
+## Recommended RF Modules
+
+On the market you can easily find these really cheap RF 433mhz modules:
+
+TODO img...
+
+We recommend these one:
+
+- RXB6 (receiver) and (transmitter)
+
+TODO img...
+
+
+
 # Server
 
 The server is built on top of Node.js.
@@ -59,9 +73,15 @@ TODO ...
 
 # Usage
 
-TODO
+You can use the system through the beautiful web interface (thumbs up for material-design) or make use of the API.
 
-# API
+## Web Interface
+
+Reachable on the <code>http://serverAddress:PORT</code>, the web <code>server_port</code> is defined in <code>config.json</code>, default's value is 8080.
+
+TODO img..
+
+## API
 
 
 <code>GET /rfcode/code </code>

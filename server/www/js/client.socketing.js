@@ -6,7 +6,15 @@
 		'max reconnection attempts': 300
 	});
 
+	socket.on('connect', function(){
+		console.log('Connected to the socket.io server');
+	});
+
 	// receiving data
+	socket.on('initData', function(initData){
+		document.getElementById('_data').innerHTML += JSON.stringify(initData)+'<br/>';
+	});
+
 	socket.on('news', function(data){
 		document.getElementById('_data').innerHTML += JSON.stringify(data)+'<br/>';
 	});

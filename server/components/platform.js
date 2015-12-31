@@ -1,4 +1,4 @@
-var config = require('./config.json');
+var config = require('../config.json');
 var prompt = require('prompt');
 // Import events module and create an eventEmitter object
 var events = require('events');
@@ -18,7 +18,7 @@ var rf433mhz = function(board){
 	function _constructor(){
 		if (typeof board === 'undefined') throw new Error('No parameter passed to rf433mhz class');
 
-		type = (board.platform == 'rpi' && !config['use-external-arduino']) ? 'rpi' : 'arduino';
+		type = (board.platform == 'rpi' && !config.platforms.rpi['use-external-arduino']) ? 'rpi' : 'arduino';
 		if (type === 'arduino'){
 			port = board.port;
 			var serialport = require('serialport');
@@ -149,7 +149,8 @@ module.exports = function(module_callback){
 			}else{
 				// Running on Linux system
 				if (data.indexOf('ID=raspbian') >= 0){
-					console.log("Running on RPi platform");
+					console.log('Running on RPi platform');
+					console.log('Using external Arduino: ',config.platforms.rpi['use-external-arduino']);
 					// Running on RPi
 					// Only on RPi will successfully works.
 					module_callback(new rf433mhz({platform: 'rpi'}));

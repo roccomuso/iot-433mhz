@@ -12,13 +12,16 @@ var rf433mhz;
 // Starting Flow
 async.series({
     ascii_logo: function(callback){
-    	require('./ascii_logo.js')(function(logo){
+    	require('./components/ascii_logo.js')(function(logo){
     		console.log(logo);
     		callback(null, 1);
     	}); 
     },
     platform: function(callback){
-    	require('./platform.js')(function(rf){
+
+        console.log('Debug Mode: '+ config.DEBUG);
+
+    	require('./components/platform.js')(function(rf){
     		rf433mhz = rf; // platform independent class
     		callback(null, rf433mhz);
     	});
@@ -46,7 +49,7 @@ async.series({
     },
     server: function(callback){
     	// Starting HTTP Server, API, and Web Socket
-    	var server = require('./server.js')(function(app){
+    	var server = require('./components/server.js')(function(app){
     		  // Handling routes
 
 			  app.route('/rfcode/:code')
@@ -69,12 +72,12 @@ async.series({
 			  // TODO page 404.
 
 			}, function(socket){ // Web Socket handler
-    		
-    		  socket.emit('news', { hello: 'world' });
+    		      
+                var socketFunctions = require('./components/socketFunctions.js')(socket);
 
-			  socket.on('example', function (data) {
-			    console.log('Socket (example) data incoming: ', data);
-			  });
+                socket.on('connection', socketFunctions.onConnection);
+
+
     	});
     	
     	callback(null, 1);
