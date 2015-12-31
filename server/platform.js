@@ -18,7 +18,7 @@ var rf433mhz = function(board){
 	function _constructor(){
 		if (typeof board === 'undefined') throw new Error('No parameter passed to rf433mhz class');
 
-		type = (board.platform == 'rpi') ? 'rpi' : 'arduino';
+		type = (board.platform == 'rpi' && !config['use-external-arduino']) ? 'rpi' : 'arduino';
 		if (type === 'arduino'){
 			port = board.port;
 			var serialport = require('serialport');
