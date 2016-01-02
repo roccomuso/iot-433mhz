@@ -55,7 +55,7 @@ module.exports = function(db, config){
 				    var isIgnored = false;
 	                Object.keys(codes).forEach(function(item){
 	                	if (item == code)
-	                		if (typeof item.isIgnored === 'boolean') isIgnored = item.isIgnored;
+	                		if (typeof codes[item].isIgnored === 'boolean') isIgnored = codes[item].isIgnored;
 	                });
 	                callback(isIgnored);
 				});
