@@ -1,5 +1,5 @@
 
-![Logo](https://github.com/roccomuso/iot-433mhz/blob/master/other/schemes/logo128x128.jpg "Logo")
+![Logo](https://github.com/roccomuso/iot-433mhz/blob/master/other/schemes/logo128x128.png "Logo")
 
       ___    _____     _  _  __________ __  __ _
      |_ _|__|_   _|   | || ||___ /___ /|  \/  | |__  ____
