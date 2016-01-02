@@ -1,5 +1,6 @@
 
 function initializeRFcodes(data){ // data is the code received through serial
+	if (typeof data === 'undefined') data = {};
 	// RFcodes table structure
 	return {
 		bitlength: data.bitlength || 24,
@@ -41,7 +42,7 @@ module.exports = function(db, config){
 		                    	if (err) return console.log('Ooops!', err) // some kind of I/O error 
 		                     	callback();
 		                    });
-	                	}else callback();
+	                	}else callback(); // already there
 
 	                }
 	            });
