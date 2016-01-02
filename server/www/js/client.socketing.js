@@ -17,8 +17,9 @@
 	});
 
 	socket.on('newRFCode', function(data){
-		// TODO: handle the new RFCode. Print a snackbar.
-		console.log(data);
+		// handle the new RFCode. Show a snackbar.
+		var mex = '<span class="pull-left" style="padding-top: 11px">Code detected: '+data.code+'</span> <span class="pull-right" code="'+data.code+'"><a href="#" class="btn btn-info btn-xs snackbar-ignore" >Ignore</a><a href="#" class="btn btn-success btn-xs snackbar-assign">Assign</a></span>';
+		$.snackbar({content: mex, timeout: 0, htmlAllowed: true});
 
 	});
 

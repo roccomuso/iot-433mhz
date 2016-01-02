@@ -83,6 +83,8 @@ async.series({
                         dbFunctions.putInDB(data, function(){
 
                             dbFunctions.isIgnored(data.code, function(isIgnored){
+                                if (config.DEBUG) console.log('Ignore code '+data.code+': ', isIgnored);
+
                                 if (!isIgnored)
                                     io.emit('newRFCode', data); // sent to every open socket.
 
