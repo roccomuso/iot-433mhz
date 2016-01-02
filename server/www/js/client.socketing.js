@@ -8,11 +8,18 @@
 
 	socket.on('connect', function(){
 		console.log('Connected to the socket.io server');
+
 	});
 
-	// receiving data
+	// receiving initData, initialize the UI
 	socket.on('initData', function(initData){
 		document.getElementById('_data').innerHTML += JSON.stringify(initData)+'<br/>';
+	});
+
+	socket.on('newRFCode', function(data){
+		// TODO: handle the new RFCode. Print a snackbar.
+		console.log(data);
+
 	});
 
 	socket.on('news', function(data){

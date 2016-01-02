@@ -4,7 +4,11 @@
 var fs = require('fs');
 var async = require('async');
 var express = require('express');
+var levelup = require('levelup');
 var config = require('./config.json');
+
+// Create or open the underlying LevelDB store
+var db = levelup('./mydb');
 
 // Radio Frequency Class platform-independent
 var rf433mhz;
@@ -38,15 +42,6 @@ async.series({
     	});
     	
     },
-    rf_ready: function(callback){
-    	// Serial port ready
-    	rf433mhz.on(function (code) {
-    		var data = JSON.parse(code);
-			console.log('data received: ', data);
-		});
-
-    	callback(null, 1);
-    },
     server: function(callback){
     	// Starting HTTP Server, API, and Web Socket
     	var server = require('./components/server.js')(function(app){
@@ -71,12 +66,34 @@ async.series({
 			  app.get('*', express.static('www'));
 			  // TODO page 404.
 
-			}, function(socket){ // Web Socket handler
+			}, function(io){ // Web Socket handler
     		      
-                var socketFunctions = require('./components/socketFunctions.js')(socket);
+                var socketFunctions = require('./components/socketFunctions.js')(io, rf433mhz, db);
+                var dbFunctions = require('./components/dbFunctions.js')(db);
 
-                socket.on('connection', socketFunctions.onConnection);
+                io.on('connection', socketFunctions.onConnection);
+            
+                rf433mhz.on(function (codeData) {
+                    var data = JSON.parse(codeData);
+                    console.log('data received: ', data);
 
+                    if (data.status === 'received'){
+
+                        // put in DB if doesn't exists yet
+                        dbFunctions.putInDB(data, function(){
+
+                            dbFunctions.isIgnored(data.code, function(isIgnored){
+                                if (!isIgnored)
+                                    io.emit('newRFCode', data); // sent to every open socket.
+
+                            });
+
+                        });
+                        
+                    }
+                
+                });
+ 
 
     	});
     	
