@@ -4,10 +4,19 @@
   "description": "Node server to handle 433mhz outlets and sensors.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "watchdb": "node ./test/watchdb.js",
+    "start": "node index.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/roccomuso/iot-433mhz"
+  },
+  "bugs": {
+    "url": "https://github.com/roccomuso/iot-433mhz/issues"
+  },
+  "keywords": ["iot", "433mhz", "domotic", "arduino", "raspberry"],
   "author": "Rocco Musolino",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "async": "^1.5.0",
     "express": "^4.13.3",
