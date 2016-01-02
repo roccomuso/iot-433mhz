@@ -8,7 +8,7 @@ var levelup = require('levelup');
 var config = require('./config.json');
 
 // Create or open the underlying LevelDB store
-var db = levelup('./mydb');
+var db = levelup('./mydb', {valueEncoding: 'json'});
 
 // Radio Frequency Class platform-independent
 var rf433mhz;
@@ -69,13 +69,13 @@ async.series({
 			}, function(io){ // Web Socket handler
     		      
                 var socketFunctions = require('./components/socketFunctions.js')(io, rf433mhz, db);
-                var dbFunctions = require('./components/dbFunctions.js')(db);
+                var dbFunctions = require('./components/dbFunctions.js')(db, config);
 
                 io.on('connection', socketFunctions.onConnection);
             
                 rf433mhz.on(function (codeData) {
                     var data = JSON.parse(codeData);
-                    console.log('data received: ', data);
+                    if (config.DEBUG) console.log('RFcode received: ', data);
 
                     if (data.status === 'received'){
 

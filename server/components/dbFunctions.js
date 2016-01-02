@@ -9,10 +9,10 @@ function initializeRFcodes(data){ // data is the code received through serial
 	};
 }
 
-module.exports = function(db){
+module.exports = function(db, config){
 
 	// exposed methods
-	var method = {
+	var methods = {
 			putInDB: function(data, callback){
 				// check if the given code is in DB, if not, put it.
 	            db.get('RFcodes', function (err, codes) {
@@ -27,6 +27,7 @@ module.exports = function(db){
 	                    
 	                }else{ // just put the code if it doesn't exists yet.
 
+	                	if (config.DEBUG) console.log('RFcodes in DB:', codes);
 	                	var notFound = true;
 	                	Object.keys(codes).forEach(function(code){
 	                		if (code == data.code) notFound = false;
@@ -40,7 +41,7 @@ module.exports = function(db){
 		                    	if (err) return console.log('Ooops!', err) // some kind of I/O error 
 		                     	callback();
 		                    });
-	                	}
+	                	}else callback();
 
 	                }
 	            });
