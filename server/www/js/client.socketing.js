@@ -13,19 +13,27 @@
 
 	// receiving initData, initialize the UI
 	socket.on('initData', function(initData){
+		// TODO
 		document.getElementById('_data').innerHTML += JSON.stringify(initData)+'<br/>';
 	});
 
 	socket.on('newRFCode', function(data){
 		// handle the new RFCode. Show a snackbar.
-		var mex = '<span class="pull-left" style="padding-top: 11px">Code detected: '+data.code+'</span> <span class="pull-right" code="'+data.code+'"><a href="#" class="btn btn-info btn-xs snackbar-ignore" >Ignore</a><a href="#" class="btn btn-success btn-xs snackbar-assign">Assign</a></span>';
-		$.snackbar({content: mex, timeout: 0, htmlAllowed: true});
+		var mex = '<span class="pull-left" style="padding-top: 11px">Code detected: '+data.code+'</span> <span class="pull-right"><a href="#" class="btn btn-info btn-xs" onclick="events.emit(\'ignoreCode\', '+data.code+');">Ignore</a><a href="#" class="btn btn-success btn-xs" onclick="events.emit(\'assignCode\', '+data.code+');">Assign</a></span>';
+		$.snackbar({content: mex, timeout: 0, htmlAllowed: true}); // print snackbar
+		// Click events handled in eventing.js
 
 	});
 
-	socket.on('news', function(data){
-		document.getElementById('_data').innerHTML += JSON.stringify(data)+'<br/>';
+	socket.on('serverError', function(data){
+		// notie.js alert
+		// TODO
+
 	});
 
-	// send data over the socket
-	socket.emit('example', {'hello': 'my name is roc'});
+	// Using EventEmitter.js
+
+	// ...
+
+
+

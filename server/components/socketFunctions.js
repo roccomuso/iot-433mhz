@@ -26,12 +26,18 @@ module.exports = function(socket, rf433mhz, db){
 		    });
 
             // Sending actual configuration
-            
             client_socket.emit('initData', methods.getInitData());
 
-            // TODO
-            // Tutti i socket.on andrebbero qui.
-            client_socket.on('example', function(data){ console.log(data); });
+            // Listen for socket events
+            client_socket.on('ignoreCode', function(data){ 
+            	// TODO (put codeToIgnore.isIgnored = false and update DB)
+            	console.log(data);
+            });
+
+            client_socket.on('assignCode', function(data){ 
+            	// TODO
+
+            });
                 
 		}
 

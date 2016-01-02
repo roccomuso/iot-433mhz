@@ -1,18 +1,14 @@
 /**
  * Event Handling
- *
- *
- * Licensed under the MIT license.
- * http://www.opensource.org/licenses/mit-license.php
- *
- * Copyright 2016, Rocco Musolino
- * http://hackerstribe.com
- */
-
-;( function( window ) {
-
-  'use strict';
+*/
 
 
+events.on('ignoreCode', function(code){
+  socket.emit('ignoreCode', {codeToIgnore: code}); // NB. socket defined below eventing.js
+});
 
-})( window );
+events.on('assignCode', function(code){
+  // TODO ... open modal box. To assign it to a device
+  console.log('open modal box ', code);
+  
+});

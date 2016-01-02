@@ -6,7 +6,7 @@ function initializeRFcodes(data){ // data is the code received through serial
 		bitlength: data.bitlength || 24,
 		protocol: data.protocol || 1,
 		isIgnored: false, // default values
-		attachedTo: undefined // attachable to a Device ID
+		assignedTo: undefined // attachable to a Device ID
 	};
 }
 
