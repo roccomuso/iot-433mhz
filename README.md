@@ -1,4 +1,5 @@
 
+![Logo](https://github.com/roccomuso/iot-433mhz/blob/master/other/schemes/logo128x128.jpg "Logo")
 
       ___    _____     _  _  __________ __  __ _
      |_ _|__|_   _|   | || ||___ /___ /|  \/  | |__  ____
@@ -70,6 +71,12 @@ Is recommended to run the server on the RPi through a terminal session. (see scr
 You can get it on npm:
 
 TODO ...
+
+or Clone this Repo:
+
+<code>git clone https://github.com/roccomuso/iot-433mhz.git</code>
+
+Then don't forget to <code>cd server</code> and install all the dependencies with <code>npm install</code>.
 
 # Usage
 
