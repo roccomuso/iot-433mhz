@@ -1,5 +1,5 @@
 
-![Logo](https://github.com/roccomuso/iot-433mhz/blob/master/other/schemes/logo128x128.png "Logo")
+![Logo](https://github.com/roccomuso/iot-433mhz/blob/master/other/pics/logo128x128.png "Logo")
 
       ___    _____     _  _  __________ __  __ _
      |_ _|__|_   _|   | || ||___ /___ /|  \/  | |__  ____
@@ -21,19 +21,9 @@ Inspired by https://www.npmjs.com/package/pimatic-homeduino-dst-dev this is a pr
 
 TODO
 
-## Recommended RF Modules
+## Recommended Hardware
 
-On the market you can easily find these really cheap RF 433mhz modules:
-
-TODO img...
-
-We recommend these one:
-
-- RXB6 (receiver) and (transmitter)
-
-TODO img...
-
-
+For more about the required 433mhz transmitter/receiver and the supported hardware see the [hardware-layer page](https://github.com/roccomuso/iot-433mhz/tree/master/hardware-layer).
 
 # Server
 
@@ -64,11 +54,11 @@ Heads Up!
 - The Raspberry Pi platform make use of the 433mhz-utils library through the rpi-433 module. But can also run using an external Arduino like the other platforms. To do that, just set to true the <code>use-external-arduino</code> option in the <code>config.json</code> file.
 - The other platforms exploits an arduino serial communication, using the node.js serialport module (check out the requirements to have it installed correctly: https://github.com/voodootikigod/node-serialport - on windows make sure to install python 2.7 and Microsoft Visual Studio Express 2013)
 
-Is recommended to run the server on the RPi through a terminal session. (see screen command).
+Is recommended to run the server on the RPi through a terminal session. (see [screen](https://www.raspberrypi.org/forums/viewtopic.php?t=8099&p=101209)).
 
 # Install
 
-You can get it on npm:
+You can get it on [npm](https://www.npmjs.com/):
 
 TODO ...
 
@@ -77,6 +67,11 @@ or Clone this Repo:
 <code>git clone https://github.com/roccomuso/iot-433mhz.git</code>
 
 Then don't forget to <code>cd server</code> and install all the dependencies with <code>npm install</code>.
+
+### What kind of devices it works with
+
+See the [Hardware page](https://github.com/roccomuso/iot-433mhz/tree/master/hardware-layer).
+
 
 # Usage
 
@@ -110,6 +105,7 @@ Required parameters: {'new_code': xxxx}
 <code>PUT /room/device/[on, off, toggle]</code>
 Edit rf code assigned to the specified endpoint.
 Required parameters: {'new_code': xxxx}
+
 
 # Notifications
 
