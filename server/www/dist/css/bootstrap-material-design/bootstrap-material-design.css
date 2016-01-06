@@ -2816,7 +2816,7 @@ fieldset[disabled] .navbar .btn-link:focus {
   right: 0;
 }
 .card .card-image {
-  height: 25%; /* on chrome app 50% */
+  height: 200px; /* on chrome app 50% */
   position: relative;
   /*overflow: hidden;*/ /* rimosso per l'utilizzo delle cards di bootstrap assieme alle webkit-columns */
 }
@@ -2841,7 +2841,7 @@ fieldset[disabled] .navbar .btn-link:focus {
   /*border-top: 1px solid #eee;*/ /* nessun bordo fra img e body */
 }
 .card .card-footer {
-  height: 10%;
+  min-height: 10%;
   padding-top: 10px;
   padding-left: 18px;
   padding-right: 18px;

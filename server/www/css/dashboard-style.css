@@ -60,7 +60,7 @@ body{
 }
 
 
-@media (min-width: 780px) and (max-width: 1000px){
+@media (min-width: 780px) and (max-width: 1170px){
 
 	#cards_container {
 	-webkit-column-count: 3;

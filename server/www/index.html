@@ -40,10 +40,6 @@
 <body>
 
 
-    <div id="logo" class="pull-left hvr-buzz hidden-xs">
-        <img src="./assets/img/logo.png" height="100" width="100" alt="MQTT Dashboard"/>
-    </div>
-
     <div class="container" id="mainBody">
         
          <div id="_data">TODO..</div>
@@ -51,12 +47,17 @@
 <!-- CARDS -->
 
 <div class="row">
-    <div class="col-md-4 text-center hidden-xs">
+    <div class="col-md-3 text-center hidden-xs">
+        <span id="logo" class="hvr-buzz hidden-xs">
+            <img src="./assets/img/logo.png" height="100" width="100" alt="MQTT Dashboard"/>
+        </span>
+    </div>
+    <div class="col-md-3 text-center hidden-xs">
         <h3>Order by</h3>
         <button class="btn btn-flat btn-primary sort active" data-sort="default">Data</button>
         <button class="btn btn-flat btn-primary sort" data-sort="random">Random</button>
     </div>
-    <div class="col-md-8 text-center">
+    <div class="col-md-6 text-center">
         <h3>Filter by</h3>
         <button class="btn btn-flat btn-primary active filter" data-filter="all">Show All</button>
         <button class="btn btn-flat btn-primary filter" data-filter=".type_bedroom">Bedroom</button>
