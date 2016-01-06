@@ -89,7 +89,7 @@ TODO img..
 
 The web interface provides along with supported browsers the ability to add the page on your homescreen like a native application. The first time you'll open it, a pop up will come out.
 
-![Added to Homescreen](https://github.com/roccomuso/iot-433mhz/blob/master/other/schemes/added-to-homescreen.jpeg "Added to Homescreen")
+![Added to Homescreen](https://github.com/roccomuso/iot-433mhz/blob/master/other/pics/added-to-homescreen.jpeg "Added to Homescreen")
 
 **Heads Up!** If your server is running on a RPi, make sure to have a static ip address assigned to your server. Otherwise the linked app on the homescreen will not work anymore.
 
