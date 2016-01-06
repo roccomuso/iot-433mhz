@@ -6,7 +6,7 @@ var config = require('../config.json'); // config file
 
 server.listen(config.server_port);
 
-console.log("Server started on port ", config.server_port);
+console.log('Server started on port', config.server_port);
 
 module.exports = function(server_cb, socket_cb){
   

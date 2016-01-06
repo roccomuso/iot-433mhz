@@ -44,7 +44,9 @@ The server is multi-platform, can runs on different hardware combinations:
 NB. The RF receiver module operates at 5V. THE GPIO data pins can only support 3.3V! If you put your receiver on 5V, the data io pin of the raspberry will also receive 5V which is way ot high. A simple resistor (4.7k) should be fine, as already outlined in many forum posts, but is recommendend a logic level converter / level shifter or a simple voltage divider:
 
 ![level shifter](https://github.com/roccomuso/iot-433mhz/blob/master/other/schemes/rpi-llc-receiver.jpg "Level Shifter")
-or
+
+or a simple voltage divider:
+
 ![voltage divider](https://github.com/roccomuso/iot-433mhz/blob/master/other/schemes/voltage-divider.jpg "Voltage Divider")
 
 The important thing here is the ratio of R1 to R2; R1 should be just over half R2's value to ensure 5V is divided down to 3.3V. The values shown here should be suitable for most uses.
