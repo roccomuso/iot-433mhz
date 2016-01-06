@@ -85,6 +85,14 @@ Reachable on the <code>http://serverAddress:PORT</code>, the web <code>server_po
 
 TODO img..
 
+### Add to Homescreen
+
+The web interface provides along with supported browsers the ability to add the page on your homescreen like a native application. The first time you'll open it, a pop up will come out.
+
+![Added to Homescreen](https://github.com/roccomuso/iot-433mhz/blob/master/other/schemes/added-to-homescreen.jpeg "Added to Homescreen")
+
+**Heads Up!** If your server is running on a RPi, make sure to have a static ip address assigned to your server. Otherwise the linked app on the homescreen will not work anymore.
+
 ## API
 
 
@@ -122,6 +130,12 @@ Required parameters: {'new_code': xxxx}
 
 Soon will be available the official app on both the stores.
 
-# License
+# License (MIT)
 
-MIT
+Copyright (c) 2016 Rocco Musolino, hackerstribe.com
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.

@@ -1,0 +1,16 @@
+{
+  "name": "Internet of Things 433Mhz",
+  "short_name": "IoT 433Mhz",
+  "lang": "en-US",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "icons": [{
+    "src": "assets/img/icon_48.png",
+    "sizes": "48x48",
+    "type": "image/png"
+  }, {
+    "src": "assets/img/icon_128.png",
+    "sizes": "128x128",
+    "type": "image/png"
+  }]
+}
