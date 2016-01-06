@@ -40,7 +40,7 @@
 <body>
 
 
-    <div id="logo" class="pull-left hvr-buzz">
+    <div id="logo" class="pull-left hvr-buzz hidden-xs">
         <img src="./assets/img/logo.png" height="100" width="100" alt="MQTT Dashboard"/>
     </div>
 
@@ -51,7 +51,7 @@
 <!-- CARDS -->
 
 <div class="row">
-    <div class="col-md-4 text-center">
+    <div class="col-md-4 text-center hidden-xs">
         <h3>Order by</h3>
         <button class="btn btn-flat btn-primary sort active" data-sort="default">Data</button>
         <button class="btn btn-flat btn-primary sort" data-sort="random">Random</button>
@@ -59,10 +59,10 @@
     <div class="col-md-8 text-center">
         <h3>Filter by</h3>
         <button class="btn btn-flat btn-primary active filter" data-filter="all">Show All</button>
-        <button class="btn btn-flat btn-primary filter" data-filter=".type_on_off">on_off</button>
-        <button class="btn btn-flat btn-primary filter" data-filter=".type_info">info</button>
-        <button class="btn btn-flat btn-primary filter" data-filter=".type_graph">graph</button>
-        <button class="btn btn-flat btn-primary filter" data-filter=".type_custom">custom</button>
+        <button class="btn btn-flat btn-primary filter" data-filter=".type_bedroom">Bedroom</button>
+        <button class="btn btn-flat btn-primary filter" data-filter=".type_bathroom">Bathroom</button>
+        <button class="btn btn-flat btn-primary filter" data-filter=".type_livingroom">Livingroom</button>
+        <button class="btn btn-flat btn-primary filter" data-filter=".type_kitchen">Kitchen</button>
 
     </div>
 </div>
@@ -71,7 +71,7 @@
 
 <div id="cards_container">
 
-    <div class="card pin mix type_info" style="background-color: #9CCC65;">
+    <div class="card pin mix type_bathroom" style="background-color: #9CCC65;">
 
             <div class="card-content">
 
@@ -94,7 +94,7 @@
         </div>
 
 
-        <div class="card pin mix type_on_off" style="background-color: #E2E26D;">
+        <div class="card pin mix type_bedroom" style="background-color: #E2E26D;">
 
             <div class="card-content">
 
@@ -117,7 +117,7 @@
         </div>
 
 
-        <div class="card pin mix type_graph" style="background-color: #5C6BC0;">
+        <div class="card pin mix type_livingroom" style="background-color: #5C6BC0;">
 
             <div class="card-content">
 
@@ -139,7 +139,7 @@
 
         </div>
 
-        <div class="card pin mix type_info" style="background-color: #c1c8cc;">
+        <div class="card pin mix type_bathroom" style="background-color: #c1c8cc;">
 
             <div class="card-content">
 
@@ -161,7 +161,7 @@
 
         </div>
 
-        <div class="card pin mix type_custom">
+        <div class="card pin mix type_kitchen">
 
             <div class="card-content">
 
@@ -171,7 +171,7 @@
                 </div>
 
                 <div class="card-body">
-                    <p>[type_custom] qui dolorem ipsum, quia dolor sit, amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt, ut labore et dolore magnam aliquam quaerat voluptatem.</p>
+                    <p>[type_kitchen] qui dolorem ipsum, quia dolor sit, amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt, ut labore et dolore magnam aliquam quaerat voluptatem.</p>
                 </div>
 
                 <footer class="card-footer">
