@@ -18,7 +18,7 @@ function printDB(keysToGet){
 		console.log('### Getting key:', key);
 
 		db.get(key, function (err, value) {
-	    	if (err) return console.log('Ooops!', err) // likely the key was not found 
+	    	if (err) return console.log('Ooops!', err); // likely the key was not found 
 	 		console.log(value);
 		});
 

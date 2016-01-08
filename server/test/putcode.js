@@ -32,7 +32,7 @@ db.get('RFcodes', function (err, codes) {
 	codes[new_code] = initializeRFcodes();
 	// store again on db
 	db.put('RFcodes', codes, function (err) {
-    	if (err) return console.log('Ooops!', err) // some kind of I/O error 
+    	if (err) return console.log('Ooops!', err); // some kind of I/O error 
      	printDB(['RFcodes']);
     });
 });
@@ -42,7 +42,7 @@ function printDB(keysToGet){
 		console.log('### Getting key:', key);
 
 		db.get(key, function (err, value) {
-	    	if (err) return console.log('Ooops!', err) // likely the key was not found 
+	    	if (err) return console.log('Ooops!', err); // likely the key was not found 
 	 		console.log(value);
 		});
 

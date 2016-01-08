@@ -43,7 +43,7 @@ async.series({
     },
     server: function(callback){
     	// Starting HTTP Server, API, and Web Socket
-    	var server = require('./components/server.js')(function(app){
+    	require('./components/server.js')(function(app){
     		  // Handling routes
 
 			  app.route('/rfcode/:code')
@@ -111,20 +111,20 @@ function(err, results) {
 
 
 // (Ctrl + C) - Handler
-if (process.platform === "win32") {
-  var rl = require("readline").createInterface({
+if (process.platform === 'win32') {
+  var rl = require('readline').createInterface({
     input: process.stdin,
     output: process.stdout
   });
 
-  rl.on("SIGINT", function () {
-    process.emit("SIGINT");
+  rl.on('SIGINT', function () {
+    process.emit('SIGINT');
   });
 
   rl.close(); // without it we have conflict with the Prompt Module.
 }
 
-process.on("SIGINT", function () {
+process.on('SIGINT', function () {
 	console.log('Closing...');
 	if (typeof rf433mhz !== 'undefined'){ // Close Serial Port
 		rf433mhz.close(function(err){
