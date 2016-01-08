@@ -74,19 +74,19 @@ async.series({
                 io.on('connection', socketFunctions.onConnection);
             
                 rf433mhz.on(function (codeData) {
-                    var data = JSON.parse(codeData);
-                    if (config.DEBUG) console.log('RFcode received: ', data);
+                    
+                    if (config.DEBUG) console.log('RFcode received: ', codeData);
 
-                    if (data.status === 'received'){
+                    if (codeData.status === 'received'){
 
                         // put in DB if doesn't exists yet
-                        dbFunctions.putInDB(data, function(){
+                        dbFunctions.putInDB(codeData, function(){
 
-                            dbFunctions.isIgnored(data.code, function(isIgnored){
-                                if (config.DEBUG) console.log('Ignore code '+data.code+': ', isIgnored);
+                            dbFunctions.isIgnored(codeData.code, function(isIgnored){
+                                if (config.DEBUG) console.log('Ignore code '+codeData.code+': ', isIgnored);
 
                                 if (!isIgnored)
-                                    io.emit('newRFCode', data); // sent to every open socket.
+                                    io.emit('newRFCode', codeData); // sent to every open socket.
 
                             });
 

@@ -84,7 +84,9 @@ The important thing here is the ratio of R1 to R2; R1 should be just over half R
 The system can run on RPi using an external Arduino like the other platforms. To do that, just set to <code>true</code> the <code>use-external-arduino</code> option in the <code>config.json</code> file.
 - In this way we'll force the RPi to use an Arduino through USB, using the node.js serialport module.
 
-**Heads Up!** On the RPi the *serial console* constantly uses the serial ports that needs to be released before being accessible by the iot-433mhz server. The iot-433mhz server **permanently disable** the *serial console* and restart the RPi when executed the first time.
+- I'm not sure if strictly necessary but it's worth installing the arduino IDE and related drivers with <code>apt-get install arduino</code>
+
+**Heads Up!** Sometimes the USB doesn't get detected on the fly (you should be able to see it with <code>ls /dev/tty*</code>). Just plug-it and then reboot your RPi.
 
 Is recommended to run the server on the RPi through a "terminal session". (see [screen](https://www.raspberrypi.org/forums/viewtopic.php?t=8099&p=101209)).
 

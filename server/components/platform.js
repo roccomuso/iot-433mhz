@@ -58,12 +58,21 @@ var rf433mhz = function(board){
 	};
 
 	this.on = function(callback){ // Receiving RF Code
-		if (type === 'rpi'){ // rpi
-			rfSniffer.on('codes', callback);
-		}else{ // arduino through serial
-			serial.on('data', callback);
-		}
-	
+			if (type === 'rpi'){ // rpi
+				rfSniffer.on('codes', function(data){
+					// TODO - need to analyzie and parse data
+					// callback(...); // gotta return JSON data
+				});
+			}else{ // arduino through serial
+				serial.on('data', function(data){
+					try{
+						callback(JSON.parse(data)); // returning JSON parsed
+					}catch(e){
+						console.log('Error parsing this JSON: ', data);
+					}
+				});
+			}
+		
 	};
 
 	this.send = function(code, callback){
