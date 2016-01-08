@@ -25,39 +25,6 @@ TODO
 
 For more about the required 433mhz transmitter/receiver and the supported hardware see the [hardware-layer page](https://github.com/roccomuso/iot-433mhz/tree/master/hardware-layer).
 
-# Server
-
-The server is built on top of Node.js.
-
-If working on RPi, remember to install wiringPi and to execute the app with Sudo.
-
-The server is multi-platform, can runs on different hardware combinations:
-
-### A. Computer with connected Arduino (with the right sketch) and 433 MHz transmitter and receiver.
-
-![tx rx arduino](https://github.com/roccomuso/iot-433mhz/blob/master/other/schemes/arduino-transmitter-and-receiver.jpg "Arduino Interface and 433mhz")
-
-### B. Raspberry Pi (Raspbian) with 433 MHz transmitter and receiver
-
-![rpi 433mhz](https://github.com/roccomuso/iot-433mhz/blob/master/other/schemes/raspberry-pi-rxb6-kxd10036-on-3.3v.jpg "IoT-433mhz with RPi")
-
-NB. The RF receiver module operates at 5V. THE GPIO data pins can only support 3.3V! If you put your receiver on 5V, the data io pin of the raspberry will also receive 5V which is way ot high. A simple resistor (4.7k) should be fine, as already outlined in many forum posts, but is recommendend a logic level converter / level shifter or a simple voltage divider:
-
-![level shifter](https://github.com/roccomuso/iot-433mhz/blob/master/other/schemes/rpi-llc-receiver.jpg "Level Shifter")
-
-or a simple voltage divider:
-
-![voltage divider](https://github.com/roccomuso/iot-433mhz/blob/master/other/schemes/voltage-divider.jpg "Voltage Divider")
-
-The important thing here is the ratio of R1 to R2; R1 should be just over half R2's value to ensure 5V is divided down to 3.3V. The values shown here should be suitable for most uses.
-
-Heads Up!
-
-- The Raspberry Pi platform make use of the 433mhz-utils library through the rpi-433 module. But can also run using an external Arduino like the other platforms. To do that, just set to true the <code>use-external-arduino</code> option in the <code>config.json</code> file.
-- The other platforms exploits an arduino serial communication, using the node.js serialport module (check out the requirements to have it installed correctly: https://github.com/voodootikigod/node-serialport - on windows make sure to install python 2.7 and Microsoft Visual Studio Express 2013)
-
-Is recommended to run the server on the RPi through a terminal session. (see [screen](https://www.raspberrypi.org/forums/viewtopic.php?t=8099&p=101209)).
-
 # Install
 
 You can get it on [npm](https://www.npmjs.com/):
@@ -70,10 +37,56 @@ or Clone this Repo:
 
 Then don't forget to <code>cd server</code> and install all the dependencies with <code>npm install</code>.
 
-### What kind of devices it works with
+# Setup
 
-See the [Hardware page](https://github.com/roccomuso/iot-433mhz/tree/master/hardware-layer).
+The server is built on top of Node.js.
 
+The server is multi-platform, can runs on different hardware combinations shown below:
+
+## A. Computer with Arduino connected and a 433 MHz transmitter and receiver.
+
+![tx rx arduino](https://github.com/roccomuso/iot-433mhz/blob/master/other/schemes/arduino-transmitter-and-receiver.jpg "Arduino Interface and 433mhz")
+
+### Mac, Linux
+
+The iot-433mhz server should run smoothly. Remember to execute with root permission (*sudo*).
+
+### Windows
+
+To run the server on windows make sure to install **python 2.7** and **Microsoft Visual Studio Express 2013**. (Required by [node-serialport](https://github.com/voodootikigod/node-serialport)).
+
+## B. Raspberry Pi (Raspbian) with 433 MHz transmitter and receiver
+
+For this configuration remember to install **wiringPi** ([link](http://wiringpi.com/download-and-install/)) and to execute the app with root permission (*sudo*).
+
+### Transmitter and Receiver connected to GPIO
+
+One way to go is directly connecting the radio transmitter and receiver to the GPIO as shown in the following picture:
+
+![rpi 433mhz](https://github.com/roccomuso/iot-433mhz/blob/master/other/schemes/raspberry-pi-rxb6-kxd10036-on-3.3v.jpg "IoT-433mhz with RPi")
+
+**Heads Up**. The RF receiver module operates at 5V. THE GPIO data pins can only support 3.3V! If you put your receiver on 5V, the data io pin of the raspberry will also receive 5V which is way too high. A simple resistor (4.7k) should be fine, as already outlined in many forum posts, but is recommendend a **logic level converter** / level shifter or a simple **voltage divider**:
+
+![level shifter](https://github.com/roccomuso/iot-433mhz/blob/master/other/schemes/rpi-llc-receiver.jpg "Level Shifter")
+
+here the voltage divider:
+
+![voltage divider](https://github.com/roccomuso/iot-433mhz/blob/master/other/schemes/voltage-divider.jpg "Voltage Divider")
+
+The important thing here is the ratio of R1 to R2; R1 should be just over half R2's value to ensure 5V is divided down to 3.3V. The values shown here should be suitable for most uses.
+
+**NB**. The Raspberry Pi platform make use of the 433mhz-utils library through the rpi-433 module for this configuration.
+
+### Using RPi with an external Arduino.
+
+- Remember to xecute with **root** permission.
+
+The system can run on RPi using an external Arduino like the other platforms. To do that, just set to <code>true</code> the <code>use-external-arduino</code> option in the <code>config.json</code> file.
+- In this way we'll force the RPi to use an Arduino through USB, using the node.js serialport module.
+
+**Heads Up!** On the RPi the *serial console* constantly uses the serial ports that needs to be released before being accessible by the iot-433mhz server. The iot-433mhz server **permanently disable** the *serial console* and restart the RPi when executed the first time.
+
+Is recommended to run the server on the RPi through a "terminal session". (see [screen](https://www.raspberrypi.org/forums/viewtopic.php?t=8099&p=101209)).
 
 # Usage
 
@@ -92,6 +105,11 @@ The web interface provides along with supported browsers the ability to add the 
 ![Added to Homescreen](https://github.com/roccomuso/iot-433mhz/blob/master/other/pics/added-to-homescreen.JPG "Added to Homescreen")
 
 **Heads Up!** If your server is running on a RPi, make sure to have a static ip address assigned to your server. Otherwise the linked app on the homescreen will not work anymore.
+
+### What kind of devices the system works with
+
+See the [Hardware page](https://github.com/roccomuso/iot-433mhz/tree/master/hardware-layer).
+
 
 ## API
 
@@ -130,12 +148,3 @@ Required parameters: {'new_code': xxxx}
 
 Soon will be available the official app on both the stores.
 
-# License (MIT)
-
-Copyright (c) 2016 Rocco Musolino, hackerstribe.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
