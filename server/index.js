@@ -4,6 +4,7 @@
 var async = require('async');
 var express = require('express');
 var levelup = require('levelup');
+var chalk = require('chalk');
 var config = require('./config.json');
 
 // Create or open the underlying LevelDB store
@@ -16,13 +17,13 @@ var rf433mhz;
 async.series({
     ascii_logo: function(callback){
     	require('./components/ascii_logo.js')(function(logo){
-    		console.log(logo);
+    		console.log(chalk.magenta(logo)); // print blue ascii logo
     		callback(null, 1);
     	}); 
     },
     platform: function(callback){
 
-        console.log('Debug Mode: '+ config.DEBUG);
+        console.log(chalk.bgYellow('Debug Mode:', config.DEBUG));
 
     	require('./components/platform.js')(function(rf){
     		rf433mhz = rf; // platform independent class

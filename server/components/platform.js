@@ -1,6 +1,7 @@
 var config = require('../config.json');
 var prompt = require('prompt');
 var fs = require('fs');
+var chalk = require('chalk');
 // Import events module and create an eventEmitter object
 var events = require('events');
 var eventEmitter = new events.EventEmitter();
@@ -130,15 +131,19 @@ module.exports = function(module_callback){
 
 	eventEmitter.on('choose_port', choose_port);
 
+	function print_colored_text(text){
+		console.log(chalk.bgCyan(text));
+	}
+
 	switch(process.platform){
 		case 'win32':
 			// Under windows
-			console.log('Running on Windows platform');
+			print_colored_text('Running on Windows platform');
 			eventEmitter.emit('choose_port', 'arduino');
 		break;
 		case 'darwin':
 			// Uder MAC OS X
-			console.log('Running on MAC OS X platform');
+			print_colored_text('Running on MAC OS X platform');
 			eventEmitter.emit('choose_port', 'arduino');
 		break;
 		case 'linux':
@@ -150,7 +155,7 @@ module.exports = function(module_callback){
 			}else{
 				// Running on Linux system
 				if (data.indexOf('ID=raspbian') >= 0){
-					console.log('Running on RPi platform');
+					print_colored_text('Running on RPi platform');
 					console.log('Using external Arduino: ',config.platforms.rpi['use-external-arduino']);
 					// Running on RPi
 					// Only on RPi will successfully works.
@@ -159,7 +164,7 @@ module.exports = function(module_callback){
 				}else{
 
 				// we're on a standard linux
-				console.log('Running on Linux platform');
+				print_colored_text('Running on Linux platform');
 				eventEmitter.emit('choose_port', 'arduino');
 
 				}
@@ -169,7 +174,7 @@ module.exports = function(module_callback){
 			});
 		break;
 		default:
-			console.log('Platform '+process.platform+' not supported');
+			print_colored_text('Platform '+process.platform+' not supported');
 		break;
 	}
 
