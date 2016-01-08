@@ -1,5 +1,6 @@
 var config = require('../config.json');
 var prompt = require('prompt');
+var fs = require('fs');
 // Import events module and create an eventEmitter object
 var events = require('events');
 var eventEmitter = new events.EventEmitter();
@@ -25,7 +26,7 @@ var rf433mhz = function(board){
 			var SerialPort = serialport.SerialPort; // localize object constructor
 
 			serial = new SerialPort(board.port, {
-  				parser: serialport.parsers.readline("\n"),
+  				parser: serialport.parsers.readline('\n'),
   				baudRate: config.arduino_baudrate
 			}, false); // openImmediately flag set to false
 
@@ -50,7 +51,7 @@ var rf433mhz = function(board){
 		});
 	  else{ // rpi
 	  	// initialize rpi-433 module
-	  	rfSniffer = rpi433.sniffer(config.platforms.rpi['sniff-pin'], config.platforms.rpi['debounce-delay']), //Snif on PIN 2 with a 500ms debounce delay 
+	  	rfSniffer = rpi433.sniffer(config.platforms.rpi['sniff-pin'], config.platforms.rpi['debounce-delay']); //Snif on PIN 2 with a 500ms debounce delay 
     	rfSend    = rpi433.sendCode;
 	  }
 	};
@@ -92,12 +93,12 @@ var rf433mhz = function(board){
 		}
 	};
 
-}
+};
 
 module.exports = function(module_callback){
 
-	function choose_port(){
-		var serialPort = require("serialport");
+	function choose_port(whatToUse){
+		var serialPort = require('serialport');
 		serialPort.list(function (err, ports) {
 			if (ports.length === 0) { console.log('No ports available'); return;}
 
@@ -110,14 +111,14 @@ module.exports = function(module_callback){
 
 			prompt.start();
 
-			prompt.get({properties: {port: {required: true, type: "number", conform: function(value){
+			prompt.get({properties: {port: {required: true, type: 'number', conform: function(value){
 				if (value > 0 && value <= ports.length) return true;
 				else return false;
 			}}}}, function (err, result) {
 	    // choices:
 	    console.log('Choosen port:', ports[result.port-1].comName);
 	    // return choosen port
-	    var classe = new rf433mhz({platform: 'arduino', port: ports[result.port-1].comName});
+	    var classe = new rf433mhz({platform: whatToUse, port: ports[result.port-1].comName});
 
 	    module_callback(classe);
 	    
@@ -130,17 +131,17 @@ module.exports = function(module_callback){
 	eventEmitter.on('choose_port', choose_port);
 
 	switch(process.platform){
-		case "win32":
+		case 'win32':
 			// Under windows
-			console.log("Running on Windows platform");
-			eventEmitter.emit('choose_port');
+			console.log('Running on Windows platform');
+			eventEmitter.emit('choose_port', 'arduino');
 		break;
-		case "darwin":
+		case 'darwin':
 			// Uder MAC OS X
-			console.log("Running on MAC OS X platform");
-			eventEmitter.emit('choose_port');
+			console.log('Running on MAC OS X platform');
+			eventEmitter.emit('choose_port', 'arduino');
 		break;
-		case "linux":
+		case 'linux':
 			// Under Linux
 			fs.readFile('/etc/os-release', 'utf-8', function(err, data){
 			if (err){
@@ -153,13 +154,13 @@ module.exports = function(module_callback){
 					console.log('Using external Arduino: ',config.platforms.rpi['use-external-arduino']);
 					// Running on RPi
 					// Only on RPi will successfully works.
-					module_callback(new rf433mhz({platform: 'rpi'}));
+					eventEmitter.emit('choose_port', 'rpi');
 					
 				}else{
 
 				// we're on a standard linux
 				console.log('Running on Linux platform');
-				eventEmitter.emit('choose_port');
+				eventEmitter.emit('choose_port', 'arduino');
 
 				}
 
@@ -168,8 +169,8 @@ module.exports = function(module_callback){
 			});
 		break;
 		default:
-		console.log('Platform '+process.platform+' not supported');
+			console.log('Platform '+process.platform+' not supported');
 		break;
 	}
 
-}
+};
