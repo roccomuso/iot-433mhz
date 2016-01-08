@@ -2,9 +2,15 @@
 
 // Include node levelup module
 var levelup = require('levelup');
+var path = require('path');
+var config = require('../config.json');
+
+// DB path
+var db_path = path.resolve(path.dirname(require.main.filename), '..'+path.sep, config.DB_FolderName);
+console.log('Opening levelup DB: ', db_path, require('os').EOL);
 
 // Create or open the underlying LevelDB store
-var db = levelup('../mydb', {valueEncoding: 'json'});
+var db = levelup(db_path, {valueEncoding: 'json'});
 
 function initializeRFcodes(data){ // data is the code received through serial
 	if (typeof data === 'undefined') data = {};
@@ -18,9 +24,10 @@ function initializeRFcodes(data){ // data is the code received through serial
 	};
 }
 
-var new_code = 1364;
+var new_code = 3333;
 
 db.get('RFcodes', function (err, codes) {
+	if (err) return console.log(err);
 	// let's put it
 	codes[new_code] = initializeRFcodes();
 	// store again on db

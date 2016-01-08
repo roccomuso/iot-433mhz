@@ -2,9 +2,15 @@
 
 // Include node levelup module
 var levelup = require('levelup');
+var path = require('path');
+var config = require('../config.json');
+
+// DB path
+var db_path = path.resolve(path.dirname(require.main.filename), '..'+path.sep, config.DB_FolderName);
+console.log('Opening levelup DB: ', db_path, require('os').EOL);
 
 // Create or open the underlying LevelDB store
-var db = levelup('./mydb', {valueEncoding: 'json'});
+var db = levelup(db_path, {valueEncoding: 'json'});
 
 // Function to print passed keys
 function printDB(keysToGet){
@@ -20,7 +26,7 @@ function printDB(keysToGet){
 }
 
 
-
+// Keys to get
 var keysToGet = ['RFcodes'];
 
 printDB(keysToGet);

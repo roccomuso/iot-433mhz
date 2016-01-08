@@ -1,14 +1,13 @@
 // On Raspberry Pi make sure to execute with SUDO.
 // On Windows platform make sure to have Visual Studio Express 2013 installed (https://github.com/voodootikigod/node-serialport)
 
-var fs = require('fs');
 var async = require('async');
 var express = require('express');
 var levelup = require('levelup');
 var config = require('./config.json');
 
 // Create or open the underlying LevelDB store
-var db = levelup('./mydb', {valueEncoding: 'json'});
+var db = levelup('./'+config.DB_FolderName, {valueEncoding: 'json'});
 
 // Radio Frequency Class platform-independent
 var rf433mhz;
