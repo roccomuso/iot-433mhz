@@ -35,7 +35,11 @@ or Clone this Repo:
 
 <code>git clone https://github.com/roccomuso/iot-433mhz.git</code>
 
-Then don't forget to <code>cd server</code> and install all the dependencies with <code>npm install</code>.
+Then don't forget to <code>cd server</code> and install all the dependencies with <code>npm install</code> (on UNIX system root privileges are required).
+
+**Heads Up**: On Raspberry Pi, you can encounter some issue installing all the dependencies, due to permission errors. If that happens try this: <code>sudo chown -R $USER:$GROUP ~/.npm</code> combined with running <code>npm cache clean</code> to get any busted packages out of your cache. In addition, if the error still persist, try adding the flag <code>--unsafe-perm</code>:
+
+<code>sudo npm install --unsafe-perm</code>
 
 # Setup
 
@@ -55,13 +59,24 @@ The iot-433mhz server should run smoothly. Remember to execute with root permiss
 
 To run the server on windows make sure to install **python 2.7** and **Microsoft Visual Studio Express 2013**. (Required by [node-serialport](https://github.com/voodootikigod/node-serialport)).
 
-## B. Raspberry Pi (Raspbian) with 433 MHz transmitter and receiver
+## B. Raspberry Pi (Raspbian Jessie) with 433 MHz transmitter and receiver
 
-For this configuration remember to install **wiringPi** ([link](http://wiringpi.com/download-and-install/)) and to execute the app with root permission (*sudo*).
+To use iot-433mhz on Raspberry Pi first do a **system update**: 
+- Update <code>/etc/apt/sources.list</code> to have <code>jessie</code> wherever you've currently got <code>wheezy</code>.
+- <code>sudo apt-get update && sudo apt-get dist-upgrade</code>. 
+- <code>sudo rpi-update</code>.
+- Reboot.
+
+Then install Node.js:
+
+    wget http://node-arm.herokuapp.com/node_latest_armhf.deb
+    sudo dpkg -i node_latest_armhf.deb
+    # Check installation
+    node -v
 
 ### Transmitter and Receiver connected to GPIO
 
-One way to go is directly connecting the radio transmitter and receiver to the GPIO as shown in the following picture:
+One way to go is directly connecting the radio transmitter and receiver to the GPIO as shown in the following picture, but first remember to install **wiringPi** ([link](http://wiringpi.com/download-and-install/)) and to execute the app with root permission (*sudo*):
 
 ![rpi 433mhz](https://github.com/roccomuso/iot-433mhz/blob/master/other/schemes/raspberry-pi-rxb6-kxd10036-on-3.3v.jpg "IoT-433mhz with RPi")
 
@@ -79,14 +94,14 @@ The important thing here is the ratio of R1 to R2; R1 should be just over half R
 
 ### Using RPi with an external Arduino.
 
-- Remember to xecute with **root** permission.
+- Remember to execute with **root** permission.
 
 The system can run on RPi using an external Arduino like the other platforms. To do that, just set to <code>true</code> the <code>use-external-arduino</code> option in the <code>config.json</code> file.
 - In this way we'll force the RPi to use an Arduino through USB, using the node.js serialport module.
 
-- I'm not sure if strictly necessary but it's worth installing the arduino IDE and related drivers with <code>apt-get install arduino</code>
+- I'm not sure if strictly necessary but it's worth installing the arduino IDE and related drivers with <code>apt-get install arduino</code>.
 
-**Heads Up!** Sometimes the USB doesn't get detected on the fly (you should be able to see it with <code>ls /dev/tty*</code>). Just plug-it and then reboot your RPi.
+**Heads Up!** Sometimes the USB doesn't get detected on the fly (you should be able to see it with <code>ls /dev/tty*</code> - [USB not working?](https://www.raspberrypi.org/forums/viewtopic.php?f=28&t=53832)). Just plug-it and then reboot your RPi.
 
 Is recommended to run the server on the RPi through a "terminal session". (see [screen](https://www.raspberrypi.org/forums/viewtopic.php?t=8099&p=101209)).
 
