@@ -68,8 +68,8 @@ async.series({
 
 			}, function(io){ // Web Socket handler
     		      
-                var socketFunctions = require('./components/socketFunctions.js')(io, rf433mhz, db);
                 var dbFunctions = require('./components/dbFunctions.js')(db, config);
+                var socketFunctions = require('./components/socketFunctions.js')(io, rf433mhz, dbFunctions);
 
                 io.on('connection', socketFunctions.onConnection);
             
@@ -82,13 +82,17 @@ async.series({
                         // put in DB if doesn't exists yet
                         dbFunctions.putInDB(codeData, function(){
 
-                            dbFunctions.isIgnored(codeData.code, function(isIgnored){
+                            dbFunctions.isIgnored(codeData.code).then(function(isIgnored){
                                 if (config.DEBUG) console.log('Ignore code '+codeData.code+': ', isIgnored);
 
                                 if (!isIgnored)
                                     io.emit('newRFCode', codeData); // sent to every open socket.
 
+                            }).catch(function(err){
+                                console.log(err);
                             });
+
+
 
                         });
                         

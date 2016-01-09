@@ -48,17 +48,37 @@ module.exports = function(db, config){
 	            });
 
 			},
-			isIgnored: function(code, callback){
-				db.get('RFcodes', function (err, codes) {
-				    if (err) return console.log('Ooops!', err) // likely the key was not found 
+			isIgnored: function(code){
+				return new Promise(function(resolve, reject){
+					db.get('RFcodes', function (err, codes) {
+					    if (err) reject('Ooops! '+ err); // likely the key was not found 
 
-				    var isIgnored = false;
-	                Object.keys(codes).forEach(function(item){
-	                	if (item == code)
-	                		if (typeof codes[item].isIgnored === 'boolean') isIgnored = codes[item].isIgnored;
-	                });
-	                callback(isIgnored);
+					    var isIgnored = false;
+		                Object.keys(codes).forEach(function(item){
+		                	if (item == code)
+		                		if (typeof codes[item].isIgnored === 'boolean') isIgnored = codes[item].isIgnored;
+		                });
+		                resolve(isIgnored);
+					});
 				});
+			},
+			ignoreCode: function(code){
+				return new Promise(function(resolve, reject){
+					methods.isIgnored(code).then(function(ignored){
+						if (!ignored){ // let's ignore it
+							db.get('RFcodes', function (err, codes) {
+					    		if (err) reject('Ooops! '+ err);
+					    		codes[code].isIgnored = true;
+					    		db.put('RFcodes', codes, function (err) {
+			                    	if (err) reject('Ooops! '+ err); // some kind of I/O error 
+			                     	resolve(true);
+		                    	});
+					    		
+							});
+						}
+					}).catch(function(err){ reject(err); });
+				});
+
 			}
 	};
 

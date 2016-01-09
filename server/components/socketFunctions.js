@@ -3,17 +3,32 @@
 
 
 
-module.exports = function(socket, rf433mhz, db){
+module.exports = function(socket, rf433mhz, dbFunctions){
 	
 	var clients = []; // Store sockets
 	
-	// exposed methods
-	var methods = {
+	// private methods
+	var _methods = {
 		getInitData: function(){
 			// TODO 
 			// get data from DB to render the init cards on the UI.
 			return {prova: true, come: 'va'};
 		},
+		onIgnoreCode: function(data){
+			// data = {codeToIgnore: xxxx} - let's put codeToIgnore.isIgnored = false in DB
+            var x = JSON.parse(data);
+            dbFunctions.ignoreCode(x.codeToIgnore).then(function(ok){
+            	console.log('code ignored: ', x.codeToIgnore); 
+            }).catch(function(err){
+            	console.log(err);
+            });
+            
+        }
+	};
+
+	// exposed methods
+	var methods = {
+		
 		onConnection: function(client_socket){ // single user socket
             // TODO ...
             console.log('User connected via socket.io');
@@ -26,13 +41,10 @@ module.exports = function(socket, rf433mhz, db){
 		    });
 
             // Sending actual configuration
-            client_socket.emit('initData', methods.getInitData());
+            client_socket.emit('initData', _methods.getInitData());
 
             // Listen for socket events
-            client_socket.on('ignoreCode', function(data){ 
-            	// TODO (put codeToIgnore.isIgnored = false and update DB)
-            	console.log(data);
-            });
+            client_socket.on('ignoreCode', _methods.onIgnoreCode);
 
             client_socket.on('assignCode', function(data){ 
             	// TODO

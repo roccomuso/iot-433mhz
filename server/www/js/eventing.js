@@ -4,7 +4,7 @@
 
 
 events.on('ignoreCode', function(code){
-  socket.emit('ignoreCode', {codeToIgnore: code}); // NB. socket defined below eventing.js
+  socket.emit('ignoreCode', JSON.stringify({codeToIgnore: code})); // NB. socket defined below eventing.js
 });
 
 events.on('assignCode', function(code){
