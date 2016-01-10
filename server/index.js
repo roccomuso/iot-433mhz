@@ -63,8 +63,13 @@ async.series({
 			    });
 
 			  // serve as static all the other routes
-			  app.get('*', express.static('www'));
-			  // TODO page 404.
+              var web_dir = __dirname + '/www';
+			  app.get('*', express.static(web_dir));
+
+              // Middleware that handle 404 page
+              app.use(function(req, res, next){
+                    res.status(404).sendFile(web_dir + '/404.html');
+              });
 
 			}, function(io){ // Web Socket handler
     		      
