@@ -90,7 +90,7 @@ here the voltage divider:
 
 The important thing here is the ratio of R1 to R2; R1 should be just over half R2's value to ensure 5V is divided down to 3.3V. The values shown here should be suitable for most uses.
 
-**NB**. The Raspberry Pi platform make use of the 433mhz-utils library through the rpi-433 module for this configuration.
+**NB**. For this configuration the Raspberry Pi platform uses the 433mhz-utils library through the rpi-433 module.
 
 ### Using RPi with an external Arduino.
 
@@ -107,7 +107,7 @@ Is recommended to run the server on the RPi through a "terminal session". (see [
 
 # Usage
 
-You can use the system through the beautiful web interface (thumbs up for material-design) or make use of the API.
+You can use the system through the beautiful web interface (thumbs up for material-design) or use the API.
 
 ## Web Interface
 
