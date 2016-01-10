@@ -8,8 +8,15 @@ events.on('ignoreCode', function(code){
 });
 
 events.on('assignCode', function(code){
-  // TODO ... open modal box. To assign it to a device
+  // TODO ... open modal dialog. To assign it to a device
   console.log('open modal box ', code);
+  var view = {title: 'Assign code', code: code};
+  templating.renderTemplate('assignCode.mustache', $('#main_modal_box'), view).then(function(){
+  	$('#assign-dialog').modal('show');
+  }).catch(function(){ // err
+  	notie.alert(2, 'Warning<br><b>with</b><br><i>HTML</i><br><u>included.</u>', 2);
+  });
+
   
 });
 
