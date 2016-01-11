@@ -13,8 +13,7 @@
 
 	// receiving initData, initialize the UI
 	socket.on('initData', function(initData){
-		// TODO
-		document.getElementById('_data').innerHTML += JSON.stringify(initData)+'<br/>';
+		events.emit('renderInitCards', initData);
 	});
 
 	// handle the new RFCode. Show a snackbar.

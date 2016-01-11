@@ -3,13 +3,13 @@
             <div class="modal-content">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title">{{title}} {{code}} to a:</h4>
+                <h3 class="modal-title">{{title}} {{code}} to a:</h3>
               </div>
               <div class="modal-body text-center">
-                <div class="btn-group btn-group-justified btn-group-raised">
+              <div class="btn-group btn-group-vertical btn-group-raised">
                   <a href="javascript:void(0)" class="btn "><i class="fa fa-plus"></i> New Room</a>
                   <a href="javascript:void(0)" class="btn "><i class="fa fa-plug"></i> Existing Room</a>
-                  <a href="javascript:void(0)" class="btn "><i class="fa fa-sign-out"></i> Just Ignore</a>
+                  <a href="#" class="btn " onclick="events.emit('ignoreCode', {{code}}); $('#assign-dialog').modal('hide');"><i class="fa fa-sign-out"></i> Just Ignore</a>
                 </div>
               </div>
                 <div class="modal-footer">

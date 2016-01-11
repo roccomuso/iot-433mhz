@@ -4,6 +4,7 @@
 
 
 events.on('ignoreCode', function(code){
+  // send ignore's command to the Server 
   socket.emit('ignoreCode', JSON.stringify({codeToIgnore: code})); // NB. socket defined below eventing.js
 });
 
@@ -13,8 +14,8 @@ events.on('assignCode', function(code){
   var view = {title: 'Assign code', code: code};
   templating.renderTemplate('assignCode.mustache', $('#main_modal_box'), view).then(function(){
   	$('#assign-dialog').modal('show');
-  }).catch(function(){ // err
-  	notie.alert(2, 'Warning<br><b>with</b><br><i>HTML</i><br><u>included.</u>', 2);
+  }).catch(function(err){ // err
+  	notie.alert(2, err, 0);
   });
 
   
@@ -41,4 +42,49 @@ events.on('renderSnackbar', function(_code){
         	$(this).html(incoming_codes[_code].badge_count).fadeIn(500);
     	});
 	}
+});
+
+events.on('renderInitCards', function(initData){
+	// TODO - stampare cards usando le iterazioni di Mustache!
+	console.log(initData);
+
+	var _data = {};
+	//temporaneo
+	templating.renderTemplate('cards.mustache', $('#mainBody'), _data).then(function(){
+
+		// NB. on dynamic refresh always recall these lines below
+		$.material.init();
+		if($('#cards_container').mixItUp('isLoaded')){ // if already loaded
+			$container.mixItUp();
+			$('#cards_container').mixItUp({animation:{ animateResizeContainer: false}});
+		}else
+			$('#cards_container').mixItUp({animation:{ animateResizeContainer: false}});
+
+	}).catch(function(err){ // err
+  		notie.alert(2, err, 0);
+  	});
+
+});
+
+// Menu Buttons
+
+// TODOs
+events.on('clickHome', function(){
+	console.log('Home button clicked.');
+});
+
+events.on('clickIgnoredCodes', function(){
+	console.log('Ignored Codes button clicked.');
+});
+
+events.on('clickTimer', function(){
+	console.log('Timer button clicked.');
+});
+
+events.on('clickTriggers', function(){
+	console.log('Triggers button clicked.');
+});
+
+events.on('clickSettings', function(){
+	console.log('Settings button clicked.');
 });

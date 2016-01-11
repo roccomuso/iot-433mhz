@@ -1,0 +1,145 @@
+<!-- CARDS -->
+
+<div class="row">
+    <div class="col-md-3 text-center">
+        <span id="logo" class="hvr-buzz">
+            <img src="./assets/img/logo.png" height="100" width="100" alt="MQTT Dashboard"/>
+        </span>
+    </div>
+    <div class="col-md-3 text-center hidden-xs">
+        <h3>Order by</h3>
+        <button class="btn btn-flat btn-primary sort active" data-sort="default">Data</button>
+        <button class="btn btn-flat btn-primary sort" data-sort="random">Random</button>
+    </div>
+    <div class="col-md-6 text-center">
+        <h3>Filter by</h3>
+        <button class="btn btn-flat btn-primary active filter" data-filter="all">Show All</button>
+        <button class="btn btn-flat btn-primary filter" data-filter=".type_bedroom">Bedroom</button>
+        <button class="btn btn-flat btn-primary filter" data-filter=".type_bathroom">Bathroom</button>
+        <button class="btn btn-flat btn-primary filter" data-filter=".type_livingroom">Livingroom</button>
+        <button class="btn btn-flat btn-primary filter" data-filter=".type_kitchen">Kitchen</button>
+
+    </div>
+</div>
+
+<!-- Devices cards  -->
+
+<div id="cards_container">
+
+    <div class="card pin mix type_bathroom" style="background-color: #9CCC65;">
+
+            <div class="card-content">
+
+                <div class="card-body">
+                    <p>qui dolorem ipsum, quia dolor sit, amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt, ut labore et dolore magnam aliquam quaerat voluptatem.</p>
+                </div>
+
+                <footer class="card-footer">
+                     <div class="onoffswitch center-block">
+					    <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" checked>
+					    <label class="onoffswitch-label" for="myonoffswitch">
+					        <span class="onoffswitch-inner"></span>
+					        <span class="onoffswitch-switch"></span>
+					    </label>
+					</div>
+                </footer>
+
+            </div>
+
+        </div>
+
+
+        <div class="card pin mix type_bedroom" style="background-color: #E2E26D;">
+
+            <div class="card-content">
+
+                <div class="card-image">
+                    <img src="./assets/demo_img/bedroom1.jpg" alt="Image">
+                    <h3 class="card-image-headline">Stanza da letto</h3>
+                </div>
+
+                <div class="card-body">
+                    <p>Altra card ricevuta.... qui dolorem ipsum, quia dolor sit, amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt, ut labore et dolore magnam aliquam quaerat voluptatem.</p>
+                </div>
+
+                <footer class="card-footer">
+                    <button class="btn btn-flat">Share</button>
+                     
+                </footer>
+
+            </div>
+
+        </div>
+
+
+        <div class="card pin mix type_livingroom" style="background-color: #5C6BC0;">
+
+            <div class="card-content">
+
+                <div class="card-image">
+                    <img src="./assets/demo_img/livingroom1.jpg" alt="Image">
+                    <h3 class="card-image-headline">Soggiorno</h3>
+                </div>
+
+                <div class="card-body">
+                    <p>qui dolorem ipsum, quia dolor sit, amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt, ut labore et dolore magnam aliquam quaerat voluptatem.</p>
+                </div>
+
+                <footer class="card-footer">
+                    <button class="btn btn-flat">Share</button>
+                    <button class="btn btn-flat btn-warning">Learn More</button>
+                </footer>
+
+            </div>
+
+        </div>
+
+        <div class="card pin mix type_bathroom" style="background-color: #c1c8cc;">
+
+            <div class="card-content">
+
+                <div class="card-image">
+                    <img src="./assets/demo_img/galileo1.jpg" alt="Image">
+                    <h3 class="card-image-headline">Sismografo</h3>
+                </div>
+
+                <div class="card-body">
+                    <p>[type: info] qui dolorem ipsum, quia dolor sit, amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt, ut labore et dolore magnam aliquam quaerat voluptatem. [data ultimo contatto]</p>
+                </div>
+
+                <footer class="card-footer">
+                    <button class="btn btn-flat">Share</button>
+                    <button class="btn btn-flat btn-warning"><i class="fa fa-ellipsis-v"></i></button>
+                </footer>
+
+            </div>
+
+        </div>
+
+        <div class="card pin mix type_kitchen">
+
+            <div class="card-content">
+
+                <div class="card-image">
+                    <img src="./assets/demo_img/kitchen1.jpg" alt="Image">
+                    <h3 class="card-image-headline">Cucina</h3>
+                </div>
+
+                <div class="card-body">
+                    <p>[type_kitchen] qui dolorem ipsum, quia dolor sit, amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt, ut labore et dolore magnam aliquam quaerat voluptatem.</p>
+                </div>
+
+                <footer class="card-footer">
+                    <button class="btn btn-flat">Share</button>
+                    <button class="btn btn-flat btn-warning">More <i class="fa fa-ellipsis-v"></i></button>
+                </footer>
+
+            </div>
+
+        </div>
+
+ 
+
+</div>
+
+<!-- / CARDS -->
