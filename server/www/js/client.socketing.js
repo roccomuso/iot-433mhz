@@ -7,9 +7,16 @@
 	});
 
 	socket.on('connect', function(){
-		console.log('Connected to the socket.io server');
-
+		notie.alert(1, '<i class="fa fa-desktop"></i> Connected to the server!', 3);
 	});
+
+	socket.on('connect_error', function(){
+		console.log('WebSocket Connection error...');
+	});
+
+	socket.on('disconnect', function(){
+		notie.alert(3, '<i class="fa fa-plug"></i> Disconnected. Trying to reconnect... <i class="fa fa-refresh fa-spin"></i>', 0);
+	})
 
 	// receiving initData, initialize the UI
 	socket.on('initData', function(initData){

@@ -31,13 +31,15 @@ module.exports = function(socket, rf433mhz, dbFunctions){
 		
 		onConnection: function(client_socket){ // single user socket
             // TODO ...
-            console.log('User connected via socket.io');
+            console.log('Client connected via socket.io:', client_socket.id);
 
             // Save the user:
             clients.push(client_socket); 
 		    client_socket.on('disconnect', function() {
 		        clients.splice(clients.indexOf(client_socket), 1);
-		        // clients.forEach(function(sckt){ console.log(sckt.id);} ); // remaining clients
+		        console.log('Client disconnected:', client_socket.id)
+		        // remaining clients
+		        // clients.forEach(function(sckt){ console.log(sckt.id);} );
 		    });
 
             // Sending actual configuration
