@@ -71,20 +71,25 @@ events.on('renderInitCards', function(initData){
 // TODOs
 events.on('clickHome', function(){
 	console.log('Home button clicked.');
+	$("#c-circle-nav__toggle").click(); // Close Menu
 });
 
 events.on('clickIgnoredCodes', function(){
 	console.log('Ignored Codes button clicked.');
+	$("#c-circle-nav__toggle").click(); // Close Menu
 });
 
 events.on('clickTimer', function(){
 	console.log('Timer button clicked.');
+	$("#c-circle-nav__toggle").click(); // Close Menu
 });
 
 events.on('clickTriggers', function(){
 	console.log('Triggers button clicked.');
+	$("#c-circle-nav__toggle").click(); // Close Menu
 });
 
 events.on('clickSettings', function(){
 	console.log('Settings button clicked.');
+	$("#c-circle-nav__toggle").click(); // Close Menu
 });
