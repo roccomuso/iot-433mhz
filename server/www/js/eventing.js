@@ -55,7 +55,7 @@ events.on('renderInitCards', function(initData){
 		// NB. on dynamic refresh always recall these lines below
 		$.material.init();
 		if($('#cards_container').mixItUp('isLoaded')){ // if already loaded
-			$container.mixItUp();
+			$('#cards_container').mixItUp('destroy');
 			$('#cards_container').mixItUp({animation:{ animateResizeContainer: false}});
 		}else
 			$('#cards_container').mixItUp({animation:{ animateResizeContainer: false}});
