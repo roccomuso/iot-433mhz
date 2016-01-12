@@ -2,13 +2,13 @@
 // On Windows platform make sure to have Visual Studio Express 2013 installed (https://github.com/voodootikigod/node-serialport)
 
 var async = require('async');
-var express = require('express');
 var levelup = require('levelup');
 var chalk = require('chalk');
 var config = require('./config.json');
 
 // Create or open the underlying LevelDB store
 var db = levelup('./'+config.DB_FolderName, {valueEncoding: 'json'});
+var dbFunctions = require('./components/dbFunctions.js')(db, config);
 
 // Radio Frequency Class platform-independent
 var rf433mhz;
@@ -47,33 +47,11 @@ async.series({
     	require('./components/server.js')(function(app){
     		  // Handling routes
 
-			  app.route('/rfcode/:code')
-			    .get(function(req, res) {
-			    	if (typeof req.params.code !== 'undefined'){
-			    		rf433mhz.send(req.params.code, function(err, out){
-				    		if(err) console.log('Error:', err);  
-				    		res.send(JSON.stringify({'status': 'ok'}));
-				    	});
-			      		
-			      	}else
-			      		res.send(JSON.stringify({'status': 'error'}));
-			    })
-			    .post(function(req, res) {
-			      res.send('TODO...');
-			    });
-
-			  // serve as static all the other routes
-              var web_dir = __dirname + '/www';
-			  app.get('*', express.static(web_dir));
-
-              // Middleware that handle 404 page
-              app.use(function(req, res, next){
-                    res.status(404).sendFile(web_dir + '/404.html');
-              });
+              require('./components/api.js')(app, rf433mhz, dbFunctions);
 
 			}, function(io){ // Web Socket handler
     		      
-                var dbFunctions = require('./components/dbFunctions.js')(db, config);
+                
                 var socketFunctions = require('./components/socketFunctions.js')(io, rf433mhz, dbFunctions);
 
                 io.on('connection', socketFunctions.onConnection);
