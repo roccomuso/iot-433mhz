@@ -2,12 +2,15 @@
 // On Windows platform make sure to have Visual Studio Express 2013 installed (https://github.com/voodootikigod/node-serialport)
 
 var async = require('async');
-var levelup = require('levelup');
 var chalk = require('chalk');
 var config = require('./config.json');
 
-// Create or open the underlying LevelDB store
-var db = levelup('./'+config.DB_FolderName, {valueEncoding: 'json'});
+// Create or open the underlying DB store
+var Datastore = require('./EventedDatastore.js'); // improvement not yet PR into ndb repo, that provides events. - it require('nedb');
+var db = {};
+db.RFCODES = new Datastore({filename: 'DB/rfcodes.db', autoload: true});
+db.CARDS = new Datastore({filename: 'DB/cards.db', autoload: true});
+
 var dbFunctions = require('./components/dbFunctions.js')(db, config);
 
 // Radio Frequency Class platform-independent
@@ -61,12 +64,12 @@ async.series({
                     if (config.DEBUG) console.log('RFcode received: ', codeData);
 
                     if (codeData.status === 'received'){
-
                         // put in DB if doesn't exists yet
-                        dbFunctions.putInDB(codeData, function(){
+                        dbFunctions.putCodeInDB(codeData).then(function(mex){
+                            if (config.DEBUG) console.log(mex);
 
-                            dbFunctions.isIgnored(codeData.code).then(function(isIgnored){
-                                if (config.DEBUG) console.log('Ignore code '+codeData.code+': ', isIgnored);
+                            dbFunctions.isCodeIgnored(codeData.code).then(function(isIgnored){
+                                if (config.DEBUG) console.log('isIgnored:', codeData.code+': ', isIgnored);
 
                                 if (!isIgnored)
                                     io.emit('newRFCode', codeData); // sent to every open socket.
@@ -75,8 +78,8 @@ async.series({
                                 console.log(err);
                             });
 
-
-
+                        }, function(err){
+                            console.log(err);
                         });
                         
                     }

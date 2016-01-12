@@ -1,7 +1,6 @@
 {
 	"app_title": "IoT-433Mhz",
 	"DEBUG": true,
-	"DB_FolderName": "DB",
 	"arduino_baudrate": 9600,
 	"server_port": 8080,
 	"platforms":{

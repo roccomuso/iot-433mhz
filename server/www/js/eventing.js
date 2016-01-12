@@ -14,8 +14,6 @@ events.on('removeIgnoreCode', function(code){
 });
 
 events.on('assignCode', function(code){
-  // TODO ... open modal dialog. To assign it to a device
-  console.log('open modal box ', code);
   var view = {title: 'Assign code', code: code};
   templating.renderTemplate('assignCode.mustache', $('#main_modal_box'), view).then(function(){
   	$('#assign-dialog').modal('show');

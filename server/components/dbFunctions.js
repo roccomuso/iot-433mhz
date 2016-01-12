@@ -15,69 +15,38 @@ module.exports = function(db, config){
 
 	// exposed methods
 	var methods = {
-			putInDB: function(data, callback){
-				// check if the given code is in DB, if not, put it.
-	            db.get('RFcodes', function (err, codes) {
-	                if (err) { // likely the key was not found (init RFcodes table)
-	                	var rfcodes = [];
-	                	rfcodes.push(initializeRFcodes(data));
-	                    // create it and put the code:
-	                     db.put('RFcodes', rfcodes, function (err) {
-	                      	if (err) return console.log('Ooops!', err) // some kind of I/O error 
-	                     	callback();
-	                     });
-	                    
-	                }else{ // just put the code if it doesn't exists yet.
-
-	                	if (config.DEBUG) console.log('RFcodes in DB:', codes);
-	                	var notFound = true;
-	                	codes.forEach(function(obj){
-	                		if (obj.code === data.code) notFound = false;
-	                	});
-
-	                	if (notFound){
-	                		// let's put it
-	                		codes.push(initializeRFcodes(data));
-	                		// store again on db
-	                		db.put('RFcodes', codes, function (err) {
-		                    	if (err) return console.log('Ooops!', err) // some kind of I/O error 
-		                     	callback();
-		                    });
-	                	}else callback(); // already there
-
-	                }
-	            });
-
-			},
-			isIgnored: function(code){
+			putCodeInDB: function(data, callback){
 				return new Promise(function(resolve, reject){
-					db.get('RFcodes', function (err, codes) {
-					    if (err) return reject('Ooops! '+ err); // likely the key was not found
-
-					    var isIgnored = false;
-		                codes.forEach(function(obj){
-		                	if (obj.code === code)
-		                		if (typeof obj.isIgnored === 'boolean') isIgnored = obj.isIgnored;
-		                });
-		                resolve(isIgnored);
+					// check if the given code is already in DB, if not, put it.
+					db.RFCODES.find({code: data.code}, function(err, doc){
+						if (err) return reject(err);
+						if (doc.length !== 0){
+							// already exists
+							resolve('Code already exists in DB');
+						}else{
+							// put it
+							db.RFCODES.insert(initializeRFcodes(data), function(err, newDoc){
+								if (err) return reject(err);
+								resolve(newDoc);
+							});
+						}
+					});
+	            });
+			},
+			isCodeIgnored: function(code){
+				return new Promise(function(resolve, reject){
+					db.RFCODES.find({code: code, isIgnored: true}, function(err, doc){
+						if (err) return reject(err);
+						if (doc.length === 0) resolve(false);
+						else resolve(true);
 					});
 				});
 			},
 			ignoreCode: function(code, val){
-				return new Promise(function(resolve, reject){	
-					db.get('RFcodes', function (err, codes) {
-			    		if (err) return reject('Ooops! '+ err);
-			    		codes.forEach(function(obj, i){
-			    			if (obj.code === code){
-			    				obj.isIgnored = val;
-			    				codes[i] = obj;
-			    			}
-			    		});
-			    		db.put('RFcodes', codes, function (err) {
-	                    	if (err) return reject('Ooops! '+ err); // some kind of I/O error 
-	                     	resolve(true);
-                    	});
-			    		
+				return new Promise(function(resolve, reject){
+					db.RFCODES.update({ code: code }, {$set: {isIgnored: val} }, {}, function (err, numReplaced) {
+						if (err) return reject(err);
+						resolve(numReplaced); // 1
 					});
 
 				});
@@ -85,22 +54,17 @@ module.exports = function(db, config){
 			},
 			getIgnoredCodes: function(){
 				return new Promise(function(resolve, reject){
-					var ignored = [];
-					db.get('RFcodes', function (err, codes) {
-					    if (err) return reject(err);
-					    codes.forEach(function(obj){
-					    	if (obj.isIgnored === true) ignored.push(obj);
-		                });
-		                resolve(ignored);
+					db.RFCODES.find({isIgnored: true}, function(err, docs){
+						if (err) return reject(err);
+						resolve(docs);
 					});
 				});
-				
 			},
 			getAllCodes: function(){
 				return new Promise(function(resolve, reject){
-					db.get('RFcodes', function (err, codes) {
-					    if (err) return reject(err);
-		                resolve(codes);
+					db.RFCODES.find({}, function(err, docs){
+						if (err) return reject(err);
+						resolve(docs);
 					});
 				});
 			}
