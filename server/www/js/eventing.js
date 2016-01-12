@@ -5,7 +5,7 @@
 
 events.on('ignoreCode', function(code){
 	// send ignore's command to the Server 
-	socket.emit('ignoreCode', JSON.stringify({codeToIgnore: code})); // NB. socket defined below eventing.js
+	socket.emit('ignoreCode', code); // NB. socket defined below eventing.js
 });
 
 events.on('removeIgnoreCode', function(code){

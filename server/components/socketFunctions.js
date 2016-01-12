@@ -14,15 +14,22 @@ module.exports = function(socket, rf433mhz, dbFunctions){
 			// get data from DB to render the init cards on the UI.
 			return {prova: true, come: 'va'};
 		},
-		onIgnoreCode: function(data){
-			// data = {codeToIgnore: xxxx} - let's put codeToIgnore.isIgnored = false in DB
-            var x = JSON.parse(data);
-            dbFunctions.ignoreCode(x.codeToIgnore).then(function(ok){
-            	console.log('code ignored: ', x.codeToIgnore); 
+		onIgnoreCode: function(code){
+			// ignore the specified code, isIgnored = true in DB
+            dbFunctions.ignoreCode(code, true).then(function(ok){
+            	console.log('code ignored: ', code); 
             }).catch(function(err){
             	console.log(err);
             });
             
+        },
+        onRemoveIgnoreCode: function(code){
+        	// make the code no more ignored (putting isIgnored = false)
+        	dbFunctions.ignoreCode(code, false).then(function(ok){
+            	console.log('code no more ignored: ', code); 
+            }).catch(function(err){
+            	console.log(err);
+            });
         }
 	};
 
@@ -47,6 +54,7 @@ module.exports = function(socket, rf433mhz, dbFunctions){
 
             // Listen for socket events
             client_socket.on('ignoreCode', _methods.onIgnoreCode);
+            client_socket.on('removeIgnoreCode', _methods.onRemoveIgnoreCode);
 
             client_socket.on('assignCode', function(data){ 
             	// TODO

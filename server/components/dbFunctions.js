@@ -63,26 +63,23 @@ module.exports = function(db, config){
 					});
 				});
 			},
-			ignoreCode: function(code){
-				return new Promise(function(resolve, reject){
-					methods.isIgnored(code).then(function(ignored){
-						if (!ignored){ // let's ignore it
-							db.get('RFcodes', function (err, codes) {
-					    		if (err) return reject('Ooops! '+ err);
-					    		codes.forEach(function(obj, i){
-					    			if (obj.code === code){
-					    				obj.isIgnored = true;
-					    				codes[i] = obj;
-					    			}
-					    		});
-					    		db.put('RFcodes', codes, function (err) {
-			                    	if (err) return reject('Ooops! '+ err); // some kind of I/O error 
-			                     	resolve(true);
-		                    	});
-					    		
-							});
-						}
-					}).catch(function(err){ reject(err); });
+			ignoreCode: function(code, val){
+				return new Promise(function(resolve, reject){	
+					db.get('RFcodes', function (err, codes) {
+			    		if (err) return reject('Ooops! '+ err);
+			    		codes.forEach(function(obj, i){
+			    			if (obj.code === code){
+			    				obj.isIgnored = val;
+			    				codes[i] = obj;
+			    			}
+			    		});
+			    		db.put('RFcodes', codes, function (err) {
+	                    	if (err) return reject('Ooops! '+ err); // some kind of I/O error 
+	                     	resolve(true);
+                    	});
+			    		
+					});
+
 				});
 
 			},

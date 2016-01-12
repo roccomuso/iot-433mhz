@@ -13,7 +13,7 @@
                   <th>Code</th>
                   <th>Bitlength</th>
                   <th>Protocol</th>
-                  <th>De-ignore</th>
+                  <th>Don't ignore it</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -22,11 +22,14 @@
                       <td>{{code}}</td>
                       <td>{{bitlength}}</td>
                       <td>{{protocol}}</td>
-                      <td><a href="#" onclick="events.emit('removeIgnoreCode', {{code}});"><i class="fa fa-times"></i></a></td>
+                      <td><a href="#" onclick="events.emit('removeIgnoreCode', {{code}}); $(this).parents('tr').hide('slow');"><i class="fa fa-times"></i></a></td>
                     </tr>
                 {{/RFcodes}}
                 </tbody>
                </table>
+               {{^RFcodes}}
+               <p class="lead">No codes ignored at the moment.</p>
+               {{/RFcodes}}
 
               </div>
                 <div class="modal-footer">
