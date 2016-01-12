@@ -9,10 +9,16 @@ module.exports = function(socket, rf433mhz, dbFunctions){
 	
 	// private methods
 	var _methods = {
-		getInitData: function(){
+		getInitCards: function(){
 			// TODO 
 			// get data from DB to render the init cards on the UI.
 			return {prova: true, come: 'va'};
+		},
+		onGetInitCards: function(socket_id){
+			clients.forEach(function(sock){
+				if (sock.id === socket_id) sock.emit('initCards', _methods.getInitCards());
+			});
+
 		},
 		onIgnoreCode: function(code){
 			// ignore the specified code, isIgnored = true in DB
@@ -50,11 +56,13 @@ module.exports = function(socket, rf433mhz, dbFunctions){
 		    });
 
             // Sending actual configuration
-            client_socket.emit('initData', _methods.getInitData());
+            client_socket.emit('initCards', _methods.getInitCards());
 
             // Listen for socket events
+            client_socket.on('getInitCards', _methods.onGetInitCards);
             client_socket.on('ignoreCode', _methods.onIgnoreCode);
             client_socket.on('removeIgnoreCode', _methods.onRemoveIgnoreCode);
+
 
             client_socket.on('assignCode', function(data){ 
             	// TODO

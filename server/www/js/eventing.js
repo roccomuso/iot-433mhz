@@ -75,12 +75,14 @@ events.on('renderInitCards', function(initData){
 // Menu Buttons
 
 
+// Home Menu Button
 events.on('clickHome', function(){
-	// TODO
 	console.log('Home button clicked.');
+	socket.emit('getInitCards', socket.id);
 	$('#c-circle-nav__toggle').click(); // Close Menu
 });
 
+// Ignored codes Menu Button
 events.on('clickIgnoredCodes', function(){
 	console.log('Ignored Codes button clicked.');
 	$.get('/api/codes/ignored', function(data) {
@@ -97,18 +99,21 @@ events.on('clickIgnoredCodes', function(){
 	$('#c-circle-nav__toggle').click(); // Close Menu
 });
 
+// Timer Menu Button
 events.on('clickTimer', function(){
 	// TODO
 	console.log('Timer button clicked.');
 	$('#c-circle-nav__toggle').click(); // Close Menu
 });
 
+// Triggers Menu Button
 events.on('clickTriggers', function(){
 	// TODO
 	console.log('Triggers button clicked.');
 	$('#c-circle-nav__toggle').click(); // Close Menu
 });
 
+// Settings Menu Button
 events.on('clickSettings', function(){
 	// TODO
 	console.log('Settings button clicked.');

@@ -18,8 +18,8 @@
 		notie.alert(3, '<i class="fa fa-plug"></i> Disconnected. Trying to reconnect... <i class="fa fa-refresh fa-spin"></i>', 0);
 	})
 
-	// receiving initData, initialize the UI
-	socket.on('initData', function(initData){
+	// receiving initCards, initialize the UI
+	socket.on('initCards', function(initData){
 		events.emit('renderInitCards', initData);
 	});
 
