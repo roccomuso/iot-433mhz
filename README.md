@@ -109,7 +109,7 @@ Is recommended to run the server on the RPi through a "terminal session". (see [
 
 You can use the system through the beautiful web interface (thumbs up for material-design) or use the API.
 
-## Web Interface
+## Built-in Web Interface
 
 Reachable on the <code>http://serverAddress:PORT</code>, the web <code>server_port</code> is defined in <code>config.json</code>, default's value is 8080. It works well in browsers like Chrome (*reccomended*), Firefox, Safari, Opera, Microsoft Edge (it doesn't on Internet Explorer, avoid it).
 
@@ -131,23 +131,29 @@ See the [Hardware page](https://github.com/roccomuso/iot-433mhz/tree/master/hard
 ## API
 
 
-<code>GET /rfcode/code </code>
-send the specified rfcode.
+<code>GET /api/code/send/[RFcode]</code>
+send the specified rfcode. Return a status object: <code>{"status": "ok"}</code>
 
-<code>GET /room/device/on</code>
-Turn on a switch. Example: GET /bedroom/lamp1/on
+<code>GET /api/codes/ignored</code>
+Return a list of ignored codes taken from DB.
 
-<code>GET /room/device/off</code>
+<code>GET /api/codes/all</code>
+Return all the registered codes from DB.
+
+<code>GET /api/room/device/on</code>
+Turn on a switch. Example: GET /api/bedroom/lamp1/on
+
+<code>GET /api/room/device/off</code>
 Turn off a switch
 
-<code>GET /room/device/toggle</code>
+<code>GET /api/room/device/toggle</code>
 Toggle a switch
 
-<code>POST /room/device/[on, off, toggle]</code>
+<code>POST /api/room/device/[on, off, toggle]</code>
 Insert rf code assigned to the specified endpoint.
 Required parameters: {'new_code': xxxx}
 
-<code>PUT /room/device/[on, off, toggle]</code>
+<code>PUT /api/room/device/[on, off, toggle]</code>
 Edit rf code assigned to the specified endpoint.
 Required parameters: {'new_code': xxxx}
 
