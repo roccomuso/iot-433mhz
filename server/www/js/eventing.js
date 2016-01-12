@@ -4,8 +4,13 @@
 
 
 events.on('ignoreCode', function(code){
-  // send ignore's command to the Server 
-  socket.emit('ignoreCode', JSON.stringify({codeToIgnore: code})); // NB. socket defined below eventing.js
+	// send ignore's command to the Server 
+	socket.emit('ignoreCode', JSON.stringify({codeToIgnore: code})); // NB. socket defined below eventing.js
+});
+
+events.on('removeIgnoreCode', function(code){
+	// tells the server to switch the 'isIgnored' flag to false.
+	socket.emit('removeIgnoreCode', code);
 });
 
 events.on('assignCode', function(code){
@@ -45,7 +50,7 @@ events.on('renderSnackbar', function(_code){
 });
 
 events.on('renderInitCards', function(initData){
-	// TODO - stampare cards usando le iterazioni di Mustache!
+	// TODO - stampare cards usando le iterazioni di Mustache! (come fatto per la tabella codici ignorati)
 	console.log(initData);
 
 	var _data = {};
@@ -66,30 +71,46 @@ events.on('renderInitCards', function(initData){
 
 });
 
+
 // Menu Buttons
 
-// TODOs
+
 events.on('clickHome', function(){
+	// TODO
 	console.log('Home button clicked.');
 	$("#c-circle-nav__toggle").click(); // Close Menu
 });
 
 events.on('clickIgnoredCodes', function(){
 	console.log('Ignored Codes button clicked.');
+	$.get('/api/codes/ignored', function(data) {
+		//var RFcodes = { RFcodes: JSON.parse(data) };
+
+		var view = {title: 'Ignored RF codes', RFcodes: data};
+		templating.renderTemplate('ignoredCodes.mustache', $('#main_modal_box'), view).then(function(){
+			$('#ignored-codes-dialog').modal('show');
+		}).catch(function(err){ // err
+			notie.alert(2, err, 0);
+		});
+	});
+
 	$("#c-circle-nav__toggle").click(); // Close Menu
 });
 
 events.on('clickTimer', function(){
+	// TODO
 	console.log('Timer button clicked.');
 	$("#c-circle-nav__toggle").click(); // Close Menu
 });
 
 events.on('clickTriggers', function(){
+	// TODO
 	console.log('Triggers button clicked.');
 	$("#c-circle-nav__toggle").click(); // Close Menu
 });
 
 events.on('clickSettings', function(){
+	// TODO
 	console.log('Settings button clicked.');
 	$("#c-circle-nav__toggle").click(); // Close Menu
 });
