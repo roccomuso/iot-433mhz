@@ -79,6 +79,27 @@ module.exports = function(db, config){
 					}).catch(function(err){ reject(err); });
 				});
 
+			},
+			getIgnoredCodes: function(){
+				return new Promise(function(resolve, reject){
+					var ignored = {};
+					db.get('RFcodes', function (err, codes) {
+					    if (err) reject(err);
+					    Object.keys(codes).forEach(function(code){
+		                	if (codes[code].isIgnored === true) ignored[code] = codes[code];
+		                });
+		                resolve(ignored);
+					});
+				});
+				
+			},
+			getAllCodes: function(){
+				return new Promise(function(resolve, reject){
+					db.get('RFcodes', function (err, codes) {
+					    if (err) reject(err);
+		                resolve(codes);
+					});
+				});
 			}
 	};
 
