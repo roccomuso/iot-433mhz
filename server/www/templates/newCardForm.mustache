@@ -1,16 +1,12 @@
-        <div id="assign-dialog" class="modal fade" tabindex="-1" style="display: none;">
+        <div id="new-card-dialog" class="modal fade" tabindex="-1" style="display: none;">
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 class="modal-title">{{title}} {{code}} to a:</h3>
+                <h3 class="modal-title">{{title}} {{code}}:</h3>
               </div>
               <div class="modal-body text-center">
-              <div class="btn-group btn-group-vertical btn-group-raised">
-                  <a href="#" class="btn" onClick="events.emit('newCardClick', {{code}}); $('#assign-dialog').modal('hide');"><i class="fa fa-plus"></i> New Card</a>
-                  <!-- <a href="javascript:void(0)" class="btn"><i class="fa fa-plug"></i> Existing Card</a> -->
-                  <a href="#" class="btn" onClick="events.emit('ignoreCode', {{code}}); $('#assign-dialog').modal('hide');"><i class="fa fa-trash"></i> Just Ignore</a>
-                </div>
+              
               </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-check"></i> Close<div class="ripple-container"><div class="ripple ripple-on ripple-out" style="left: 51.1563px; top: 12px; transform: scale(10.875); background-color: rgb(0, 150, 136);"></div><div class="ripple ripple-on ripple-out" style="left: 45.6563px; top: 21px; transform: scale(10.875); background-color: rgb(0, 150, 136);"></div></div></button>

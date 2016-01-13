@@ -19,9 +19,16 @@ events.on('assignCode', function(code){
   	$('#assign-dialog').modal('show');
   }).catch(function(err){ // err
   	notie.alert(2, err, 0);
-  });
+  });  
+});
 
-  
+events.on('newCardClick', function(code){
+	var view = {title: 'New Card for', code: code};
+	templating.renderTemplate('newCardForm.mustache', $('#main_modal_box'), view).then(function(){
+		$('#new-card-dialog').modal('show');
+	}).catch(function(err){ // err
+		notie.alert(2, err, 0);
+	}); 
 });
 
 var incoming_codes = {}; // RF codes with an opened snackbar
