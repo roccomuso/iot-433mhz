@@ -25,7 +25,7 @@ events.on('assignCode', function(code){
 
 
 events.on('newCardClick', function(code){
-	var view = {title: 'New Card for code', code: code};
+	var view = {title: 'New Card', code: code};
 	templating.renderTemplate('newCardForm.mustache', $('#main_modal_box'), view).then(function(){
 		$('#new-card-dialog').modal('show');
 		// all lower case, no blank space or non alpha numeric chars are admitted for this 2 fields
@@ -39,9 +39,9 @@ events.on('newCardClick', function(code){
 		    $('#type option:selected').each(function() {
 		    	var selected = $(this).val();
 		      if(selected === 'switch'){
-		      	str += '<div class="col-md-5"><select id="code" name="on_code" class="form-control codes" required>'+RFcodes.getCodesInHTML(code)+'</select><span class="help-block">ON Code</span></div><div class="col-md-5"><select name="off_code" class="form-control codes" required>'+RFcodes.getCodesInHTML(code)+'</select><span class="help-block">OFF Code</span></div>';
+		      	str += '<div class="col-md-5"><select id="code" name="on_code" class="form-control codes" required>'+RFcodes.getCodesInHTML()+'</select><span class="help-block">ON Code</span></div><div class="col-md-5"><select name="off_code" class="form-control codes" required>'+RFcodes.getCodesInHTML()+'</select><span class="help-block">OFF Code</span></div>';
 		      }else if(selected === 'alarm'){
-		      	str += '<div class="col-md-5"><select id="code" name="trigger_code" class="form-control codes" required>'+RFcodes.getCodesInHTML(code)+'</select><span class="help-block">Trigger Code</span></div>';
+		      	str += '<div class="col-md-5"><select id="code" name="trigger_code" class="form-control codes" required>'+RFcodes.getCodesInHTML()+'</select><span class="help-block">Trigger Code</span></div>';
 		      }else if (selected === 'info'){ // we don't need to have codes
 		      	str = '';
 		      }
@@ -50,7 +50,7 @@ events.on('newCardClick', function(code){
 		  }).change();
 		// modal box incoming codes listener (to updated select box lists)
 		function updateSelectBoxes(code){
-			$('.codes').html(RFcodes.getCodesInHTML(code)).fadeIn(500);
+			$('.codes').html(RFcodes.getCodesInHTML()).fadeIn(500);
 		}
 		RFcodes.on('newCode', updateSelectBoxes); // set listener
 		RFcodes.on('removedCode', updateSelectBoxes); // set listener
@@ -157,7 +157,7 @@ events.on('clickTimer', function(){
 
 // Triggers Menu Button
 events.on('clickTriggers', function(){
-	// TODO
+	// TODO (change with a plus button, to simply add a card from the Menu.)
 	console.log('Triggers button clicked.');
 	$('#c-circle-nav__toggle').click(); // Close Menu
 });

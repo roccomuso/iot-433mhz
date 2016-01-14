@@ -43,15 +43,11 @@ var Codes = function(){ // Class RFcodes
 		_events.emit('removedCode', code); // emit event
 	};
 
-	this.getCodesInHTML = function(code){ // passed code is the checked one
-		var html = '';
+	this.getCodesInHTML = function(){
+		var html = '<option disabled selected> -- choose -- </option>';
 		Object.keys(this.incoming_codes).forEach(function(key){
-			if (key == code)
-				html += '<option value="'+key+'" checked>'+key+'</option>';
-			else
 				html += '<option value="'+key+'">'+key+'</option>';
 		});
-
 		return html;
 	};
 
