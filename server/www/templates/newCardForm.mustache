@@ -19,6 +19,7 @@
       <label for="shortname" class="col-md-2 control-label">Short name</label>
       <div class="col-md-10">
         <input type="text" class="form-control" id="shortname" name="shortname" maxlength="15" placeholder="Max 15 characters" required>
+        <span class="help-block">Only alpha numeric characters admitted</span>
       </div>
     </div>
     <div class="form-group">
@@ -38,7 +39,7 @@
       <label for="type" class="col-md-2 control-label">Select Type</label>
 
       <div class="col-md-10">
-        <select id="type" name="type" class="form-control">
+        <select id="type" name="type" class="form-control" required>
           <option checked value="switch">Switch</option>
           <option value="alarm">Alarm</option>
           <option value="info">Info</option>
