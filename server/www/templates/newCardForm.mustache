@@ -5,8 +5,67 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h3 class="modal-title">{{title}} {{code}}:</h3>
               </div>
-              <div class="modal-body text-center">
-              
+              <div class="modal-body">
+<form class="form-horizontal" id="newCardForm">
+  <fieldset>
+    <legend>Fill the form below</legend>
+    <div class="form-group">
+      <label for="headline" class="col-md-2 control-label">Headline</label>
+      <div class="col-md-10">
+        <input type="text" class="form-control" id="headline" name="headline" placeholder="Card Headline" required>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="shortname" class="col-md-2 control-label">Short name</label>
+      <div class="col-md-10">
+        <input type="text" class="form-control" id="shortname" name="shortname" maxlength="15" placeholder="Max 15 characters" required>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="description" class="col-md-2 control-label">Description</label>
+      <div class="col-md-10">
+        <textarea class="form-control" rows="3" id="description" name="card_body"></textarea>
+        <span class="help-block">A brief description displayed in the card's body.</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="roomname" class="col-md-2 control-label">Room name</label>
+      <div class="col-md-10">
+        <input type="text" class="form-control" id="roomname" name="room" placeholder="Room name" required>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="type" class="col-md-2 control-label">Select Type</label>
+
+      <div class="col-md-10">
+        <select id="type" name="type" class="form-control">
+          <option checked value="switch">Switch</option>
+          <option value="alarm">Alarm</option>
+          <option value="info">Info</option>
+          <option disabled="disabled">Monitor</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group" id="type_related_content">
+    <!-- Dinamically changed -->
+    </div>
+    <div class="form-group">
+      <label for="inputFile" class="col-md-2 control-label">Image</label>
+      <div class="col-md-10">
+        <input type="text" readonly="" class="form-control" placeholder="Put an Image for your card header...">
+        <input type="file" id="inputFile" name="card_img">
+      </div>
+    </div>
+
+
+    <div class="form-group">
+      <div class="col-md-10 col-md-offset-2">
+        <button type="reset" class="btn btn-default">Cancel</button>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </div>
+    </div>
+  </fieldset>
+</form>
               </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-check"></i> Close<div class="ripple-container"><div class="ripple ripple-on ripple-out" style="left: 51.1563px; top: 12px; transform: scale(10.875); background-color: rgb(0, 150, 136);"></div><div class="ripple ripple-on ripple-out" style="left: 45.6563px; top: 21px; transform: scale(10.875); background-color: rgb(0, 150, 136);"></div></div></button>

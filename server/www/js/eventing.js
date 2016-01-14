@@ -23,9 +23,35 @@ events.on('assignCode', function(code){
 });
 
 events.on('newCardClick', function(code){
-	var view = {title: 'New Card for', code: code};
+	var view = {title: 'New Card for code', code: code};
 	templating.renderTemplate('newCardForm.mustache', $('#main_modal_box'), view).then(function(){
 		$('#new-card-dialog').modal('show');
+		// no blank space admitted and all lower case.
+		$('#shortname').keyup(function(){
+		    this.value = this.value.replace(/\s+/g, '-').toLowerCase();
+		});
+		// dynamic form adapter
+		$("#type").change(function() {
+		    var str = '<label for="code" class="col-md-2 control-label">RF Codes</label>';
+		    $("#type option:selected").each(function() {
+		    	var selected = $(this).val();
+		      if(selected === 'switch'){
+		      	str += '<div class="col-md-5"><input type="number" class="form-control" name="on_code" id="code" placeholder="ON code" required/></div><div class="col-md-5"><input type="number" class="form-control" name="off_code" placeholder="OFF code" required/></div>';
+		      }else if(selected === 'alarm'){
+		      	str += '<div class="col-md-5"><input type="number" class="form-control" name="trigger_code" id="_code" placeholder="Trigger Code" required/></div>';
+		      }else if (selected === 'info'){ // we don't need to have codes
+		      	str = '';
+		      }
+		    });
+		    $("#type_related_content").html(str);
+		  }).change();
+		// form submitting listener
+		$('#newCardForm').submit(function(e){
+			e.preventDefault();
+			// TODO ajax POST to /api/card/new
+
+		});
+
 	}).catch(function(err){ // err
 		notie.alert(2, err, 0);
 	}); 
