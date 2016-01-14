@@ -1,3 +1,6 @@
+
+;(function(window){
+
 var templating = {
 	isMobile: false,
 	dir: '/templates/',
@@ -14,3 +17,9 @@ var templating = {
 
 	}
 };
+
+// exposing only 'templating' to the global namespace
+window.templating = templating;
+
+})(window);
+
