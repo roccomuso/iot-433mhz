@@ -63,7 +63,7 @@ events.on('newCardClick', function(code){
 		  RFcodes.deleteCode(code);
 		});
 		// form submitting listener
-		$cardForm = $('#newCardForm');
+		var $cardForm = $('#newCardForm');
 		$cardForm.submit(function(e){
 			e.preventDefault();
 			// Ajax POST to /api/cards/new
@@ -96,7 +96,7 @@ events.on('newCardClick', function(code){
 			  'contentType': false,
 			  'mimeType': 'multipart/form-data',
 			  'data': form
-			}
+			};
 
 			$.ajax(settings).done(function (data) {
 				console.log('Data Loaded:', data);
