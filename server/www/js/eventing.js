@@ -30,7 +30,7 @@ events.on('newCardClick', function(code){
 		$('#new-card-dialog').modal('show');
 		// all lower case, no blank space or non alpha numeric chars are admitted for this 2 fields
 		$('#shortname, #roomname').keyup(function(){
-		    this.value = this.value.replace(/\W+/g, " ");
+		    this.value = this.value.replace(/\W+/g, ' ');
     		this.value = this.value.replace(/\s+/g, '-').toLowerCase();
 		});
 		// dynamic form adapter
@@ -73,7 +73,7 @@ events.on('newCardClick', function(code){
 			form.append('shortname', $('input[name=shortname]').val());
 			form.append('card_body', $('#description').val());
 			form.append('room', $('input[name=room]').val());
-			$type_selected = $('#type option:selected').val();
+			var $type_selected = $('#type option:selected').val();
 			form.append('type', $type_selected);
 
 			if ($type_selected == 'switch'){
@@ -85,21 +85,21 @@ events.on('newCardClick', function(code){
 			form.append('card_img', $('input[name=card_img]').prop('files')[0]);
 
 			var settings = {
-			  "async": true,
-			  "crossDomain": true,
-			  "url": "/api/cards/new",
-			  "method": "POST",
-			  "headers": {
-			    "cache-control": "no-cache"
+			  'async': true,
+			  'crossDomain': true,
+			  'url': '/api/cards/new',
+			  'method': 'POST',
+			  'headers': {
+			    'cache-control': 'no-cache'
 			  },
-			  "processData": false,
-			  "contentType": false,
-			  "mimeType": "multipart/form-data",
-			  "data": form
+			  'processData': false,
+			  'contentType': false,
+			  'mimeType': 'multipart/form-data',
+			  'data': form
 			}
 
 			$.ajax(settings).done(function (data) {
-				console.log("Data Loaded:", data);
+				console.log('Data Loaded:', data);
 			    notie.alert(1, '<i class="fa fa-paper-plane"></i> Card sent!', 3);
 			    RFcodes.deleteCodes([$('#code option:selected').val(), $('#off_code option:selected').val()]); // remove codes from the incoming codes. (in this way it can't be used anymore)
 			    $('#new-card-dialog').modal('hide');
