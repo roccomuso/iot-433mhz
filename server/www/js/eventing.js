@@ -25,7 +25,7 @@ events.on('assignCode', function(code){
 
 
 events.on('newCardClick', function(code){
-	var view = {title: 'New Card', code: code};
+	var view = {title: 'New Card'};
 	templating.renderTemplate('newCardForm.mustache', $('#main_modal_box'), view).then(function(){
 		$('#new-card-dialog').modal('show');
 		// all lower case, no blank space or non alpha numeric chars are admitted for this 2 fields
@@ -39,7 +39,7 @@ events.on('newCardClick', function(code){
 		    $('#type option:selected').each(function() {
 		    	var selected = $(this).val();
 		      if(selected === 'switch'){
-		      	str += '<div class="col-md-5"><select id="code" name="on_code" class="form-control codes" required>'+RFcodes.getCodesInHTML()+'</select><span class="help-block">ON Code</span></div><div class="col-md-5"><select name="off_code" class="form-control codes" required>'+RFcodes.getCodesInHTML()+'</select><span class="help-block">OFF Code</span></div>';
+		      	str += '<div class="col-md-5"><select id="code" name="on_code" class="form-control codes" required>'+RFcodes.getCodesInHTML()+'</select><span class="help-block">ON Code</span></div><div class="col-md-5"><select id="off_code" name="off_code" class="form-control codes" required>'+RFcodes.getCodesInHTML()+'</select><span class="help-block">OFF Code</span></div>';
 		      }else if(selected === 'alarm'){
 		      	str += '<div class="col-md-5"><select id="code" name="trigger_code" class="form-control codes" required>'+RFcodes.getCodesInHTML()+'</select><span class="help-block">Trigger Code</span></div>';
 		      }else if (selected === 'info'){ // we don't need to have codes
@@ -63,11 +63,51 @@ events.on('newCardClick', function(code){
 		  RFcodes.deleteCode(code);
 		});
 		// form submitting listener
-		$('#newCardForm').submit(function(e){
+		$cardForm = $('#newCardForm');
+		$cardForm.submit(function(e){
 			e.preventDefault();
-			// TODO ajax POST to /api/card/new
+			// Ajax POST to /api/cards/new
+			var form = new FormData();
 
-			RFcodes.deleteCode(code); // remove code from the incoming codes. (in this way it can't be used anymore)
+			form.append('headline', $('input[name=headline]').val());
+			form.append('shortname', $('input[name=shortname]').val());
+			form.append('card_body', $('#description').val());
+			form.append('room', $('input[name=room]').val());
+			$type_selected = $('#type option:selected').val();
+			form.append('type', $type_selected);
+
+			if ($type_selected == 'switch'){
+				form.append('on_code', $('#code option:selected').val());
+				form.append('off_code', $('#off_code option:selected').val());
+			}else if ($type_selected == 'alarm')
+				form.append('trigger_code', $('#code option:selected').val());
+
+			form.append('card_img', $('input[name=card_img]').prop('files')[0]);
+
+			var settings = {
+			  "async": true,
+			  "crossDomain": true,
+			  "url": "/api/cards/new",
+			  "method": "POST",
+			  "headers": {
+			    "cache-control": "no-cache"
+			  },
+			  "processData": false,
+			  "contentType": false,
+			  "mimeType": "multipart/form-data",
+			  "data": form
+			}
+
+			$.ajax(settings).done(function (data) {
+				console.log("Data Loaded:", data);
+			    notie.alert(1, '<i class="fa fa-paper-plane"></i> Card sent!', 3);
+			    RFcodes.deleteCodes([$('#code option:selected').val(), $('#off_code option:selected').val()]); // remove codes from the incoming codes. (in this way it can't be used anymore)
+			    $('#new-card-dialog').modal('hide');
+			}).fail(function(error){
+				notie.alert(2, JSON.parse(error.responseText).err, 0);
+				console.log('Ajax error', error);
+			});
+	
 		});
 
 	}).catch(function(err){ // err
@@ -121,7 +161,7 @@ events.on('renderInitCards', function(initData){
 });
 
 
-// Menu Buttons
+/* Menu Buttons */
 
 
 // Home Menu Button
