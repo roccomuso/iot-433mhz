@@ -34,14 +34,20 @@ async.series({
     	});
     	
     },
+    init_db: function(callback){
+         // init DB - TODO: inseriamo le cards di default se non ne esistono già altre nel DB.
+         // dbFunctions.initDBCards()... <-- TODO
+
+
+
+         callback(null, 1);
+    },
     init_rf: function(callback){
     	// Listen on Arduino Serial Port or RF433Mhz chip if on RPi platform.
     	rf433mhz.openSerialPort(function(){
-    		
     		setTimeout(function (){
     			callback(null, 1);
     		}, 2000); // Arduino AutoReset requires to wait a few seconds before sending data!
-    		
     	});
     	
     },
@@ -57,7 +63,21 @@ async.series({
                 
                 var socketFunctions = require('./components/socketFunctions.js')(io, rf433mhz, dbFunctions);
 
+                /* LISTENERS */
                 io.on('connection', socketFunctions.onConnection);
+
+                db.CARDS.on('inserted', function(card){ // card just inserted
+                    // refresh every client UI
+                    io.emit('initCards', dbFunctions.getInitCards());
+                });
+
+                db.CARDS.on('removed', function(card){ // card removed
+                    // TODO remove from DB codes attached to this card:
+                    // ...
+
+                    // refresh every client UI
+                    io.emit('initCards', dbFunctions.getInitCards());
+                });
             
                 rf433mhz.on(function (codeData) {
                     
@@ -68,10 +88,10 @@ async.series({
                         dbFunctions.putCodeInDB(codeData).then(function(mex){
                             if (config.DEBUG) console.log(mex);
 
-                            dbFunctions.isCodeIgnored(codeData.code).then(function(isIgnored){
-                                if (config.DEBUG) console.log('isIgnored:', codeData.code+': ', isIgnored);
+                            dbFunctions.isCodeAvailable(codeData.code).then(function(isAvailable){ // code available if not ignored and not assigned.
+                                if (config.DEBUG) console.log(codeData.code, 'isAvailable:', isAvailable);
 
-                                if (!isIgnored)
+                                if (isAvailable)
                                     io.emit('newRFCode', codeData); // sent to every open socket.
 
                             }).catch(function(err){
