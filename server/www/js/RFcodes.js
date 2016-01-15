@@ -43,6 +43,13 @@ var Codes = function(){ // Class RFcodes
 		_events.emit('removedCode', code); // emit event
 	};
 
+	this.deleteCodes = function(codesArray){
+		var self = this;
+		codesArray.forEach(function(code){
+			self.deleteCode(code);
+		});
+	};
+
 	this.getCodesInHTML = function(){
 		var html = '<option disabled selected> -- choose -- </option>';
 		Object.keys(this.incoming_codes).forEach(function(key){
