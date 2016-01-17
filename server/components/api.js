@@ -85,11 +85,16 @@ module.exports = function(app, rf433mhz, dbFunctions){
 
 	});
 
+	// handle 404 error for API
+	app.all('/api/*', function(req, res){
+		res.status(404).json({error_code: 404, err: 'API entrypoint not found'});
+	});
+
 	// serve as static all the other routes
 	var web_dir = path.resolve(__dirname, '../www');
 	app.get('*', express.static(web_dir));
 
-	// Middleware that handle 404 page
+	// Middleware that handle 404 error for web pages
 	app.use(function(req, res, next){
 	    res.status(404).sendFile(web_dir + '/404.html');
 	});
