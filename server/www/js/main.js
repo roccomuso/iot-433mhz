@@ -30,3 +30,25 @@ $('#cards_container').mixItUp({animation:{ animateResizeContainer: false}});
 
 	}
 })();
+
+
+// Init Iot.Sound
+
+// init bunch of sounds
+ion.sound({
+    sounds: [
+        {name: "button_tiny"}, // for cards retrieved.
+        {name: "glass"},
+        {name: "notification1"},
+        {name: "water_droplet_3"} // for code detected (snackbar opened)
+    ],
+
+    // main config
+    path: "assets/sounds/",
+    preload: true,
+    multiplay: true,
+    volume: 0.9
+});
+
+// play sound: 
+// ion.sound.play("button_tiny");
