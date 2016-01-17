@@ -79,6 +79,7 @@ events.on('newCardClick', function(code){
 		$('#new-card-dialog').on('hidden.bs.modal', function (e) {
 		  RFcodes.off('newCode', updateSelectBoxes);
 		  RFcodes.off('removedCode', updateSelectBoxes);
+		  $('.modal-backdrop').remove(); // force backdrop removal
 		  console.log('modal box closed');
 		  RFcodes.deleteCode(code);
 		});
@@ -153,6 +154,8 @@ events.on('renderSnackbar', function(_code){
 			}}); // print snackbar
 
 	}else{ // RFcode already exists and snackbar too, just increment badge_count field
+		if (!RFcodes.incoming_codes[_code].elem.hasClass('snackbar-opened')) // snackbar was dismissed, show it again
+			RFcodes.incoming_codes[_code].elem.snackbar('show');
 		RFcodes.incoming_codes[_code].badge_count++;
 		RFcodes.incoming_codes[_code].elem.find('.badge').fadeOut(500, function() {
         	$(this).html(RFcodes.incoming_codes[_code].badge_count).fadeIn(500);
