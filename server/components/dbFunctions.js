@@ -33,9 +33,11 @@ function _initializeCard(params, img_path){ // params received through API
 
 	return {
 		active: true,
+		date: Math.floor(Date.now() / 1000),
 		headline: params.headline,
 		shortname: params.shortname,
 		card_body: params.card_body,
+		background_color: params.background_color || '#FAFAFA',
 		img: img_path, // false if card got no img.
 		room: params.room,
 		type: params.type,

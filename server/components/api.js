@@ -104,7 +104,7 @@ function checkRequiredParams(params){ // required params (headline, shortname, r
 
 	if (typeof params === 'undefined') return false;
 
-	var required_params = ['headline', 'shortname', 'room', 'type'];
+	var required_params = ['headline', 'shortname', 'room', 'type', 'background_color'];
 	var params_name = Object.keys(params);
 
 	var keepGoing = true;
@@ -112,6 +112,9 @@ function checkRequiredParams(params){ // required params (headline, shortname, r
 		if (!validator.isIn(param, params_name)) keepGoing = false;
 	});
 	if (!keepGoing) return false;
+
+	// check background color
+	if (!validator.isHexColor(params.background_color)) return false;
 
 	// check for type-specific params
 	switch (params.type){

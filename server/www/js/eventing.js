@@ -23,6 +23,17 @@ events.on('assignCode', function(code){
   });  
 });
 
+// Util function to convert RGB to Hex.
+
+function rgb2hex(rgb) {
+    if (/^#[0-9A-F]{6}$/i.test(rgb)) return rgb;
+
+    rgb = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+    function hex(x) {
+        return ("0" + parseInt(x).toString(16)).slice(-2);
+    }
+    return "#" + hex(rgb[1]) + hex(rgb[2]) + hex(rgb[3]);
+}
 
 events.on('newCardClick', function(code){
 	var view = {title: 'New Card'};
@@ -32,6 +43,15 @@ events.on('newCardClick', function(code){
 		$('#shortname, #roomname').keyup(function(){
 		    this.value = this.value.replace(/\W+/g, ' ');
     		this.value = this.value.replace(/\s+/g, '-').toLowerCase();
+		});
+		// color picker
+		var background_color = '#FAFAFA';
+		$('.pick_colors .btn-fab').click(function(){
+		background_color = rgb2hex($(this).css('background-color'));
+		console.log('Card BG color selected:', background_color);
+		$('.btn-fab .fa-check').remove();
+		$(this).html('<i class="fa fa-check" style="margin-top: 15px; color: #000"></i>');
+			
 		});
 		// dynamic form adapter
 		$('#type').change(function() {
@@ -73,6 +93,7 @@ events.on('newCardClick', function(code){
 			form.append('shortname', $('input[name=shortname]').val());
 			form.append('card_body', $('#description').val());
 			form.append('room', $('input[name=room]').val());
+			form.append('background_color', background_color);
 			var $type_selected = $('#type option:selected').val();
 			form.append('type', $type_selected);
 
