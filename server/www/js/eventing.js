@@ -216,10 +216,10 @@ events.on('clickTimer', function(){
 	$('#c-circle-nav__toggle').click(); // Close Menu
 });
 
-// Triggers Menu Button
-events.on('clickTriggers', function(){
-	// TODO (change with a plus button, to simply add a card from the Menu.)
-	console.log('Triggers button clicked.');
+// add Card Menu Button
+events.on('clickAddCard', function(){
+	events.emit('newCardClick');
+	console.log('New Card button clicked.');
 	$('#c-circle-nav__toggle').click(); // Close Menu
 });
 
