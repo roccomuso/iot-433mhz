@@ -32,7 +32,7 @@
         this.events[eventName] = this.events[eventName] || [];
         this.events[eventName].push(fn);
       },
-      off: function(eventName, fn) {
+      off: function(eventName) {
         if (this.events[eventName]) {
           delete this.events[eventName];
         }
