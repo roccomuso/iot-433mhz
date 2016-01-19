@@ -2835,7 +2835,7 @@ fieldset[disabled] .navbar .btn-link:focus {
   font-size: 2em;
 }
 .card .card-body {
-  min-height: 15%; /* on chrome app height: 35% */ 
+  min-height: 120px; /* on chrome app height: 35% */ 
   padding: 18px; 
   border: 0;
   /*border-top: 1px solid #eee;*/ /* nessun bordo fra img e body */
