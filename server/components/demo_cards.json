@@ -1,0 +1,71 @@
+[
+  {
+    "active": true,
+    "date": 1453057691,
+    "headline": "Welcome!",
+    "shortname": "welcome",
+    "card_body": "Welcome to the Iot-433mhz Dashboard. We've made for you a clear design.<br/>From here you can interact with almost every <b>433-mhz based device</b>! Just keep in mind that every single card in this page represents a device. A <b>device</b> can be one of three different types: <em>switch, alarm, info</em>.",
+    "background_color": "#ffd180",
+    "img": "/assets/demo_img/kitchen1.jpg",
+    "room": "kitchen",
+    "type": "info",
+    "device": {}
+  },
+  {
+    "active": true,
+    "date": 1452989005,
+    "headline": "I'm an info card!",
+    "shortname": "welcome-info-card-1",
+    "card_body": "This is an example of <b>info card</b>!<br/>You can add new card from the beautiful circular menu on the bottom right of the screen! and for every card you can choose the color you like the most and upload whatever header image you want.",
+    "background_color": "#ccff90",
+    "img": false,
+    "room": "bathroom",
+    "type": "info",
+    "device": {}
+  },
+  {
+    "active": true,
+    "date": 1452989005,    
+    "headline": "Alarm in Bedroom",
+    "shortname": "alarm1",
+    "card_body": "An alarm device is like a switch one, with the exception that you can't trigger it! The Alarm is triggered when the associated radio code is received.",
+    "background_color": "#ccff90",
+    "img": "/assets/demo_img/bedroom1.jpg",
+    "room": "bedroom",
+    "type": "alarm",
+    "device": {
+      "last_alert": "no alert yet",
+      "notification_sound": true,
+      "trigger_code": 0000
+    }
+  },
+  {
+    "active": true,
+    "date": 1452989005,
+    "headline": "Ignore Noisy codes",
+    "shortname": "welcome-info-card-2",
+    "card_body": "If you get flooded by a code, you can hit the 'Ignore' button once it pop out...<br/><b>Tip</b>: Usually a single RF button can generates multiple radio codes according to several reasons (pressure or waves noise), make sure to select the most common one for your switch/alarm card.",
+    "background_color": "#ccff90",
+    "img": false,
+    "room": "living-room",
+    "type": "info",
+    "device": {}
+  },
+  {
+    "active": true,
+    "date": 1452989005,
+    "headline": "Switch Card",
+    "shortname": "welcome-switch-card",
+    "card_body": "This is a <b>switch card</b> example! You can easily use a 433mhz-based remote controller and catch the button codes directly in this dashboard! Once you got some codes, you're ready to associate them to the ON and OFF buttons, it's easy as programming your TV!",
+    "background_color": "#ccff90",
+    "img": "/assets/demo_img/livingroom1.jpg",
+    "room": "living-room",
+    "type": "switch",
+    "device": {
+      "on_code": 0000,
+      "off_code": 0000,
+      "notification_sound": true,
+      "is_on": false
+    }
+  }
+]
