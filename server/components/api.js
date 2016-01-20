@@ -61,12 +61,13 @@ module.exports = function(app, rf433mhz, dbFunctions){
 			if (checkRequiredParams(req.body)){
 				// req.body will hold the img file
 				if (req.file){
+					var file_name = req.body.shortname+path.extname(req.file.originalname);
 					var origin_path = path.resolve(__dirname, '..', req.file.path);
-					var destination_path = path.resolve(__dirname, '../www/uploads/', req.body.shortname+path.extname(req.file.originalname));
+					var destination_path = path.resolve(__dirname, '../www/uploads/', file_name);
 					fs.rename(origin_path, destination_path, function (err) { // rename file uploaded
 						if (err) return res.status(500).json({done: false, err: err});
 						// put data in DB
-						dbFunctions.putCardInDatabase(req, destination_path).then(function(newCard){
+						dbFunctions.putCardInDatabase(req, './uploads/'+file_name).then(function(newCard){
 							res.status(200).json({done: true, newCard: newCard});
 						}).catch(function(err){
 							res.status(500).json({done: false, err: err});
