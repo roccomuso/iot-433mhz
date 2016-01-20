@@ -169,6 +169,23 @@ module.exports = function(db, config){
 					});
 
 				});
+			},
+			initDBCards: function(demo_cards){
+				return new Promise(function(resolve, reject){
+					//check if any cards already exists
+					methods.getAllCards().then(function(cards){
+						if (cards.length)
+							return resolve(cards);
+						// no cards, let's put demo cards in DB
+						db.CARDS.insert(demo_cards, function(err, newDocs){
+							if (err) return reject(err);
+							resolve(newDocs);
+						});
+					}).catch(function(err){
+						reject(err);
+					});
+
+				});
 			}
 	};
 
