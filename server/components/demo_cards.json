@@ -27,7 +27,7 @@
     "active": true,
     "date": 1452989005,    
     "headline": "Alarm in Bedroom",
-    "shortname": "alarm1",
+    "shortname": "welcome-alarm-1",
     "card_body": "An alarm device is like a switch one, with the exception that you can't trigger it! The Alarm is triggered when the associated radio code is received.",
     "background_color": "#ccff90",
     "img": "/assets/demo_img/bedroom1.jpg",
