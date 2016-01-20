@@ -35,12 +35,11 @@ async.series({
     	
     },
     init_db: function(callback){
-         // init DB - TODO: inseriamo le cards di default se non ne esistono già altre nel DB.
-         // dbFunctions.initDBCards()... <-- TODO
-
-
-
-         callback(null, 1);
+         // Put default demo cards if CARDS DB is empty
+         dbFunctions.initDBCards(require('./components/demo_cards.json')).then(function(){
+            callback(null, 1);
+         }).catch(function(err){ console.log('init_db error:', err); });
+         
     },
     init_rf: function(callback){
     	// Listen on Arduino Serial Port or RF433Mhz chip if on RPi platform.
@@ -68,7 +67,8 @@ async.series({
 
                 db.CARDS.on('inserted', function(card){ // card just inserted
                     // refresh every client UI
-                    io.emit('initCards', dbFunctions.getInitCards());
+                    socketFunctions.asyncEmitInitCards(io);
+                    
                 });
 
                 db.CARDS.on('removed', function(card){ // card removed
@@ -76,7 +76,8 @@ async.series({
                     // ...
 
                     // refresh every client UI
-                    io.emit('initCards', dbFunctions.getInitCards());
+                    socketFunctions.asyncEmitInitCards(io);
+
                 });
             
                 rf433mhz.on(function (codeData) {
