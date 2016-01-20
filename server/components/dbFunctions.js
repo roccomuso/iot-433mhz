@@ -142,7 +142,7 @@ module.exports = function(db, config){
 			},
 			getAllCards: function(){
 				return new Promise(function(resolve, reject){
-					db.CARDS.find({}, function(err, docs){
+					db.CARDS.find({}).sort({date: -1}).exec(function(err, docs){
 						if (err) return reject(err);
 						resolve(docs);
 					});
@@ -169,12 +169,6 @@ module.exports = function(db, config){
 					});
 
 				});
-			},
-			getInitCards: function(){
-				// TODO
-				// cards che vengono renderizzate nella UI
-				return {prova: true, come: 'va'};
-
 			}
 	};
 
