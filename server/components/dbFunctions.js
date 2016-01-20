@@ -45,6 +45,34 @@ function _initializeCard(params, img_path){ // params received through API
 	};
 }
 
+function _checkDatabaseCorrispondence(db, params){ // check if 
+	// CHECK THAT:
+	// shortname is unique
+	// codes are in db.RFCODES
+	return new Promise(function(resolve, reject){
+		db.CARDS.find({shortname: params.shortname}, function(err, doc){
+			if (err) return reject(err);
+			if (doc.length !== 0) reject('shortname already exists in DB, choose another one.');
+			else{
+				// check for codes
+				var query = {};
+				if (params.type === 'switch') query = { $or: [{ code: parseInt(params.on_code), isIgnored: false, assignedTo: 'none' }, { code: parseInt(params.off_code), isIgnored: false, assignedTo: 'none' }] };
+				else if (params.type === 'alarm') query = {code: parseInt(params.trigger_code), isIgnored: false, assignedTo: 'none'};
+				else if (params.type === 'info') query = {};
+				
+				db.RFCODES.find(query, function(err, docs){
+					var len = (params.type === 'switch') ? 2 : 1 ; // should have found 2 records in codes' DB for switch type
+					if (params.type === 'info') return resolve(true);
+
+					if (docs.length === len)
+						resolve(true);
+					else 
+						reject('Make sure to assign free not Ignored existing codes.');
+				});
+			}
+		});
+	});
+}
 
 module.exports = function(db, config){
 
@@ -119,46 +147,25 @@ module.exports = function(db, config){
 						resolve(docs);
 					});
 				});
-			},
-			checkDatabaseCorrispondence: function(params){
-				// CHECK THAT:
-				// shortname is unique
-				// codes are in db.RFCODES
-				return new Promise(function(resolve, reject){
-					db.CARDS.find({shortname: params.shortname}, function(err, doc){
-						if (err) return reject(err);
-						if (doc.length !== 0) reject('shortname already exists in DB, choose another one.');
-						else{
-							// check for codes
-							var query = {};
-							if (params.type === 'switch') query = { $or: [{ code: parseInt(params.on_code), isIgnored: false, assignedTo: 'none' }, { code: parseInt(params.off_code), isIgnored: false, assignedTo: 'none' }] };
-							else if (params.type === 'alarm') query = {code: parseInt(params.trigger_code), isIgnored: false, assignedTo: 'none'};
-							else if (params.type === 'info') query = {};
-							
-							db.RFCODES.find(query, function(err, docs){
-								var len = (params.type === 'switch') ? 2 : 1 ; // should have found 2 records in codes' DB for switch type
-								if (params.type === 'info') return resolve(true);
-
-								if (docs.length === len)
-									resolve(true);
-								else 
-									reject('Make sure to assign free not Ignored existing codes.');
-							});
-						}
-					});
-				});
-			},
+			},			
 			putCardInDatabase: function(req, destination_path){
 				// req.body e req.file
 				return new Promise(function(resolve, reject){
-					// normalize 'room' text before DB insertion
-					db.CARDS.insert(_initializeCard(req.body, destination_path), function(err, newDoc){
-							if (err) return reject(err);
-							// set as assigned the codes in DB (handles both 'swtich' and 'alarm' type)
-							db.RFCODES.update({ $or: [{ code: parseInt(req.body.on_code) }, { code: parseInt(req.body.off_code) }, {code: parseInt(req.body.trigger_code)}] }, { $set: { assignedTo: req.body.shortname } }, { multi: true }, function (err, numReplaced) {
-							  // numReplaced = 2
-							  resolve(newDoc); // return the new Card just inserted
-							});
+					
+					_checkDatabaseCorrispondence(db, req.body).then(function(){
+						// normalize 'room' text before DB insertion
+						db.CARDS.insert(_initializeCard(req.body, destination_path), function(err, newDoc){
+								if (err) return reject(err);
+								// set as assigned the codes in DB (handles both 'swtich' and 'alarm' type)
+								db.RFCODES.update({ $or: [{ code: parseInt(req.body.on_code) }, { code: parseInt(req.body.off_code) }, {code: parseInt(req.body.trigger_code)}] }, { $set: { assignedTo: req.body.shortname } }, { multi: true }, function (err, numReplaced) {
+								  // numReplaced = 2
+								  resolve(newDoc); // return the new Card just inserted
+								});
+								
+						});
+
+					}).catch(function(err){
+						reject(err);
 					});
 
 				});
