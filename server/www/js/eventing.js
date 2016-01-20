@@ -139,7 +139,7 @@ events.on('newCardClick', function(code){
 
 
 events.on('renderSnackbar', function(_code){
-	ion.sound.play("water_droplet_3");
+	ion.sound.play('water_droplet_3');
 	if (!RFcodes.incoming_codes.hasOwnProperty(_code)){ // code first time detected
 		RFcodes.putCode(_code, {badge_count: 1}); // put the code in incoming_codes but using a method (in this way we can implement event handling)
 		var mex = '<span class="pull-left" style="padding-top: 11px"><span class="badge">'+RFcodes.incoming_codes[_code].badge_count+'</span> Code detected: '+_code+'</span>'+
@@ -165,12 +165,11 @@ events.on('renderSnackbar', function(_code){
 
 events.on('renderInitCards', function(initData){
 	// TODO - stampare cards usando le iterazioni di Mustache! (come fatto per la tabella codici ignorati)
-	console.log(initData);
+	console.log('initData received: ', initData);
 
-	var _data = {};
-	//temporaneo
-	templating.renderTemplate('cards.mustache', $('#mainBody'), _data).then(function(){
-		ion.sound.play("button_tiny"); // sound notification
+	var view = {CARDS: initData, rooms: ['elenco room.. TODO...']};
+	templating.renderTemplate('cards.mustache', $('#mainBody'), view).then(function(){
+		ion.sound.play('button_tiny'); // sound notification
 		// NB. on dynamic refresh always recall these lines below
 		$.material.init();
 		if($('#cards_container').mixItUp('isLoaded')){ // if already loaded
