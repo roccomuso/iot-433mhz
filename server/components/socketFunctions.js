@@ -13,11 +13,7 @@ module.exports = function(socket, rf433mhz, dbFunctions){
 			clients.forEach(function(sock){
 				if (sock.id === socket_id){
 		            // Sending the cards stored in db.CARDS
-		            dbFunctions.getAllCards().then(function(cards){
-		            	client_socket.emit('initCards', cards);
-		            }).catch(function(err){
-		            	console.log(err);
-		            });
+		            methods.asyncEmitInitCards(sock);
 				}
 			});
 		},
@@ -57,11 +53,7 @@ module.exports = function(socket, rf433mhz, dbFunctions){
 		    });
 
             // Sending the cards stored in db.CARDS
-            dbFunctions.getAllCards().then(function(cards){
-            	client_socket.emit('initCards', cards);
-            }).catch(function(err){
-            	console.log(err);
-            });
+            methods.asyncEmitInitCards(client_socket);
 
             // Listen for socket events
             client_socket.on('getInitCards', _methods.onGetInitCards);
@@ -69,6 +61,13 @@ module.exports = function(socket, rf433mhz, dbFunctions){
             client_socket.on('removeIgnoreCode', _methods.onRemoveIgnoreCode);
 
                 
+		},
+		asyncEmitInitCards: function(io){
+			dbFunctions.getAllCards().then(function(cards){
+                io.emit('initCards', cards);
+            }).catch(function(err){
+                console.log(err);
+            });
 		}
 
 	};
