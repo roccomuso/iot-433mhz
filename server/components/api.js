@@ -59,29 +59,33 @@ module.exports = function(app, rf433mhz, dbFunctions){
 			// req.body will hold the text fields, if there were any
 
 			if (checkRequiredParams(req.body)){
-				// req.body will hold the img file
-				if (req.file){
-					var file_name = req.body.shortname+path.extname(req.file.originalname);
-					var origin_path = path.resolve(__dirname, '..', req.file.path);
-					var destination_path = path.resolve(__dirname, '../www/uploads/', file_name);
-					fs.rename(origin_path, destination_path, function (err) { // rename file uploaded
-						if (err) return res.status(500).json({done: false, err: err});
-						// put data in DB
-						dbFunctions.putCardInDatabase(req, './uploads/'+file_name).then(function(newCard){
-							res.status(200).json({done: true, newCard: newCard});
-						}).catch(function(err){
-							res.status(500).json({done: false, err: err});
+				dbFunctions.checkDatabaseCorrispondence(req.body).then(function(){
+					// req.body will hold the img file
+					if (req.file){
+						var file_name = req.body.shortname+path.extname(req.file.originalname);
+						var origin_path = path.resolve(__dirname, '..', req.file.path);
+						var destination_path = path.resolve(__dirname, '../www/uploads/', file_name);
+						fs.rename(origin_path, destination_path, function (err) { // rename file uploaded
+							if (err) return res.status(500).json({done: false, err: err});
+							// put data in DB
+							dbFunctions.putCardInDatabase(req, './uploads/'+file_name).then(function(newCard){
+								res.status(200).json({done: true, newCard: newCard});
+							}).catch(function(err){
+								res.status(500).json({done: false, err: err});
+							});
 						});
-					});
-				}else{
-					// put data (no img) in DB
-					dbFunctions.putCardInDatabase(req).then(function(newCard){
-							res.status(200).json({done: true, newCard: newCard});
-						}).catch(function(err){
-							res.status(500).json({done: false, err: err});
-						});
-					
-				}
+					}else{
+						// put data (no img) in DB
+						dbFunctions.putCardInDatabase(req).then(function(newCard){
+								res.status(200).json({done: true, newCard: newCard});
+							}).catch(function(err){
+								res.status(500).json({done: false, err: err});
+							});
+						
+					}
+				}).catch(function(err){
+					res.status(500).json({done: false, err: err});
+				});
 			}else res.status(500).json({done: false, err: 'Make sure to pass all the required params.'});
 
 	});
