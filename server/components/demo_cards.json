@@ -46,7 +46,7 @@
     "shortname": "welcome-info-card-2",
     "card_body": "If you get flooded by a code, you can hit the 'Ignore' button once it pop out...<br/><b>Tip</b>: Usually a single RF button can generates multiple radio codes according to several reasons (pressure or waves noise), make sure to select the most common one for your switch/alarm card.",
     "background_color": "#ccff90",
-    "img": false,
+    "img": "/assets/demo_img/raspberry-pi-2.png",
     "room": "living-room",
     "type": "info",
     "device": {}
