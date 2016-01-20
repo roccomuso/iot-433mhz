@@ -36,7 +36,7 @@
     "device": {
       "last_alert": "no alert yet",
       "notification_sound": true,
-      "trigger_code": 0000
+      "trigger_code": 0
     }
   },
   {
@@ -62,8 +62,8 @@
     "room": "living-room",
     "type": "switch",
     "device": {
-      "on_code": 0000,
-      "off_code": 0000,
+      "on_code": 0,
+      "off_code": 0,
       "notification_sound": true,
       "is_on": false
     }
