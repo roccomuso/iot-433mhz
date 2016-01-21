@@ -14,11 +14,9 @@
     <div class="col-md-6 text-center">
         <h3>Filter by</h3>
         <button class="btn btn-flat btn-primary active filter" data-filter="all">Show All</button>
-        <button class="btn btn-flat btn-primary filter" data-filter=".type_bedroom">Bedroom</button>
-        <button class="btn btn-flat btn-primary filter" data-filter=".type_bathroom">Bathroom</button>
-        <button class="btn btn-flat btn-primary filter" data-filter=".type_livingroom">Livingroom</button>
-        <button class="btn btn-flat btn-primary filter" data-filter=".type_kitchen">Kitchen</button>
-
+        {{#rooms}}
+        <button class="btn btn-flat btn-primary filter" data-filter=".type_{{.}}">{{.}}</button>
+        {{/rooms}}
     </div>
 </div>
 
@@ -26,54 +24,24 @@
 
 <div id="cards_container">
 
-    <div class="card pin mix type_bathroom" style="background-color: #9CCC65;">
+
+        {{#CARDS}}
+        <div class="card pin mix type_{{room}}" style="background-color: {{background_color}};">
 
             <div class="card-content">
 
-                <div class="btn-group pull-right">
-                  <a href="bootstrap-elements.html" data-target="#" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown"><i class="material-icons">more_vert</i></a>
-                  <ul class="dropdown-menu">
-                    <li><a href="javascript:void(0)">Action</a></li>
-                    <li><a href="javascript:void(0)">Another action</a></li>
-                    <li><a href="javascript:void(0)">Something else here</a></li>
-                    <li class="divider"></li>
-                    <li><a href="javascript:void(0)">Separated link</a></li>
-                  </ul>
-                </div>
-
-                <div class="card-body">
-                    <p>qui dolorem ipsum, quia dolor sit, amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt, ut labore et dolore magnam aliquam quaerat voluptatem.</p>
-                </div>
-
-                <footer class="card-footer">
-                     <div class="onoffswitch center-block">
-					    <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" checked>
-					    <label class="onoffswitch-label" for="myonoffswitch">
-					        <span class="onoffswitch-inner"></span>
-					        <span class="onoffswitch-switch"></span>
-					    </label>
-					</div>
-                </footer>
-
-            </div>
-
-        </div>
-
-
-        <div class="card pin mix type_bedroom" style="background-color: #E2E26D;">
-
-            <div class="card-content">
-
+                {{#img}}
                 <div class="card-image">
-                    <img src="./assets/demo_img/bedroom1.jpg" alt="Image">
-                    <h3 class="card-image-headline">Stanza da letto</h3>
+                    <img src="{{img}}" alt="{{headline}}">
+                    <h3 class="card-image-headline">{{headline}}</h3>
                 </div>
+                {{/img}}
 
                 <div class="btn-group pull-right">
                       <a href="bootstrap-elements.html" data-target="#" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown"><i class="material-icons">more_vert</i></a>
                       <ul class="dropdown-menu">
-                        <li class="disabled"><a href="#"><i class="fa fa-terminal fa-fw"></i> Type: switch</a></li>
-                        <li class="disabled"><a href="#"><i class="fa fa-home fa-fw"></i> Room: bedroom</a></li>
+                        <li class="disabled"><a href="#"><i class="fa fa-terminal fa-fw"></i> Type: {{type}}</a></li>
+                        <li class="disabled"><a href="#"><i class="fa fa-home fa-fw"></i> Room: {{room}}</a></li>
                         <li><a href="javascript:void(0)"><i class="fa fa-volume-up fa-fw"></i> Mute</a></li>
                         <li class="divider"></li>
                         <li><a href="javascript:void(0)"><i class="fa fa-trash fa-fw"></i> Delete</a></li>
@@ -81,116 +49,35 @@
                 </div>
 
                 <div class="card-body">
-                    <p>body.</p>
+                    {{{card_body}}}
                 </div>
 
                 <footer class="card-footer">
-                    &nbsp;
+                {{#device}}
+                    {{#on_code}}
+                    <div class="onoffswitch center-block" card-id="{{_id}}">
+                        <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="{{_id}}">
+                        <label class="onoffswitch-label" for="{{_id}}">
+                            <span class="onoffswitch-inner"></span>
+                            <span class="onoffswitch-switch"></span>
+                        </label>
+                    </div>
+                    {{/on_code}}
+                    {{#trigger_code}}
+                    <div class="center-block">
+                        Alarm.... TODO
+                        notification sound: {{notification_sound}},
+                        trigger_code: {{trigger_code}},
+                        last_alert: {{last_alert}}
+                    </div>
+                    {{/trigger_code}}
+                {{/device}}
                 </footer>
 
             </div>
 
         </div>
-
-
-        <div class="card pin mix type_livingroom" style="background-color: #5C6BC0;">
-
-            <div class="card-content">
-
-                <div class="card-image">
-                    <img src="./assets/demo_img/livingroom1.jpg" alt="Image">
-                    <h3 class="card-image-headline">Soggiorno</h3>
-                </div>
-
-                <div class="btn-group pull-right">
-                      <a href="bootstrap-elements.html" data-target="#" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown"><i class="material-icons">more_vert</i></a>
-                      <ul class="dropdown-menu">
-                        <li><a href="javascript:void(0)">Action</a></li>
-                        <li><a href="javascript:void(0)">Another action</a></li>
-                        <li><a href="javascript:void(0)">Something else here</a></li>
-                        <li class="divider"></li>
-                        <li><a href="javascript:void(0)">Separated link</a></li>
-                      </ul>
-                </div>
-
-                <div class="card-body">
-                    <p>qui dolorem ipsum, quia dolor sit, amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt, ut labore et dolore magnam aliquam quaerat voluptatem.</p>
-                </div>
-
-                <footer class="card-footer">
-                    <button class="btn btn-flat">Share</button>
-                    <button class="btn btn-flat btn-warning">Learn</button>
-                </footer>
-
-            </div>
-
-        </div>
-
-        <div class="card pin mix type_bathroom" style="background-color: #c1c8cc;">
-
-            <div class="card-content">
-
-                <div class="card-image">
-                    <img src="./assets/demo_img/galileo1.jpg" alt="Image">
-                    <h3 class="card-image-headline">Sismografo</h3>
-                </div>
-
-                <div class="btn-group pull-right">
-                      <a href="bootstrap-elements.html" data-target="#" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown"><i class="material-icons">more_vert</i></a>
-                      <ul class="dropdown-menu">
-                        <li class="disabled"><a href="#"><i class="fa fa-terminal fa-fw"></i> Type: switch</a></li>
-                        <li class="disabled"><a href="#"><i class="fa fa-home fa-fw"></i> Room: bathroom</a></li>
-                        <li><a href="javascript:void(0)"><i class="fa fa-volume-up fa-fw"></i> Mute</a></li>
-                        <li class="divider"></li>
-                        <li><a href="javascript:void(0)"><i class="fa fa-trash fa-fw"></i> Delete</a></li>
-                      </ul>
-                </div>
-
-                <div class="card-body">
-                    <p>lol</p>
-                </div>
-
-                <footer class="card-footer">
-                    <button class="btn btn-flat">Share</button>
-                    <button class="btn btn-flat btn-warning">Hello</button>
-                </footer>
-
-            </div>
-
-        </div>
-
-        <div class="card pin mix type_kitchen">
-
-            <div class="card-content">
-
-                <div class="card-image">
-                    <img src="./assets/demo_img/kitchen1.jpg" alt="Image">
-                    <h3 class="card-image-headline">Cucina</h3>
-                </div>
-
-                <div class="btn-group pull-right">
-                      <a href="bootstrap-elements.html" data-target="#" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown"><i class="material-icons">more_vert</i></a>
-                      <ul class="dropdown-menu">
-                        <li><a href="javascript:void(0)">Action</a></li>
-                        <li><a href="javascript:void(0)">Another action</a></li>
-                        <li><a href="javascript:void(0)">Something else here</a></li>
-                        <li class="divider"></li>
-                        <li><a href="javascript:void(0)">Separated link</a></li>
-                      </ul>
-                </div>
-
-                <div class="card-body">
-                    <p>[type_kitchen] qui dolorem ipsum, quia dolor sit, amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt, ut labore et dolore magnam aliquam quaerat voluptatem.</p>
-                </div>
-
-                <footer class="card-footer">
-                    <button class="btn btn-flat">Share</button>
-                    <button class="btn btn-flat btn-warning">More</button>
-                </footer>
-
-            </div>
-
-        </div>
+        {{/CARDS}}
 
  
 

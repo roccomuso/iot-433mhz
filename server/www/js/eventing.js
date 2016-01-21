@@ -23,17 +23,6 @@ events.on('assignCode', function(code){
   });  
 });
 
-// Util function to convert RGB to Hex.
-
-function rgb2hex(rgb) {
-    if (/^#[0-9A-F]{6}$/i.test(rgb)) return rgb;
-
-    rgb = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
-    function hex(x) {
-        return ("0" + parseInt(x).toString(16)).slice(-2);
-    }
-    return "#" + hex(rgb[1]) + hex(rgb[2]) + hex(rgb[3]);
-}
 
 events.on('newCardClick', function(code){
 	var view = {title: 'New Card'};
@@ -139,7 +128,7 @@ events.on('newCardClick', function(code){
 
 
 events.on('renderSnackbar', function(_code){
-	ion.sound.play("water_droplet_3");
+	ion.sound.play('water_droplet_3');
 	if (!RFcodes.incoming_codes.hasOwnProperty(_code)){ // code first time detected
 		RFcodes.putCode(_code, {badge_count: 1}); // put the code in incoming_codes but using a method (in this way we can implement event handling)
 		var mex = '<span class="pull-left" style="padding-top: 11px"><span class="badge">'+RFcodes.incoming_codes[_code].badge_count+'</span> Code detected: '+_code+'</span>'+
@@ -165,12 +154,18 @@ events.on('renderSnackbar', function(_code){
 
 events.on('renderInitCards', function(initData){
 	// TODO - stampare cards usando le iterazioni di Mustache! (come fatto per la tabella codici ignorati)
-	console.log(initData);
+	console.log('initData received: ', initData);
 
-	var _data = {};
-	//temporaneo
-	templating.renderTemplate('cards.mustache', $('#mainBody'), _data).then(function(){
-		ion.sound.play("button_tiny"); // sound notification
+	var rooms = [];
+	initData.forEach(function(card){
+	  rooms.push(card.room);
+	});
+	// clean rooms from duplicates
+	rooms = distinctElementsArray(rooms);
+
+	var view = {CARDS: initData, rooms: rooms};
+	templating.renderTemplate('cards.mustache', $('#mainBody'), view).then(function(){
+		ion.sound.play('button_tiny'); // sound notification
 		// NB. on dynamic refresh always recall these lines below
 		$.material.init();
 		if($('#cards_container').mixItUp('isLoaded')){ // if already loaded
@@ -178,6 +173,15 @@ events.on('renderInitCards', function(initData){
 			$('#cards_container').mixItUp({animation:{ animateResizeContainer: false}});
 		}else
 			$('#cards_container').mixItUp({animation:{ animateResizeContainer: false}});
+
+		// for 'switch' type only
+		$('.onoffswitch-label').click(function() {
+		  var _btn = $(this).parent();
+		  _btn.toggleClass('onoffswitch-checked');
+		  socket.emit('switchCommuted', { card_id: _btn.attr('card-id'), set: ((_btn.hasClass('onoffswitch-checked')) ? 'on' : 'off')});
+		});
+		// TODO js handler for 'alarm' type devices
+		// ...
 
 	}).catch(function(err){ // err
   		notie.alert(2, err, 0);
@@ -233,3 +237,27 @@ events.on('clickSettings', function(){
 	console.log('Settings button clicked.');
 	$('#c-circle-nav__toggle').click(); // Close Menu
 });
+
+
+/* UTILITY FUNCTIONS */
+
+// Convert RGB to Hex.
+function rgb2hex(rgb) {
+    if (/^#[0-9A-F]{6}$/i.test(rgb)) return rgb;
+
+    rgb = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+    function hex(x) {
+        return ("0" + parseInt(x).toString(16)).slice(-2);
+    }
+    return "#" + hex(rgb[1]) + hex(rgb[2]) + hex(rgb[3]);
+}
+
+// Get an array with distinct elements
+function distinctElementsArray(array){ // O(n^2)
+   var unique = [];
+   array.forEach(function(elem){
+   		if (unique.indexOf(elem) === -1)
+      	unique.push(elem)
+   });
+   return unique;
+}
