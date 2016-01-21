@@ -36,7 +36,7 @@
     "device": {
       "last_alert": "no alert yet",
       "notification_sound": true,
-      "trigger_code": 1111
+      "trigger_code": 3333
     }
   },
   {
@@ -63,7 +63,7 @@
     "type": "switch",
     "device": {
       "on_code": 1111,
-      "off_code": 1111,
+      "off_code": 2222,
       "notification_sound": true,
       "is_on": false
     }
