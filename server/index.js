@@ -67,7 +67,7 @@ async.series({
 
                 db.CARDS.on('inserted', function(card){ // card just inserted
                     // refresh every client UI
-                    socketFunctions.asyncEmitInitCards(io);
+                    socketFunctions.asyncEmitInitCards();
                     
                 });
 
@@ -76,7 +76,7 @@ async.series({
                     // ...
 
                     // refresh every client UI
-                    socketFunctions.asyncEmitInitCards(io);
+                    socketFunctions.asyncEmitInitCards();
 
                 });
             
