@@ -29,6 +29,11 @@
 		events.emit('renderSnackbar', _code);
 	});
 
+	// Randomize Cards, new shake detected on a mobile device
+	socket.on('randomizeCards', function(){
+		$('#cards_container').mixItUp('sort', 'random', true);
+	});
+
 	socket.on('serverError', function(data){
 		// notie.js alert
 		// TODO

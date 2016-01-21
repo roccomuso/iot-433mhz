@@ -2,7 +2,7 @@
 // For socket sending methods see http://stackoverflow.com/questions/10058226/send-response-to-all-clients-except-sender-socket-io
 
 
-module.exports = function(socket, rf433mhz, dbFunctions){
+module.exports = function(io, rf433mhz, dbFunctions){
 	
 	var clients = []; // Store sockets
 	
@@ -46,6 +46,10 @@ module.exports = function(socket, rf433mhz, dbFunctions){
         		console.log(err);
         	});
 
+        },
+        onDeviceShake: function(){
+        	console.log('Randomizing Cards on the UI');
+        	io.emit('randomizeCards');
         }
 	};
 
@@ -69,6 +73,7 @@ module.exports = function(socket, rf433mhz, dbFunctions){
             methods.asyncEmitInitCards(client_socket);
 
             // Listen for socket events
+            client_socket.on('shakeOccurred', _methods.onDeviceShake);
             client_socket.on('getInitCards', _methods.onGetInitCards);
             client_socket.on('ignoreCode', _methods.onIgnoreCode);
             client_socket.on('removeIgnoreCode', _methods.onRemoveIgnoreCode);
@@ -76,9 +81,12 @@ module.exports = function(socket, rf433mhz, dbFunctions){
 
                 
 		},
-		asyncEmitInitCards: function(io){
+		asyncEmitInitCards: function(socket){
 			dbFunctions.getAllCards().then(function(cards){
-                io.emit('initCards', cards);
+				if (socket)
+                	socket.emit('initCards', cards);
+                else
+                	io.emit('initCards', cards);
             }).catch(function(err){
                 console.log(err);
             });

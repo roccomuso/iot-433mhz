@@ -189,6 +189,9 @@ events.on('renderInitCards', function(initData){
 
 });
 
+events.on('shakeOccurred', function(){
+    socket.emit('shakeOccurred');
+});
 
 /* Menu Buttons */
 
