@@ -179,6 +179,19 @@ module.exports = function(db, config){
 					});
 
 				});
+			},
+			getSwitchCodes: function(card_id){
+				return new Promise(function(resolve, reject){
+					// get the switch codes for the specified card _id
+					db.CARDS.find({_id: card_id}, function(err, docs){
+						if (err) return reject(err);
+						if (docs.length){
+							var card = docs[0];
+							if (card.type !== 'switch') return reject('Misleading card type.');
+							resolve({on_code: card.device.on_code, off_code: card.device.off_code});
+						}
+					});
+				});
 			}
 	};
 

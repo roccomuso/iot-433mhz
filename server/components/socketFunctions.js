@@ -33,6 +33,19 @@ module.exports = function(socket, rf433mhz, dbFunctions){
             }).catch(function(err){
             	console.log(err);
             });
+        },
+        onSwitchCommuted: function(data){
+        	// send the RF code | data = {card_id: '...', set: 'on/off'}
+        	dbFunctions.getSwitchCodes(data.card_id).then(function(switch_codes){
+        		var codeToSend = (data.set === 'on') ? switch_codes.on_code: switch_codes.off_code;
+        		rf433mhz.send(codeToSend, function(err, out){
+	    			if(err) return console.log('Error:', err);
+	    			console.log('Code '+codeToSend+' sent!');
+	    		});
+        	}).catch(function(err){
+        		console.log(err);
+        	});
+
         }
 	};
 
@@ -59,6 +72,7 @@ module.exports = function(socket, rf433mhz, dbFunctions){
             client_socket.on('getInitCards', _methods.onGetInitCards);
             client_socket.on('ignoreCode', _methods.onIgnoreCode);
             client_socket.on('removeIgnoreCode', _methods.onRemoveIgnoreCode);
+            client_socket.on('switchCommuted', _methods.onSwitchCommuted);
 
                 
 		},
