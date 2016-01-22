@@ -1,0 +1,30 @@
+<html>
+<title>Console Mirroring Demo</title>
+
+<body>
+
+	<div id="#console"></div>
+
+	<!-- Dependencies -->
+
+	<!-- Socket.io for Web Socket -->
+	<script src="/socket.io/socket.io.js"></script>
+
+	<!-- jQuery -->
+	<script src="dist/js/browser.console.mirror.js"></script>
+
+	<script type="text/javascript">
+		var socket = io.connect('http://' + location.host, {
+			'reconnect': true,
+			'reconnection delay': 50,
+			'max reconnection attempts': 300
+		});
+	
+		consoleMirroring.init({
+			socketLib: socket,
+			containerId: '#console' 
+		});
+	</script>
+
+</body>
+</html>

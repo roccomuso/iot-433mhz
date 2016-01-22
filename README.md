@@ -115,6 +115,8 @@ Reachable on the <code>http://serverAddress:PORT</code>, the web <code>server_po
 
 TODO img..
 
+If you wanna have a **live console** output of your iot-433mhz running on Node. There's a real time console-mirroring web-console on <code>http://serverAddress:PORT/console.html</code>. (Thanks to [console-mirroring](https://github.com/roccomuso/console-mirroring)).
+
 ### Add to Homescreen
 
 The web interface provides along with supported browsers the ability to add the page on your homescreen like a native application. The first time you'll open it, a pop up will come out.

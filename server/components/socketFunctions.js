@@ -22,7 +22,7 @@ module.exports = function(io, rf433mhz, dbFunctions){
             dbFunctions.ignoreCode(code, true).then(function(ok){
             	console.log('code ignored: ', code); 
             }).catch(function(err){
-            	console.log(err);
+            	console.error(err);
             });
             
         },
@@ -31,7 +31,7 @@ module.exports = function(io, rf433mhz, dbFunctions){
         	dbFunctions.ignoreCode(code, false).then(function(ok){
             	console.log('code no more ignored: ', code); 
             }).catch(function(err){
-            	console.log(err);
+            	console.error(err);
             });
         },
         onSwitchCommuted: function(data){
@@ -56,7 +56,7 @@ module.exports = function(io, rf433mhz, dbFunctions){
         	dbFunctions.deleteCard({_id: _id}).then(function(){
         		// UI refreshed by db.CARDS on Remove listener in index.js
         	}).catch(function(err){
-        		if (err) console.log(err);
+        		if (err) console.error(err);
         	});
         }
 	};
@@ -97,7 +97,7 @@ module.exports = function(io, rf433mhz, dbFunctions){
                 else
                 	io.emit('initCards', cards);
             }).catch(function(err){
-                console.log(err);
+                console.error(err);
             });
 		}
 

@@ -59,7 +59,8 @@ async.series({
 
 			}, function(io){ // Web Socket handler
     		      
-                
+                require('console-mirroring')(io); // Console mirroring
+
                 var socketFunctions = require('./components/socketFunctions.js')(io, rf433mhz, dbFunctions);
 
                 /* LISTENERS */
@@ -108,11 +109,11 @@ async.series({
                                     io.emit('newRFCode', codeData); // sent to every open socket.
 
                             }).catch(function(err){
-                                console.log(err);
+                                console.error(err);
                             });
 
                         }, function(err){
-                            console.log(err);
+                            console.error(err);
                         });
                         
                     }
@@ -152,7 +153,7 @@ process.on('SIGINT', function () {
 	console.log('Closing...');
 	if (typeof rf433mhz !== 'undefined'){ // Close Serial Port
 		rf433mhz.close(function(err){
-			if (err) console.log('Error: ', err);
+			if (err) console.error('Error: ', err);
 			else console.log('Serial Port closed.');
 			//graceful shutdown
   			process.exit();
