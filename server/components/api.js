@@ -19,11 +19,11 @@ module.exports = function(app, rf433mhz, dbFunctions){
 		if (typeof req.params.code !== 'undefined'){
 			rf433mhz.send(req.params.code, function(err, out){
 	    		if(err) console.log('Error:', err);
-	    		res.send(JSON.stringify({'status': 'ok'}));
+	    		res.status(200).json({'status': 'ok'});
 	    	});
 	  		
 	  	}else
-	  		res.send(JSON.stringify({'status': 'error'}));
+	  		res.status(500).json({error: 'Provide the code to sent'});
 	});
 
 	// return list of ignored codes.
@@ -52,6 +52,18 @@ module.exports = function(app, rf433mhz, dbFunctions){
 		}, function(err){
 			res.status(500).json({error: err});
 		});
+	});
+
+	// delete a card given his _id or shortname
+	app.route('/api/cards/delete/:shortname').get(function (req, res){
+		if (typeof req.params.shortname !== 'undefined')
+			dbFunctions.deleteCard({shortname: req.params.shortname}).then(function(numDeleted){
+				res.status(200).json({status: 'ok', cards_deleted: numDeleted});
+			}, function(err){
+				res.status(500).json({error: err});
+			});
+		else
+			res.status(500).json({error: 'Please provide the shortname if you wanna delete a card'});
 	});
 
 	// new card insertion

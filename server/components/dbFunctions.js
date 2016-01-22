@@ -180,6 +180,20 @@ module.exports = function(db, config){
 
 				});
 			},
+			deleteCard: function(identifiers){
+				return new Promise(function(resolve, reject){
+					// delete a single card, given his _id or shortname.
+					if (!identifiers.hasOwnProperty('_id') && !identifiers.hasOwnProperty('shortname')) return reject('No valid parameters.');
+					
+					db.CARDS.remove(identifiers, {}, function (err, numRemoved) {
+					  if (err) return reject(err);
+					  resolve(numRemoved);
+					  // NB. the listener in index.js will delete the attached codes.
+					});
+					
+
+				});
+			},
 			getSwitchCodes: function(card_id){
 				return new Promise(function(resolve, reject){
 					// get the switch codes for the specified card _id

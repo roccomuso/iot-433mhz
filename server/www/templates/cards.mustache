@@ -27,7 +27,7 @@
 
 <!-- Devices cards  -->
 
-<div id="cards_container">
+<div id="cards_container" style="min-height: 650px">
 
 
         {{#CARDS}}
@@ -49,7 +49,7 @@
                         <li class="disabled"><a href="#"><i class="fa fa-home fa-fw"></i> Room: {{room}}</a></li>
                         <li><a href="javascript:void(0)"><i class="fa fa-volume-up fa-fw"></i> Mute</a></li>
                         <li class="divider"></li>
-                        <li><a href="javascript:void(0)"><i class="fa fa-trash fa-fw"></i> Delete</a></li>
+                        <li><a href="#" onClick="events.emit('deleteCard', '{{_id}}');"><i class="fa fa-trash fa-fw"></i> Delete</a></li>
                       </ul>
                 </div>
 
@@ -72,6 +72,8 @@
                     <div class="center-block">
                         Alarm.... TODO
                         notification sound: {{notification_sound}},
+
+                        ARM/DISARM: (...for email notification)
                         trigger_code: {{trigger_code}},
                         last_alert: {{last_alert}}
                     </div>

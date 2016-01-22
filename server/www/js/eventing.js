@@ -2,6 +2,10 @@
  * Event Handling
 */
 
+events.on('shakeOccurred', function(){
+	// request to reorder cards due to accelerometer shake.
+    socket.emit('shakeOccurred');
+});
 
 events.on('ignoreCode', function(code){
 	// send ignore's command to the Server 
@@ -189,8 +193,9 @@ events.on('renderInitCards', function(initData){
 
 });
 
-events.on('shakeOccurred', function(){
-    socket.emit('shakeOccurred');
+events.on('deleteCard', function(_id){
+	// delete card request
+	socket.emit('deleteCard', _id);
 });
 
 /* Menu Buttons */

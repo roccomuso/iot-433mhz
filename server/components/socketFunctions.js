@@ -50,6 +50,14 @@ module.exports = function(io, rf433mhz, dbFunctions){
         onDeviceShake: function(){
         	console.log('Randomizing Cards on the UI');
         	io.emit('randomizeCards');
+        },
+        onDeleteCard: function(_id){
+        	// delete the card with the given _id
+        	dbFunctions.deleteCard({_id: _id}).then(function(){
+        		// UI refreshed by db.CARDS on Remove listener in index.js
+        	}).catch(function(err){
+        		if (err) console.log(err);
+        	});
         }
 	};
 
@@ -78,6 +86,7 @@ module.exports = function(io, rf433mhz, dbFunctions){
             client_socket.on('ignoreCode', _methods.onIgnoreCode);
             client_socket.on('removeIgnoreCode', _methods.onRemoveIgnoreCode);
             client_socket.on('switchCommuted', _methods.onSwitchCommuted);
+            client_socket.on('deleteCard', _methods.onDeleteCard);
 
                 
 		},
