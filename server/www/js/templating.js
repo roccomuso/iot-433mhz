@@ -3,6 +3,7 @@
 
 var templating = {
 	isMobile: false,
+	hasAccelerometer: false,
 	dir: '/templates/',
 	renderTemplate: function(templateFile, $domElem, view){
 		return new Promise(function (resolve, reject){

@@ -29,6 +29,12 @@ $('#cards_container').mixItUp({animation:{ animateResizeContainer: false}});
 		}
 
 	}
+
+	// accelerometer supported
+	if (typeof window.DeviceMotionEvent != 'undefined')
+		templating.hasAccelerometer = true;
+	else templating.hasAccelerometer = false;
+
 })();
 
 

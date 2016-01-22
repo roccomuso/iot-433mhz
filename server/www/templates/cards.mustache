@@ -11,6 +11,11 @@
         <button class="btn btn-flat btn-primary sort active" data-sort="default">Data</button>
         <button class="btn btn-flat btn-primary sort" data-sort="random">Random</button>
     </div>
+    <div class="col-md-3 text-center hidden-md hidden-lg">
+    {{#accelerometer}}
+        <p class="lead">Shake your Device to reorganize cards.</p>
+    {{/accelerometer}}
+    </div>
     <div class="col-md-6 text-center">
         <h3>Filter by</h3>
         <button class="btn btn-flat btn-primary active filter" data-filter="all">Show All</button>

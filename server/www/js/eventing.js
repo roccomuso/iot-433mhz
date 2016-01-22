@@ -163,7 +163,7 @@ events.on('renderInitCards', function(initData){
 	// clean rooms from duplicates
 	rooms = distinctElementsArray(rooms);
 
-	var view = {CARDS: initData, rooms: rooms};
+	var view = {CARDS: initData, rooms: rooms, accelerometer: templating.hasAccelerometer};
 	templating.renderTemplate('cards.mustache', $('#mainBody'), view).then(function(){
 		ion.sound.play('button_tiny'); // sound notification
 		// NB. on dynamic refresh always recall these lines below
