@@ -1,5 +1,15 @@
 <html>
-<title>Console Mirroring Demo</title>
+<head>
+<title>Console Mirroring</title>
+
+	<style type="text/css">
+		body {    
+			margin: 0 !important;
+			padding: 0 !important;
+		}
+	</style>
+
+</head>
 
 <body>
 
@@ -19,10 +29,12 @@
 			'reconnection delay': 50,
 			'max reconnection attempts': 300
 		});
-	
+
 		consoleMirroring.init({
 			socketLib: socket,
-			containerId: '#console' 
+			containerId: '#console',
+			fullScreen: true,
+			border: false
 		});
 	</script>
 
