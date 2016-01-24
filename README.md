@@ -33,7 +33,7 @@ For more about the required 433mhz transmitter/receiver and the supported hardwa
 
 You can get it on [npm](https://www.npmjs.com/package/iot-433mhz):
 
-    npm install iot-433mhz
+    npm install iot-433mhz -g
 
 or Clone this Repo:
 
@@ -43,7 +43,9 @@ Then don't forget to install all the dependencies with <code>npm install</code> 
 
 **Heads Up**: On Raspberry Pi, you can encounter some issue installing all the dependencies, due to permission errors. If that happens try this: <code>sudo chown -R $USER:$GROUP ~/.npm</code> combined with running <code>npm cache clean</code> to get any busted packages out of your cache. In addition, if the error still persist, try adding the flag <code>--unsafe-perm</code>:
 
-    sudo npm install --unsafe-perm
+    sudo npm install --unsafe-perm   (if installing from git)
+    or
+    sudo npm install iot-433mhz -g --unsafe-perm   (if installing from npm)
 
 If running on different platforms follow the platform-specific setup below:
 
@@ -60,14 +62,14 @@ The server is multi-platform, can runs on different hardware combinations shown 
 
 The iot-433mhz server should run smoothly. Remember to execute with root permission (*sudo*):
 
-    sudo npm install iot-433mhz
+    sudo npm install iot-433mhz -g
 
 ### Windows
 
 To run the server on windows make sure to install **python 2.7** and **Microsoft Visual Studio Express 2013**. (Required by [node-serialport](https://github.com/voodootikigod/node-serialport)).
 Then just do a:
 
-    npm install iot-433mhz
+    npm install iot-433mhz -g
 
 ## B. Raspberry Pi (Raspbian Jessie) with 433 MHz transmitter and receiver
 
