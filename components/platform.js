@@ -125,14 +125,15 @@ module.exports = function(module_callback){
 				if (value > 0 && value <= ports.length) return true;
 				else return false;
 			}}}}, function (err, result) {
-	    // choices:
-	    console.log('Choosen port:', ports[result.port-1].comName);
-	    // return choosen port
-	    var classe = new rf433mhz({platform: whatToUse, port: ports[result.port-1].comName});
+				if (err) return console.error(err);
+	    		// choices:
+	    		console.log('Choosen port:', ports[result.port-1].comName);
+	    		// return choosen port
+	    		var classe = new rf433mhz({platform: whatToUse, port: ports[result.port-1].comName});
 
-	    module_callback(classe);
+	   			 module_callback(classe);
 	    
-	});
+			});
 
 		});
 
