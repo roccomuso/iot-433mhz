@@ -11,7 +11,7 @@
 
 # UI Demo
 
-![iot-433mhz UI](https://github.com/roccomuso/iot-433mhz/blob/master/other/schemes/web-ui.gif "Iot-433mhz Web UI")
+![iot-433mhz UI](https://github.com/roccomuso/iot-433mhz/blob/master/other/pics/web-ui.gif "Iot-433mhz Web UI")
 
 # Inspiration
 
