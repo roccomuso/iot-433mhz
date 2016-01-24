@@ -9,25 +9,31 @@
                                    |___\___/|_|        |_||____/____/|_|  |_|_| |_/___|
 
 
-# Demo
+# UI Demo
 
-TODO img
+![iot-433mhz UI](https://github.com/roccomuso/iot-433mhz/blob/master/other/schemes/web-ui.gif "Iot-433mhz Web UI")
 
 # Inspiration
 
-Inspired by https://www.npmjs.com/package/pimatic-homeduino-dst-dev this is a project in his Alpha stage. Documentation is under construction.
+Inspired by [pimatic-homeduino](https://www.npmjs.com/package/pimatic-homeduino-dst-dev) this is a project in his Alpha stage. Documentation is under construction.
 
 # Features
 
-TODO
+- Multi-platform (Windows, Mac OS X, Linux).
+- Intuitive API to build your own interface.
+- Built-In Material design cards-based template.
+- Detect Radio Frequency codes (433mhz).
+- Generate Cards and assign it to your rooms.
+- Control RC power sockets, PIR sensors, Door sensors and much more.
+- Totally Open Source & Open Hardware.
 
 ## Recommended Hardware
 
 For more about the required 433mhz transmitter/receiver and the supported hardware see the [hardware-layer page](https://github.com/roccomuso/iot-433mhz/tree/master/hardware-layer).
 
-# Install
+# General Install
 
-You can get it on [npm](https://www.npmjs.com/):
+You can get it on [npm](https://www.npmjs.com/package/iot-433mhz):
 
     npm install iot-433mhz
 
@@ -35,16 +41,17 @@ or Clone this Repo:
 
 <code>git clone https://github.com/roccomuso/iot-433mhz.git</code>
 
-Then don't forget to <code>cd server</code> and install all the dependencies with <code>npm install</code> (on UNIX system root privileges are required).
+Then don't forget to install all the dependencies with <code>npm install</code> (on UNIX system root privileges are required).
 
 **Heads Up**: On Raspberry Pi, you can encounter some issue installing all the dependencies, due to permission errors. If that happens try this: <code>sudo chown -R $USER:$GROUP ~/.npm</code> combined with running <code>npm cache clean</code> to get any busted packages out of your cache. In addition, if the error still persist, try adding the flag <code>--unsafe-perm</code>:
 
-<code>sudo npm install --unsafe-perm</code>
+    sudo npm install --unsafe-perm
 
-# Setup
+If running on different platforms follow the platform-specific setup below:
 
-The server is built on top of Node.js.
+# Specific Setup
 
+Iot-433Mhz is built on top of Node.js.
 The server is multi-platform, can runs on different hardware combinations shown below:
 
 ## A. Computer with Arduino connected and a 433 MHz transmitter and receiver.
@@ -53,11 +60,16 @@ The server is multi-platform, can runs on different hardware combinations shown 
 
 ### Mac, Linux
 
-The iot-433mhz server should run smoothly. Remember to execute with root permission (*sudo*).
+The iot-433mhz server should run smoothly. Remember to execute with root permission (*sudo*):
+
+    sudo npm install iot-433mhz
 
 ### Windows
 
 To run the server on windows make sure to install **python 2.7** and **Microsoft Visual Studio Express 2013**. (Required by [node-serialport](https://github.com/voodootikigod/node-serialport)).
+Then just do a:
+
+    npm install iot-433mhz
 
 ## B. Raspberry Pi (Raspbian Jessie) with 433 MHz transmitter and receiver
 
@@ -112,8 +124,6 @@ You can use the system through the beautiful web interface (thumbs up for materi
 ## Built-in Web Interface
 
 Reachable on the <code>http://serverAddress:PORT</code>, the web <code>server_port</code> is defined in <code>config.json</code>, default's value is 8080. It works well in browsers like Chrome (*reccomended*), Firefox, Safari, Opera, Microsoft Edge (it doesn't on Internet Explorer, avoid it).
-
-TODO img..
 
 If you wanna have a **live console** output of your iot-433mhz running on Node. There's a real time console-mirroring web-console on <code>http://serverAddress:PORT/console.html</code>. (Thanks to [console-mirroring](https://github.com/roccomuso/console-mirroring)).
 
