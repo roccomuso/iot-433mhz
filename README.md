@@ -29,7 +29,7 @@ For more about the required 433mhz transmitter/receiver and the supported hardwa
 
 You can get it on [npm](https://www.npmjs.com/):
 
-TODO ...
+    npm install iot-433mhz
 
 or Clone this Repo:
 
