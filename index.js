@@ -76,8 +76,8 @@ async.series({
                     
                 });
 
-                db.CARDS.on('removed', function(card){ // card removed
-                    // TODO remove from DB codes attached to this card:
+                db.CARDS.on('removed', function(card){ // a card was removed
+                    // remove from DB codes attached to this card:
                     var codes_to_remove = {};
                         if (card.type === 'switch') codes_to_remove = { $or: [{ code: card.device.on_code }, { code: card.device.off_code }] };
                         else if (card.type === 'alarm') codes_to_remove = {code: card.device.trigger_code};
