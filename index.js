@@ -1,5 +1,9 @@
-// On Raspberry Pi make sure to execute with SUDO.
-// On Windows platform make sure to have Visual Studio Express 2013 installed (https://github.com/voodootikigod/node-serialport)
+#!/usr/bin/env node
+
+/*
+* On Raspberry Pi make sure to execute with SUDO.
+* On Windows platform make sure to have Visual Studio Express 2013 installed (https://github.com/voodootikigod/node-serialport)
+*/
 
 var async = require('async');
 var chalk = require('chalk');
