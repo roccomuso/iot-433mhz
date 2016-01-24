@@ -1,6 +1,4 @@
-<p align="center">
-  <img src="https://github.com/roccomuso/iot-433mhz/blob/master/other/pics/logo128x128.png" alt="Logo IoT 433mhz" />
-</p>
+![IoT 433Mhz Logo](https://github.com/roccomuso/iot-433mhz/blob/master/other/pics/logo128x128.png?raw=true "Iot 433Mhz Logo")
 
                                     ___    _____     _  _  __________ __  __ _
                                    |_ _|__|_   _|   | || ||___ /___ /|  \/  | |__  ____
@@ -11,7 +9,7 @@
 
 # UI Demo
 
-![iot-433mhz UI](https://github.com/roccomuso/iot-433mhz/blob/master/other/pics/web-ui.gif "Iot-433mhz Web UI")
+![iot-433mhz UI](https://github.com/roccomuso/iot-433mhz/blob/master/other/pics/web-ui.gif?raw=true "Iot-433mhz Web UI")
 
 # Inspiration
 
@@ -56,7 +54,7 @@ The server is multi-platform, can runs on different hardware combinations shown 
 
 ## A. Computer with Arduino connected and a 433 MHz transmitter and receiver.
 
-![tx rx arduino](https://github.com/roccomuso/iot-433mhz/blob/master/other/schemes/arduino-transmitter-and-receiver.jpg "Arduino Interface and 433mhz")
+![tx rx arduino](https://github.com/roccomuso/iot-433mhz/blob/master/other/schemes/arduino-transmitter-and-receiver.jpg?raw=true "Arduino Interface and 433mhz")
 
 ### Mac, Linux
 
@@ -90,15 +88,15 @@ Then install Node.js:
 
 One way to go is directly connecting the radio transmitter and receiver to the GPIO as shown in the following picture, but first remember to install **wiringPi** ([link](http://wiringpi.com/download-and-install/)) and to execute the app with root permission (*sudo*):
 
-![rpi 433mhz](https://github.com/roccomuso/iot-433mhz/blob/master/other/schemes/raspberry-pi-rxb6-kxd10036-on-3.3v.jpg "IoT-433mhz with RPi")
+![rpi 433mhz](https://github.com/roccomuso/iot-433mhz/blob/master/other/schemes/raspberry-pi-rxb6-kxd10036-on-3.3v.jpg?raw=true "IoT-433mhz with RPi")
 
 **Heads Up**. The RF receiver module operates at 5V. THE GPIO data pins can only support 3.3V! If you put your receiver on 5V, the data io pin of the raspberry will also receive 5V which is way too high. A simple resistor (4.7k) should be fine, as already outlined in many forum posts, but is recommendend a **logic level converter** / level shifter or a simple **voltage divider**:
 
-![level shifter](https://github.com/roccomuso/iot-433mhz/blob/master/other/schemes/rpi-llc-receiver.jpg "Level Shifter")
+![level shifter](https://github.com/roccomuso/iot-433mhz/blob/master/other/schemes/rpi-llc-receiver.jpg?raw=true "Level Shifter")
 
 here the voltage divider:
 
-![voltage divider](https://github.com/roccomuso/iot-433mhz/blob/master/other/schemes/voltage-divider.jpg "Voltage Divider")
+![voltage divider](https://github.com/roccomuso/iot-433mhz/blob/master/other/schemes/voltage-divider.jpg?raw=true "Voltage Divider")
 
 The important thing here is the ratio of R1 to R2; R1 should be just over half R2's value to ensure 5V is divided down to 3.3V. The values shown here should be suitable for most uses.
 
@@ -131,7 +129,7 @@ If you wanna have a **live console** output of your iot-433mhz running on Node. 
 
 The web interface provides along with supported browsers the ability to add the page on your homescreen like a native application. The first time you'll open it, a pop up will come out.
 
-![Added to Homescreen](https://github.com/roccomuso/iot-433mhz/blob/master/other/pics/added-to-homescreen.JPG "Added to Homescreen")
+![Added to Homescreen](https://github.com/roccomuso/iot-433mhz/blob/master/other/pics/added-to-homescreen.JPG?raw=true "Added to Homescreen")
 
 **Heads Up!** If your server is running on a RPi, make sure to have a static ip address assigned to your server. Otherwise the linked app on the homescreen will not work anymore.
 
