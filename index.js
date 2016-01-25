@@ -13,11 +13,11 @@ var config = require('./config.json');
 var Datastore = require('./EventedDatastore.js'); // improvement not yet PR into ndb repo, that provides events. - it require('nedb');
 var db = {};
 db.RFCODES = new Datastore({
-    filename: './DB/rfcodes.db',
+    filename: 'DB/rfcodes.db',
     autoload: true
 });
 db.CARDS = new Datastore({
-    filename: './DB/cards.db',
+    filename: 'DB/cards.db',
     autoload: true
 });
 
