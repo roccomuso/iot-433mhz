@@ -35,6 +35,10 @@ You can get it on [npm](https://www.npmjs.com/package/iot-433mhz):
 
     npm install iot-433mhz -g
 
+and then execute it from console with:
+
+    iot-433mhz
+
 or Clone this Repo:
 
 <code>git clone https://github.com/roccomuso/iot-433mhz.git</code>
@@ -60,9 +64,13 @@ The server is multi-platform, can runs on different hardware combinations shown 
 
 ### Mac, Linux
 
-The iot-433mhz server should run smoothly. Remember to execute with root permission (*sudo*):
+The iot-433mhz server should run smoothly. Remember to install with root permission (*sudo*):
 
     sudo npm install iot-433mhz -g
+
+and then execute with:
+
+    iot-433mhz
 
 ### Windows
 
@@ -70,6 +78,10 @@ To run the server on windows make sure to install **python 2.7** and **Microsoft
 Then just do a:
 
     npm install iot-433mhz -g
+
+and then execute with:
+
+    iot-433mhz
 
 ## B. Raspberry Pi (Raspbian Jessie) with 433 MHz transmitter and receiver
 
@@ -106,7 +118,7 @@ The important thing here is the ratio of R1 to R2; R1 should be just over half R
 
 ### Using RPi with an external Arduino.
 
-- Remember to execute with **root** permission.
+- Remember to install with **root** permission.
 
 The system can run on RPi using an external Arduino like the other platforms. To do that, just set to <code>true</code> the <code>use-external-arduino</code> option in the <code>config.json</code> file.
 - In this way we'll force the RPi to use an Arduino through USB, using the node.js serialport module.
