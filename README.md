@@ -31,6 +31,8 @@ For more about the required 433mhz transmitter/receiver and the supported hardwa
 
 # General Install
 
+[![NPM](https://nodei.co/npm-dl/iot-433mhz.png)](https://nodei.co/npm/iot-433mhz/)
+
 You can get it on [npm](https://www.npmjs.com/package/iot-433mhz):
 
     npm install iot-433mhz -g
