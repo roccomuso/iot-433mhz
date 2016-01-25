@@ -184,3 +184,5 @@ process.on('SIGINT', function() {
     } else process.exit();
 
 });
+
+// Unix Line Ending
