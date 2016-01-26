@@ -46,6 +46,7 @@ ion.sound({
         {name: "button_tiny"}, // for cards retrieved.
         {name: "glass"},
         {name: "notification1"},
+        {name: "switch-toggle"}, // for switch toggling
         {name: "water_droplet_3"} // for code detected (snackbar opened)
     ],
 
