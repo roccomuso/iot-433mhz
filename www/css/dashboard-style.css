@@ -208,11 +208,11 @@ body {
     width: 110px;
     height: 128px;
     background-image: url(../assets/img/siren-sprite.png);
-    -webkit-filter: grayscale(60%);
-    -moz-filter: grayscale(60%);
-    -ms-filter: grayscale(60%);
-    -o-filter: grayscale(60%);
-    filter: grayscale(60%);
+    -webkit-filter: grayscale(70%);
+    -moz-filter: grayscale(70%);
+    -ms-filter: grayscale(70%);
+    -o-filter: grayscale(70%);
+    filter: grayscale(70%);
 }
 
 .siren-animated {
