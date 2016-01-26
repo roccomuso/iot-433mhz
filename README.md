@@ -132,6 +132,17 @@ The system can run on RPi using an external Arduino like the other platforms. To
 
 Is recommended to run the server on the RPi through a "terminal session". (see [screen](https://www.raspberrypi.org/forums/viewtopic.php?t=8099&p=101209)).
 
+# Config
+
+Through the Settings page from the Web Interface, you can change the general settings (stored in <code>config.json</code>). Few of those settings are there listed with their default values:
+
+    DEBUG: true, // Start the app in Debugging mode.
+    arduino_baudrate: 9600, // The arduino default baudrate (no need to change it)
+    server_port: 8080, // Choose on which port you wanna run the web interface
+    db_compact_interval: 12, // Database needs to be compacted to have better performance, by default every 12 hours it will be compacted, put 0 to avoid DB compacting.
+
+If you made a change to the settings from the Web interface, then to make it effective, you need to restart the app.
+
 # Usage
 
 You can use the system through the beautiful web interface (thumbs up for material-design) or use the API.
