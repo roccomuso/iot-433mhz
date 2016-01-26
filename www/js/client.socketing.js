@@ -37,7 +37,7 @@
 	// commute the button on the UI.
 	socket.on('uiSwitchToggle', function(data){
 		$('#switch-'+data.card_id).prop('checked', data.set);
-		ion.sound.play('switch-toggle'); // sound notification
+		if (data.sound) ion.sound.play('switch-toggle'); // sound notification
 	});
 
 	socket.on('serverError', function(data){

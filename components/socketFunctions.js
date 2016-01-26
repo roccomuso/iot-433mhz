@@ -43,7 +43,7 @@ module.exports = function(io, rf433mhz, dbFunctions){
 	    			if(err) return console.log('Error:', err);
 	    			console.log('Code '+codeToSend+' sent!');
                     // let's commute the switch on UI
-                    io.emit('uiSwitchToggle', {card_id: data.card_id, set: is_on});
+                    io.emit('uiSwitchToggle', {card_id: data.card_id, set: is_on, sound: switch_codes.sound});
                     // save it on DB
                     dbFunctions.setSwitchStatus(data.card_id, is_on).then(function(numDocs){
                         console.log('DB records updated:', numDocs);

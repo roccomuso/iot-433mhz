@@ -202,7 +202,7 @@ module.exports = function(db, config){
 						if (docs.length){
 							var card = docs[0];
 							if (card.type !== 'switch') return reject('Misleading card type.');
-							resolve({on_code: card.device.on_code, off_code: card.device.off_code});
+							resolve({on_code: card.device.on_code, off_code: card.device.off_code, sound: card.device.notification_sound});
 						}
 					});
 				});
