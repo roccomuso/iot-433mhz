@@ -21,6 +21,12 @@ db.CARDS = new Datastore({
     autoload: true
 });
 
+// Compact DB at regular intervals (see nedb: #Persistence)
+if (config.db_compact_interval > 0){
+    db.RFCODES.persistence.setAutocompactionInterval(config.db_compact_interval * 60000 * 60);
+    db.CARDS.persistence.setAutocompactionInterval(config.db_compact_interval * 60000 * 60);
+}
+
 var dbFunctions = require('./components/dbFunctions.js')(db, config);
 
 // Radio Frequency Class platform-independent

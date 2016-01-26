@@ -3,6 +3,7 @@
 	"DEBUG": true,
 	"arduino_baudrate": 9600,
 	"server_port": 8080,
+	"db_compact_interval": 12,
 	"platforms":{
 		"rpi": {
 			"sniff-pin": 2,
