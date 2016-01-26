@@ -134,6 +134,7 @@ events.on('newCardClick', function(code){
 events.on('renderSnackbar', function(_code){
 	ion.sound.play('water_droplet_3');
 	if (!RFcodes.incoming_codes.hasOwnProperty(_code)){ // code first time detected
+		badge++; favicon.badge(badge); // render favicon badge
 		RFcodes.putCode(_code, {badge_count: 1}); // put the code in incoming_codes but using a method (in this way we can implement event handling)
 		var mex = '<span class="pull-left" style="padding-top: 11px"><span class="badge">'+RFcodes.incoming_codes[_code].badge_count+'</span> Code detected: '+_code+'</span>'+
 		'<span class="pull-right"><a href="#" class="btn btn-info btn-xs" onclick="events.emit(\'ignoreCode\', '+_code+');">Ignore</a>'+
@@ -143,7 +144,7 @@ events.on('renderSnackbar', function(_code){
 		 	timeout: 0,
 		 	htmlAllowed: true,
 		 	onClose: function(){ // when snackbar is closed
-		 		// do nothing
+		 		badge--; favicon.badge(badge); // render favicon badge
 			}}); // print snackbar
 
 	}else{ // RFcode already exists and snackbar too, just increment badge_count field

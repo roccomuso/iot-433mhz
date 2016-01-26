@@ -79,3 +79,10 @@ function shakeEventDidOccur () {
 	console.log('Shake detected!');
     events.emit('shakeOccurred');
 }
+
+/* Init Favicon js */
+
+var favicon=new Favico({
+    animation:'popFade'
+});
+var badge = 0;
