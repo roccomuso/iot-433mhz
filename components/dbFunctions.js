@@ -206,6 +206,14 @@ module.exports = function(db, config){
 						}
 					});
 				});
+			},
+			setSwitchStatus: function(card_id, is_on){
+				return new Promise(function(resolve, reject){
+					db.CARDS.update({ _id: card_id }, { $set: { "device.is_on": is_on } }, {}, function (err, numReplaced) {
+					  if (err) return reject(err);
+					  resolve(numReplaced);
+					});
+				});
 			}
 	};
 

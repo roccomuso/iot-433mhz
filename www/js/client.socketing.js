@@ -34,6 +34,12 @@
 		$('#cards_container').mixItUp('sort', 'random', true);
 	});
 
+	// commute the button on the UI.
+	socket.on('uiSwitchToggle', function(data){
+		$('#switch-'+data.card_id).prop('checked', data.set);
+		ion.sound.play('switch-toggle'); // sound notification
+	});
+
 	socket.on('serverError', function(data){
 		// notie.js alert
 		// TODO

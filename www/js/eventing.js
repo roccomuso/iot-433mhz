@@ -179,10 +179,10 @@ events.on('renderInitCards', function(initData){
 			$('#cards_container').mixItUp({animation:{ animateResizeContainer: false}});
 
 		// for 'switch' type only
-		$('.onoffswitch-label').click(function() {
-		  var _btn = $(this).parent();
-		  _btn.toggleClass('onoffswitch-checked');
-		  socket.emit('switchCommuted', { card_id: _btn.attr('card-id'), set: ((_btn.hasClass('onoffswitch-checked')) ? 'on' : 'off')});
+		$('.onoffswitch-label').click(function(e) {
+		  e.preventDefault();
+		  var _cardId = $(this).parent().attr('switch-id');
+		  socket.emit('switchCommuted', { card_id: _cardId, set: (($('#switch-'+_cardId).is(':checked')) ? 'off' : 'on')});
 		});
 		// TODO js handler for 'alarm' type devices
 		// ...

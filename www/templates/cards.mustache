@@ -60,9 +60,9 @@
                 <footer class="card-footer">
                 {{#device}}
                     {{#on_code}}
-                    <div class="onoffswitch center-block" card-id="{{_id}}">
-                        <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="{{_id}}">
-                        <label class="onoffswitch-label" for="{{_id}}">
+                    <div class="onoffswitch center-block" switch-id="{{_id}}">
+                        <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="switch-{{_id}}" {{#is_on}}checked{{/is_on}}>
+                        <label class="onoffswitch-label" for="switch-{{_id}}">
                             <span class="onoffswitch-inner"></span>
                             <span class="onoffswitch-switch"></span>
                         </label>

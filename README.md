@@ -20,6 +20,7 @@ Inspired by [pimatic-homeduino](https://www.npmjs.com/package/pimatic-homeduino-
 - Multi-platform (Windows, Mac OS X, Linux).
 - Intuitive API to build your own interface.
 - Built-In Material design cards-based template.
+- Real-time UI refresh.
 - Detect Radio Frequency codes (433mhz).
 - Generate Cards and assign it to your rooms.
 - Control RC power sockets, PIR sensors, Door sensors and much more.
