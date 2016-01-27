@@ -207,6 +207,8 @@ body {
 .siren {
     width: 110px;
     height: 128px;
+    position: relative;
+    z-index: 4;
     background-image: url(../assets/img/siren-sprite.png);
     -webkit-filter: grayscale(70%);
     -moz-filter: grayscale(70%);
@@ -216,11 +218,11 @@ body {
 }
 
 .siren-animated {
-    -webkit-animation: play .3s steps(3) infinite;
-    -moz-animation: play .3s steps(3) infinite;
-    -ms-animation: play .3s steps(3) infinite;
-    -o-animation: play .3s steps(3) infinite;
-    animation: play .3s steps(3) infinite;
+    -webkit-animation: play-siren .3s steps(3) infinite;
+    -moz-animation: play-siren .3s steps(3) infinite;
+    -ms-animation: play-siren .3s steps(3) infinite;
+    -o-animation: play-siren .3s steps(3) infinite;
+    animation: play-siren .3s steps(3) infinite;
     -webkit-filter: none;
     -moz-filter: none;
     -ms-filter: none;
@@ -228,7 +230,7 @@ body {
     filter: none;
 }
 
-@-webkit-keyframes play {
+@-webkit-keyframes play-siren {
     from {
         background-position: 0px;
     }
@@ -237,7 +239,7 @@ body {
     }
 }
 
-@-moz-keyframes play {
+@-moz-keyframes play-siren {
     from {
         background-position: 0px;
     }
@@ -246,7 +248,7 @@ body {
     }
 }
 
-@-ms-keyframes play {
+@-ms-keyframes play-siren {
     from {
         background-position: 0px;
     }
@@ -255,7 +257,7 @@ body {
     }
 }
 
-@-o-keyframes play {
+@-o-keyframes play-siren {
     from {
         background-position: 0px;
     }
@@ -264,7 +266,7 @@ body {
     }
 }
 
-@keyframes play {
+@keyframes play-siren {
     from {
         background-position: 0px;
     }
