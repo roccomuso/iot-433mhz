@@ -4,7 +4,9 @@
   "description": "Node server to handle 433mhz outlets and sensors.",
   "main": "index.js",
   "preferGlobal": "true",
-  "bin": { "iot-433mhz": "./index.js" },
+  "bin": {
+    "iot-433mhz": "./index.js"
+  },
   "scripts": {
     "start": "node index.js"
   },
@@ -31,7 +33,7 @@
     "express": "4.13.3",
     "figlet": "1.1.1",
     "multer": "1.1.0",
-    "nedb": "1.6.0",
+    "nedb": "1.6.2",
     "prompt": "0.2.14",
     "serialport": "2.0.5",
     "socket.io": "1.3.7",
