@@ -210,6 +210,7 @@ body {
     position: relative;
     z-index: 4;
     background-image: url(../assets/img/siren-sprite.png);
+    -webkit-transform: translate3d(0px, 0px, 0px); /* solve z-index chrome bug */
     -webkit-filter: grayscale(70%);
     -moz-filter: grayscale(70%);
     -ms-filter: grayscale(70%);
