@@ -43,14 +43,22 @@
 	// trigger Alarm
 	socket.on('uiTriggerAlarm', function(card){
 
-		$siren = $('div[alarm-id='+card._id+']');
+		var $siren = $('div[alarm-id='+card._id+']');
 		if (!$siren.hasClass('siren-animated')){ // avoid multiple execution at the same time
 			$siren.toggleClass('siren-animated');
 			if (card.device.notification_sound) ion.sound.play('siren-sound');
-			// TODO: moment.js format on the last_alert timestamp.
-			$siren.parent().find('.last_alert').html(card.device.last_alert);
+			// format last_alert timestamp
+			$siren.parent().find('.last_alert').html(moment(card.device.last_alert, 'X').format('D MMM YYYY, H:mm:ss'));
 
+			var secs = 30;
+			$siren.html('<span class="label label-danger" style="position:relative; top: 105px; left: 43px;">30</span>');
+			var $label = $siren.children('span');
+			var timer = setInterval(function(){
+				$label.html(--secs);
+			}, 1000);
 			setTimeout(function(){
+				clearInterval(timer);
+				$siren.html('');
 				$siren.toggleClass('siren-animated');
 			}, 30 * 1000); // siren spins for 30 seconds.
 		}

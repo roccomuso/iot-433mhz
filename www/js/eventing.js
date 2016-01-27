@@ -168,7 +168,15 @@ events.on('renderInitCards', function(initData){
 	// clean rooms from duplicates
 	rooms = distinctElementsArray(rooms);
 
-	var view = {CARDS: initData, rooms: rooms, accelerometer: templating.hasAccelerometer};
+	// pre-process initData to be rendered
+	var dataReady = (JSON.parse(JSON.stringify(initData))); // cloning Object
+	for (var i = 0; i < initData.length; i++){
+		if(initData[i].device.hasOwnProperty('last_alert')){
+			dataReady[i].device.last_alert = moment(dataReady[i].device.last_alert, 'X').format('D MMM YYYY, H:mm:ss');
+		}
+	}
+
+	var view = {CARDS: dataReady, rooms: rooms, accelerometer: templating.hasAccelerometer};
 	templating.renderTemplate('cards.mustache', $('#mainBody'), view).then(function(){
 		ion.sound.play('button_tiny'); // sound notification
 		// NB. on dynamic refresh always recall these lines below
@@ -185,8 +193,10 @@ events.on('renderInitCards', function(initData){
 		  var _cardId = $(this).parent().attr('switch-id');
 		  socket.emit('switchCommuted', { card_id: _cardId, set: (($('#switch-'+_cardId).is(':checked')) ? 'off' : 'on')});
 		});
-		// TODO js handler for 'alarm' type devices
-		// ...
+		// for 'alarm' type devices
+		$('.card-footer').on('click', '.siren-animated', function(e){
+			ion.sound.stop('siren-sound'); // stop sound when clicking on the siren
+		});
 
 	}).catch(function(err){ // err
   		notie.alert(2, err, 0);

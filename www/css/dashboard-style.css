@@ -229,6 +229,7 @@ body {
     -ms-filter: none;
     -o-filter: none;
     filter: none;
+    cursor: pointer;
 }
 
 @-webkit-keyframes play-siren {
