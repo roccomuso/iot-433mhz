@@ -40,6 +40,23 @@
 		if (data.sound) ion.sound.play('switch-toggle'); // sound notification
 	});
 
+	// trigger Alarm
+	socket.on('uiTriggerAlarm', function(card){
+
+		$siren = $('div[alarm-id='+card._id+']');
+		if (!$siren.hasClass('siren-animated')){ // avoid multiple execution at the same time
+			$siren.toggleClass('siren-animated');
+			if (card.device.notification_sound) ion.sound.play('siren-sound');
+			// TODO: moment.js format on the last_alert timestamp.
+			$siren.parent().find('.last_alert').html(card.device.last_alert);
+
+			setTimeout(function(){
+				$siren.toggleClass('siren-animated');
+			}, 30 * 1000); // siren spins for 30 seconds.
+		}
+
+	});
+
 	socket.on('serverError', function(data){
 		// notie.js alert
 		// TODO

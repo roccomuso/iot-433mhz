@@ -24,7 +24,7 @@ function _initializeCard(params, img_path){ // params received through API
 		};
 	else if (params.type === 'alarm')
 		selected_device = {
-			last_alert: 'no alert yet',
+			last_alert: 'No alert yet',
 			notification_sound: true,
 			trigger_code: parseInt(params.trigger_code)
 		};
@@ -79,10 +79,14 @@ module.exports = function(db, config){
 			},
 			isCodeAvailable: function(code){
 				return new Promise(function(resolve, reject){
-					db.RFCODES.find({code: code, isIgnored: false, assignedTo: 'none'}, function(err, doc){
+					db.RFCODES.find({code: code, isIgnored: false}, function(err, docs){
 						if (err) return reject(err);
-						if (doc.length === 0) resolve(false);
-						else resolve(true);
+
+						if (docs.length === 0) resolve({isAvailable: true, assignedTo: docs[0].assignedTo}); 
+						else if (docs.length === 1)
+							resolve({isAvailable: false, assignedTo: docs[0].assignedTo});
+						else return reject('More than one code reference in DB');
+
 					});
 				});
 			},
@@ -203,7 +207,7 @@ module.exports = function(db, config){
 							var card = docs[0];
 							if (card.type !== 'switch') return reject('Misleading card type.');
 							resolve({on_code: card.device.on_code, off_code: card.device.off_code, sound: card.device.notification_sound});
-						}
+						} else reject('no records found');
 					});
 				});
 			},
@@ -213,6 +217,27 @@ module.exports = function(db, config){
 					  if (err) return reject(err);
 					  resolve(numReplaced);
 					});
+				});
+			},
+			alarmTriggered: function(cardShortname, type){
+				return new Promise(function(resolve, reject){
+					// check if it is an alarm card
+					db.CARDS.find({shortname: cardShortname, type: type}, function(err, docs){
+						if (err) return reject(err);
+						if (docs.length){
+							// it is an alarm card, update the DB last_alert field
+							var timestamp = Math.floor(Date.now() / 1000);
+							db.CARDS.update({ shortname: cardShortname }, { $set: { "device.last_alert": timestamp } }, {}, function (err, numReplaced) {
+							  if (err) return reject(err);
+							  if (numReplaced){
+							  	docs[0].device.last_alert = timestamp;
+							  	resolve(docs[0]);
+							  }else
+							  	reject('error updating last_alert');
+							});
+						}else resolve(undefined);
+					});
+
 				});
 			}
 	};

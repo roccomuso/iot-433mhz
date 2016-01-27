@@ -10,7 +10,7 @@ var chalk = require('chalk');
 var config = require('./config.json');
 
 // Create or open the underlying DB store
-var Datastore = require('./EventedDatastore.js'); // improvement not yet PR into ndb repo, that provides events. - it require('nedb');
+var Datastore = require('./EventedDatastore.js'); // nedb doesn't provide listener on DB events by default
 var db = {};
 db.RFCODES = new Datastore({
     filename: 'DB/rfcodes.db',
@@ -130,12 +130,25 @@ async.series({
                         dbFunctions.putCodeInDB(codeData).then(function(mex) {
                             if (config.DEBUG) console.log(mex);
 
-                            dbFunctions.isCodeAvailable(codeData.code).then(function(isAvailable) { // code available if not ignored and not assigned.
-                                if (config.DEBUG) console.log(codeData.code, 'isAvailable:', isAvailable);
+                            dbFunctions.isCodeAvailable(codeData.code).then(function(result) { // a code is available if not ignored and not assigned.
+                                if (config.DEBUG) console.log(codeData.code, 'isAvailable: '+ result.isAvailable);
 
-                                if (isAvailable)
+                                if (result.isAvailable)
                                     io.emit('newRFCode', codeData); // sent to every open socket.
+                                else{
+                                    // code not available, check if the code is assigned to an alarm card
+                                    console.log(result.isAvailable, result.assignedTo);
+                                    var card_shortname = result.assignedTo;
+                                    dbFunctions.alarmTriggered(card_shortname, 'alarm').then(function(card){
+                                            if (card){
+                                               io.emit('uiTriggerAlarm', card);
+                                               // TODO: send email or other kind of notification (IFTTT) if Armed.
 
+
+                                            }
+                                    }, function(err){ console.error(err);});
+
+                                }
                             }).catch(function(err) {
                                 console.error(err);
                             });
