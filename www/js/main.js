@@ -47,6 +47,7 @@ ion.sound({
         {name: "glass"},
         {name: "notification1"},
         {name: "switch-toggle"}, // for switch toggling
+        {name: "siren-sound", loop: 2}, // for alarm siren
         {name: "water_droplet_3"} // for code detected (snackbar opened)
     ],
 
@@ -58,7 +59,7 @@ ion.sound({
 });
 
 // play sound: 
-// ion.sound.play("button_tiny");
+// ion.sound.play('button_tiny');
 
 
 /* Handle Shake Event on Mobile Devices */
