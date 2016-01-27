@@ -47,7 +47,12 @@
                       <ul class="dropdown-menu">
                         <li class="disabled"><a href="#"><i class="fa fa-terminal fa-fw"></i> Type: {{type}}</a></li>
                         <li class="disabled"><a href="#"><i class="fa fa-home fa-fw"></i> Room: {{room}}</a></li>
-                        <li><a href="javascript:void(0)"><i class="fa fa-volume-up fa-fw"></i> Mute</a></li>
+                        <li><a href="#"><i class="fa fa-volume-up fa-fw"></i> Mute</a></li>
+                        {{#device}}
+                        {{#trigger_code}}
+                        <li><a href="#"><i class="fa fa-rocket fa-fw"></i> Arm/Disarm</a></li> 
+                        {{/trigger_code}}
+                        {{/device}}
                         <li class="divider"></li>
                         <li><a href="#" onClick="events.emit('deleteCard', '{{_id}}');"><i class="fa fa-trash fa-fw"></i> Delete</a></li>
                       </ul>
@@ -59,7 +64,7 @@
 
                 <footer class="card-footer">
                 {{#device}}
-                    {{#on_code}}
+                    {{#on_code}} {{! Switch section}}
                     <div class="onoffswitch center-block" switch-id="{{_id}}">
                         <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="switch-{{_id}}" {{#is_on}}checked{{/is_on}}>
                         <label class="onoffswitch-label" for="switch-{{_id}}">
@@ -68,15 +73,14 @@
                         </label>
                     </div>
                     {{/on_code}}
-                    {{#trigger_code}}
-                    <div class="center-block">
-                        Alarm.... TODO
+                    {{#trigger_code}} {{! Alarm section}}
+                    
+                        <div class="siren center-block" alarm-id="{{_id}}"></div>
                         notification sound: {{notification_sound}},
-
-                        ARM/DISARM: (...for email notification)
+                        ARM/DISARM: (...for email notification - already on menù)
                         trigger_code: {{trigger_code}},
                         last_alert: {{last_alert}}
-                    </div>
+                    
                     {{/trigger_code}}
                 {{/device}}
                 </footer>
