@@ -102,6 +102,30 @@ module.exports = function(app, rf433mhz, dbFunctions){
 
 	});
 
+	// arm card 
+	app.route('/api/cards/arm/:shortname').get(function (req, res){
+		if (typeof req.params.shortname !== 'undefined')
+			dbFunctions.armCard({shortname: req.params.shortname, arm: true}).then(function(result){
+				res.status(200).json({status: 'ok', cards_affected: result.affected, armed: true});
+			}, function(err){
+				res.status(500).json({status: 'error', error: err});
+			});
+		else
+			res.status(500).json({status: 'error', error: 'Please provide the shortname if you wanna arm a card'});
+	});
+
+	// disarm card
+	app.route('/api/cards/disarm/:shortname').get(function (req, res){
+		if (typeof req.params.shortname !== 'undefined')
+			dbFunctions.armCard({shortname: req.params.shortname, arm: false}).then(function(result){
+				res.status(200).json({status: 'ok', cards_affected: result.affected, armed: false});
+			}, function(err){
+				res.status(500).json({status: 'error', error: err});
+			});
+		else
+			res.status(500).json({status: 'error', error: 'Please provide the shortname if you wanna disarm a card'});
+	});
+
 	// handle 404 error for API
 	app.all('/api/*', function(req, res){
 		res.status(404).json({status: 'error', error_code: 404, err: 'API entrypoint not found'});
