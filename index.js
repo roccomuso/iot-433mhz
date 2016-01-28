@@ -7,6 +7,8 @@
 
 var async = require('async');
 var chalk = require('chalk');
+var fs = require('fs');
+var path = require('path');
 var config = require('./config.json');
 
 // Create or open the underlying DB store
@@ -115,6 +117,9 @@ async.series({
                         });
                     }
 
+                    // delete img file
+                    if (card.img) fs.unlink(path.resolve('./www/', card.img), function(err){ if (err) console.error('DeleteFile: file not found', err.path); });
+
                     console.log('Card ' + card.shortname + ' deleted.');
                     // refresh every client UI
                     socketFunctions.asyncEmitInitCards();
@@ -149,6 +154,8 @@ async.series({
                                     }, function(err){ console.error(err);});
 
                                 }
+                                // TODO: WebHook call
+                                
                             }).catch(function(err) {
                                 console.error(err);
                             });
