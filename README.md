@@ -188,10 +188,13 @@ Below every single API available is documented. Too lazy to copy and paste? just
 send the specified rfcode. Return a status object: <code>{"status": "ok"}</code> or <code>{"status": "error", "error": "error description.."}</code>
 
 - <code>GET /api/codes/ignored</code>
-Return a list of ignored codes taken from DB.
+Return a list of ignored codes stored in DB.
 
 - <code>GET /api/codes/all</code>
-Return all the registered codes from DB.
+Return all the registered codes stored in DB.
+
+- <code>GET /api/cards/all</code>
+Return all the cards stored in DB.
 
 - <code>POST /api/cards/new</code>
 form-data required parameters:
