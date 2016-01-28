@@ -36,6 +36,7 @@
     "device": {
       "last_alert": "no alert yet",
       "notification_sound": true,
+      "armed": true,
       "trigger_code": 3333
     }
   },
