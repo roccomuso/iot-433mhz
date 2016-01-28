@@ -19,11 +19,11 @@ module.exports = function(app, rf433mhz, dbFunctions){
 		if (typeof req.params.code !== 'undefined'){
 			rf433mhz.send(req.params.code, function(err, out){
 	    		if(err) console.log('Error:', err);
-	    		res.status(200).json({'status': 'ok'});
+	    		res.status(200).json({status: 'ok'});
 	    	});
 	  		
 	  	}else
-	  		res.status(500).json({error: 'Provide the code to sent'});
+	  		res.status(500).json({status: 'error', error: 'Provide the code to sent'});
 	});
 
 	// return list of ignored codes.
@@ -31,7 +31,7 @@ module.exports = function(app, rf433mhz, dbFunctions){
 		dbFunctions.getIgnoredCodes().then(function(ignored){
 			res.status(200).json(ignored);
 		}, function(err){
-			res.status(500).json({error: err});
+			res.status(500).json({status: 'error', error: err});
 		});
 
 	});
@@ -41,7 +41,7 @@ module.exports = function(app, rf433mhz, dbFunctions){
 		dbFunctions.getAllCodes().then(function(codes){
 			res.status(200).json(codes);
 		}, function(err){
-			res.status(500).json({error: err});
+			res.status(500).json({status: 'error', error: err});
 		});
 	});
 
@@ -50,7 +50,7 @@ module.exports = function(app, rf433mhz, dbFunctions){
 		dbFunctions.getAllCards().then(function(codes){
 			res.status(200).json(codes);
 		}, function(err){
-			res.status(500).json({error: err});
+			res.status(500).json({status: 'error', error: err});
 		});
 	});
 
@@ -60,10 +60,10 @@ module.exports = function(app, rf433mhz, dbFunctions){
 			dbFunctions.deleteCard({shortname: req.params.shortname}).then(function(numDeleted){
 				res.status(200).json({status: 'ok', cards_deleted: numDeleted});
 			}, function(err){
-				res.status(500).json({error: err});
+				res.status(500).json({status: 'error', error: err});
 			});
 		else
-			res.status(500).json({error: 'Please provide the shortname if you wanna delete a card'});
+			res.status(500).json({status: 'error', error: 'Please provide the shortname if you wanna delete a card'});
 	});
 
 	// new card insertion
@@ -74,7 +74,7 @@ module.exports = function(app, rf433mhz, dbFunctions){
 				dbFunctions.checkDatabaseCorrispondence(req.body).then(function(){
 					// req.body will hold the img file
 					if (req.file){
-						var file_name = req.body.shortname+path.extname(req.file.originalname);
+						var file_name = req.body.shortname.trim().toLowerCase().replace(new RegExp(' ', 'g'), '-')+path.extname(req.file.originalname);
 						var origin_path = path.resolve(__dirname, '..', req.file.path);
 						var destination_path = path.resolve(__dirname, '../www/uploads/', file_name);
 						fs.rename(origin_path, destination_path, function (err) { // rename file uploaded
@@ -104,7 +104,7 @@ module.exports = function(app, rf433mhz, dbFunctions){
 
 	// handle 404 error for API
 	app.all('/api/*', function(req, res){
-		res.status(404).json({error_code: 404, err: 'API entrypoint not found'});
+		res.status(404).json({status: 'error', error_code: 404, err: 'API entrypoint not found'});
 	});
 
 	// serve as static all the other routes
@@ -126,7 +126,7 @@ function checkRequiredParams(params){ // required params (headline, shortname, r
 
 	if (typeof params === 'undefined') return false;
 
-	var required_params = ['headline', 'shortname', 'room', 'type', 'background_color'];
+	var required_params = ['headline', 'shortname', 'room', 'type'];
 	var params_name = Object.keys(params);
 
 	var keepGoing = true;
@@ -135,8 +135,8 @@ function checkRequiredParams(params){ // required params (headline, shortname, r
 	});
 	if (!keepGoing) return false;
 
-	// check background color
-	if (!validator.isHexColor(params.background_color)) return false;
+	// check background color (must be an hex color if passed)
+	if (params.background_color && !validator.isHexColor(params.background_color)) return false;
 
 	// check for type-specific params
 	switch (params.type){
