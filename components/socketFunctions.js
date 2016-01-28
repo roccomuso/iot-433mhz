@@ -65,6 +65,24 @@ module.exports = function(io, rf433mhz, dbFunctions){
         	}).catch(function(err){
         		if (err) console.error(err);
         	});
+        },
+        onMuteCard: function(_id){
+            // mute/unmute card
+            dbFunctions.muteCard(_id).then(function(result){
+                // update every UI
+                io.emit('uiMuteStatus', {card_id: _id, is_mute: result});
+            }).catch(function(err){
+                if (err) console.error(err);
+            });
+        },
+        onArmDisarm: function(_id){
+            // arm/disarm card
+            dbFunctions.armCard({_id: _id}).then(function(result){
+                // update every UI
+                io.emit('uiArmStatus', {card_id: _id, is_armed: result.is_armed});
+            }).catch(function(err){
+                if (err) console.error(err);
+            });
         }
 	};
 
@@ -94,6 +112,8 @@ module.exports = function(io, rf433mhz, dbFunctions){
             client_socket.on('removeIgnoreCode', _methods.onRemoveIgnoreCode);
             client_socket.on('switchCommuted', _methods.onSwitchCommuted);
             client_socket.on('deleteCard', _methods.onDeleteCard);
+            client_socket.on('muteCard', _methods.onMuteCard);
+            client_socket.on('arm_disarm', _methods.onArmDisarm);
 
                 
 		},
