@@ -166,43 +166,103 @@ The web interface provides along with supported browsers the ability to add the 
 See the [Hardware page](https://github.com/roccomuso/iot-433mhz/tree/master/hardware-layer).
 
 
+## WebHooks
+
+Webhooks allow you to build or set up integrations which subscribe to certain events on the iot-433mhz system. When one of those events is triggered, we'll send a HTTP POST payload to the webhook's configured URL.
+Webhooks can be used to catch several events:
+- alarm triggered event.
+- new card event.
+- card deleted event.
+- new code detected event.
+- switch toggle event.
+
+NB. In this current release WebHooks are not card-specific. For example, a single *alarmTriggered* event type catches every alarm trigger. It's up to you parse the payload and make sure that was the sensor you were wishing for.
+
+Use the API below to set up and interacts with WebHooks.
+
 ## API
 
+Below every single API available is documented. Too lazy to copy and paste? just download and import the Postman collection ([download](https://github.com/roccomuso/iot-433mhz/blob/master/other/IoT-433Mhz.json.postman_collection)).
 
-<code>GET /api/code/send/[RFcode]</code>
-send the specified rfcode. Return a status object: <code>{"status": "ok"}</code>
+- <code>GET /api/code/send/[RFcode]</code>
+send the specified rfcode. Return a status object: <code>{"status": "ok"}</code> or <code>{"status": "error", "error": "error description.."}</code>
 
-<code>GET /api/codes/ignored</code>
+- <code>GET /api/codes/ignored</code>
 Return a list of ignored codes taken from DB.
 
-<code>GET /api/codes/all</code>
+- <code>GET /api/codes/all</code>
 Return all the registered codes from DB.
 
-<code>GET /api/room/device/on</code>
+- <code>POST /api/cards/new</code>
+form-data required parameters:
+    
+    headline - a brief headline.
+    shortname - lower case, no spaces.
+    card_body - a description, html allowed.
+    room - lower case, no spaces.
+    type - must be one of the following types: switch/alarm/info 
+    device - if type==switch gotta have on_code and off_code parameters. if type==alarm just the trigger_code parameter
+
+Optional parameter: <code>card_img</code>, <code>background_color</code> (must be an hex color with).
+Json response: 200 OK - <code>{"done": true, "newCard": ...}</code> where newCard is the json card just inserted. Or <code>{"done": "false", "error": "error description..."}</code>
+
+- <code>GET /api/cards/delete/[shortname]</code>
+Delete the card with the specified shortname, it returns <code>{"status": "ok", cards_deleted: 1}</code> or <code>{"status": "error", "error": "error description.."}</code>
+
+- <code>GET /api/cards/arm/[shortname]</code>
+Only alarm type cards can be armed.
+
+- <code>GET /api/cards/disarm/[shortname]</code>
+Only alarm type cards can be disarmed. (If disarmed no WebHook callbacks or email notifications will be sent)
+
+- <code>GET /api/room/[room-name]/[shortname]/on</code>
 Turn on a switch. Example: GET /api/bedroom/lamp1/on
 
-<code>GET /api/room/device/off</code>
+- <code>GET /api/room/[room-name]/[shortname]/off</code>
 Turn off a switch
 
-<code>GET /api/room/device/toggle</code>
+- <code>GET /api/room/[room-name]/[shortname]/toggle</code>
 Toggle a switch
 
-<code>POST /api/room/device/[on, off, toggle]</code>
-Insert rf code assigned to the specified endpoint.
-Required parameters: {'new_code': xxxx}
+- <code>GET /api/webhook/all</code>
+List all the registered webhooks.
 
-<code>PUT /api/room/device/[on, off, toggle]</code>
-Edit rf code assigned to the specified endpoint.
-Required parameters: {'new_code': xxxx}
+- <code>GET /api/webhook/get/[WebHookShortname]</code>
+Get the WebHook stored information.
 
+- <code>POST /api/webhook/put</code>
+Insert a new WebHook.
+Required parameters:
 
-# Notifications
+    webHookShortname - a brief shortname (it will be made lower case and without blank spaces).
+    description - a brief WebHook description.
+    url - the URL to which a HTTP POST request will be sent when the event get fired (the request carries a JSON payload field that gotta be parsed).
+    active - true/false (if true the POST request will be sent).
+    eventName - It must be one of these*: alarmTriggered, newCard, cardDeleted, newCode, switchToggle
 
-- in-app with notie.js
-- and using the html5 features.
+This API call returns the new generated WebHook *_id* and a valid *shortname*
+Let's describe every event JSON payload you're gonna listen for according to the supplied <code>eventName</code>:
 
-# IFTTT Integration
+<code>alarmTriggered = {"card_id": "...", "last_alert": 1453..., "code": ..., "shortname": "...", "room": "..." }</code> * NB. an alarmTriggered WebHook callback will be executed only if the alarm card is armed!
+<code>newCard = {"card_id":"...", "headline": "", "shortname": "", "card_body": "", "img": "", "type": "switch/alarm/info", "room": "", "device": { \*\*\* }}</code> NB. device depends on **type**: if *switch*, we would look for these properties: on_code, off_code, notification_sound, is_on. If *alarm*: last_alert, trigger_code, notification_sound. If *info* device got no properties.
+<code>cardDeleted = {"card_id": "..."}</code>
+<code>newCode = {"code": "...", "bitlength": ..., "protocol": ...}</code> NB. The detected code could be ignored or already attached to a device card.
+<code>switchToggle = {"card_id": "...", "is_on": true/false, "sent_code": ..., "timestamp": 1453... }</code>
 
+- <code>GET /api/webhook/active/[WebHookShortname]</code>
+Active the specified WebHook.
+
+- <code>GET /api/webhook/deactive/[WebHookShortname]</code>
+Deactive the specified WebHook.
+
+- <code>GET /api/webhook/delete/[WebHookShortname]</code>
+Delete the specified webhook.
+
+# Telegram Bot & Notifications
+
+Out of the box, the iot-433mhz provides notifications through email and through a Telegram Bot. Of course you're free to develop your own notification system using our WebHooks API.
+
+The telegram bot is under construction (TODO).
 ...
 
 # Android & iOS Apps
