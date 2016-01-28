@@ -42,27 +42,17 @@
 
 	// trigger Alarm
 	socket.on('uiTriggerAlarm', function(card){
+		events.emit('uiTriggerAlarm', card);
+	});
 
-		var $siren = $('div[alarm-id='+card._id+']');
-		if (!$siren.hasClass('siren-animated')){ // avoid multiple execution at the same time
-			$siren.toggleClass('siren-animated');
-			if (card.device.notification_sound) ion.sound.play('siren-sound');
-			// format last_alert timestamp
-			$siren.parent().find('.last_alert').html(moment(card.device.last_alert, 'X').format('D MMM YYYY, H:mm:ss'));
+	// need to update card dropdown menu mute status
+	socket.on('uiMuteStatus', function(data){
+		events.emit('uiMuteStatus', data);
+	});
 
-			var secs = 30;
-			$siren.html('<span class="label label-danger" style="position:relative; top: 105px; left: 43px;">30</span>');
-			var $label = $siren.children('span');
-			var timer = setInterval(function(){
-				$label.html(--secs);
-			}, 1000);
-			setTimeout(function(){
-				clearInterval(timer);
-				$siren.html('');
-				$siren.toggleClass('siren-animated');
-			}, 30 * 1000); // siren spins for 30 seconds.
-		}
-
+	// need to update card dropdown menu arm/disarm status
+	socket.on('uiArmStatus', function(data){
+		events.emit('uiArmStatus', data);
 	});
 
 	socket.on('serverError', function(data){

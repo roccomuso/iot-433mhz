@@ -171,7 +171,7 @@ events.on('renderInitCards', function(initData){
 	// pre-process initData to be rendered
 	var dataReady = (JSON.parse(JSON.stringify(initData))); // cloning Object
 	for (var i = 0; i < initData.length; i++){
-		if(initData[i].device.hasOwnProperty('last_alert')){
+		if(initData[i].device.hasOwnProperty('last_alert') && initData[i].device.last_alert){
 			dataReady[i].device.last_alert = moment(dataReady[i].device.last_alert, 'X').format('D MMM YYYY, H:mm:ss');
 		}
 	}
@@ -204,10 +204,58 @@ events.on('renderInitCards', function(initData){
 
 });
 
+// alarm triggered
+events.on('uiTriggerAlarm', function(card){
+	var $siren = $('div[alarm-id='+card._id+']');
+	if (!$siren.hasClass('siren-animated')){ // avoid multiple execution at the same time
+		$siren.toggleClass('siren-animated');
+		if (card.device.notification_sound) ion.sound.play('siren-sound');
+		// format last_alert timestamp
+		$siren.parent().find('.last_alert').html(moment(card.device.last_alert, 'X').format('D MMM YYYY, H:mm:ss'));
+
+		var secs = 30;
+		$siren.html('<span class="label label-danger" style="position:relative; top: 105px;">30</span>');
+		var $label = $siren.children('span');
+		var timer = setInterval(function(){
+			$label.html(--secs);
+		}, 1000);
+		setTimeout(function(){
+			clearInterval(timer);
+			$siren.html('');
+			$siren.toggleClass('siren-animated');
+		}, 30 * 1000); // siren spins for 30 seconds.
+	}
+});
+
+// delete card request
 events.on('deleteCard', function(_id){
-	// delete card request
 	socket.emit('deleteCard', _id);
 });
+
+// mute card request
+events.on('muteCard', function(_id){
+	socket.emit('muteCard', _id);
+});
+
+// arm/disarm request
+events.on('arm_disarm', function(_id){
+	socket.emit('arm_disarm', _id);
+});
+
+// update card dropdown menu mute status
+events.on('uiMuteStatus', function(data){
+	// data.card_id, data.is_mute
+	console.log(data);
+	var $menu_entry = $('');
+});
+
+// update card dropdown menu arm/disarm status
+events.on('uiArmStatus', function(data){
+	// data.card_id, data.is_armed
+	console.log(data);
+	var $menu_entry = $('');
+});
+
 
 /* Menu Buttons */
 
