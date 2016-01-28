@@ -196,12 +196,12 @@ Return all the registered codes from DB.
 - <code>POST /api/cards/new</code>
 form-data required parameters:
     
-    headline - a brief headline.
-    shortname - lower case, no spaces.
-    card_body - a description, html allowed.
-    room - lower case, no spaces.
-    type - must be one of the following types: switch/alarm/info 
-    device - if type==switch gotta have on_code and off_code parameters. if type==alarm just the trigger_code parameter
+        headline - a brief headline.
+        shortname - lower case, no spaces.
+        card_body - a description, html allowed.
+        room - lower case, no spaces.
+        type - must be one of the following types: switch/alarm/info 
+        device - if type==switch gotta have on_code and off_code parameters. if type==alarm just the trigger_code parameter
 
 Optional parameter: <code>card_img</code>, <code>background_color</code> (must be an hex color with).
 Json response: 200 OK - <code>{"done": true, "newCard": ...}</code> where newCard is the json card just inserted. Or <code>{"done": "false", "error": "error description..."}</code>
@@ -234,19 +234,23 @@ Get the WebHook stored information.
 Insert a new WebHook.
 Required parameters:
 
-    webHookShortname - a brief shortname (it will be made lower case and without blank spaces).
-    description - a brief WebHook description.
-    url - the URL to which a HTTP POST request will be sent when the event get fired (the request carries a JSON payload field that gotta be parsed).
-    active - true/false (if true the POST request will be sent).
-    eventName - It must be one of these*: alarmTriggered, newCard, cardDeleted, newCode, switchToggle
+        webHookShortname - a brief shortname (it will be made lower case and without blank spaces).
+        description - a brief WebHook description.
+        url - the URL to which a HTTP POST request will be sent when the event get fired (the request carries a JSON payload field that gotta be parsed).
+        active - true/false (if true the POST request will be sent).
+        eventName - It must be one of these*: alarmTriggered, newCard, cardDeleted, newCode, switchToggle
 
 This API call returns the new generated WebHook *_id* and a valid *shortname*
 Let's describe every event JSON payload you're gonna listen for according to the supplied <code>eventName</code>:
 
 <code>alarmTriggered = {"card_id": "...", "last_alert": 1453..., "code": ..., "shortname": "...", "room": "..." }</code> * NB. an alarmTriggered WebHook callback will be executed only if the alarm card is armed!
+
 <code>newCard = {"card_id":"...", "headline": "", "shortname": "", "card_body": "", "img": "", "type": "switch/alarm/info", "room": "", "device": { \*\*\* }}</code> NB. device depends on **type**: if *switch*, we would look for these properties: on_code, off_code, notification_sound, is_on. If *alarm*: last_alert, trigger_code, notification_sound. If *info* device got no properties.
+
 <code>cardDeleted = {"card_id": "..."}</code>
+
 <code>newCode = {"code": "...", "bitlength": ..., "protocol": ...}</code> NB. The detected code could be ignored or already attached to a device card.
+
 <code>switchToggle = {"card_id": "...", "is_on": true/false, "sent_code": ..., "timestamp": 1453... }</code>
 
 - <code>GET /api/webhook/active/[WebHookShortname]</code>
