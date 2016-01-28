@@ -1,0 +1,183 @@
+{
+	"id": "d9f1a733-05df-add2-1dd9-5910ad167bf4",
+	"name": "IoT-433Mhz",
+	"description": "API for IoT-433Mhz",
+	"order": [
+		"d874cfc4-19c4-e361-40c4-aac696e5a361",
+		"f866bae2-5d72-8666-bd89-0bd71487bf44",
+		"37f4de17-c746-012d-0629-dbf1693faf94",
+		"63dc519c-d481-abe1-9b24-b0c1e39ca5a8",
+		"65c20876-02b3-1d3e-8562-2427577455ca",
+		"c1924bc0-41c1-1bc5-debd-6ad97c85fc8b"
+	],
+	"folders": [],
+	"timestamp": 1452386878140,
+	"owner": 0,
+	"remoteLink": "",
+	"public": false,
+	"requests": [
+		{
+			"id": "37f4de17-c746-012d-0629-dbf1693faf94",
+			"headers": "",
+			"url": "127.0.0.1:8080/api/code/send/5201",
+			"pathVariables": {},
+			"preRequestScript": "",
+			"method": "GET",
+			"collectionId": "d9f1a733-05df-add2-1dd9-5910ad167bf4",
+			"data": [],
+			"dataMode": "params",
+			"name": "send a specified code",
+			"description": "Send the specified code",
+			"descriptionFormat": "html",
+			"time": 1452560458572,
+			"version": 2,
+			"responses": [],
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {}
+		},
+		{
+			"id": "63dc519c-d481-abe1-9b24-b0c1e39ca5a8",
+			"headers": "",
+			"url": "127.0.0.1:8080/api/cards/all",
+			"pathVariables": {},
+			"preRequestScript": "",
+			"method": "GET",
+			"collectionId": "d9f1a733-05df-add2-1dd9-5910ad167bf4",
+			"data": [],
+			"dataMode": "params",
+			"name": "list all cards",
+			"description": "Request all CARDS in DB",
+			"descriptionFormat": "html",
+			"time": 1452828531252,
+			"version": 2,
+			"responses": [],
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {}
+		},
+		{
+			"id": "65c20876-02b3-1d3e-8562-2427577455ca",
+			"headers": "",
+			"url": "127.0.0.1:8080/api/card/new",
+			"pathVariables": {},
+			"preRequestScript": "",
+			"method": "POST",
+			"collectionId": "d9f1a733-05df-add2-1dd9-5910ad167bf4",
+			"data": [
+				{
+					"key": "card_img",
+					"value": "Rocco Musolino.jpg",
+					"type": "file",
+					"enabled": true
+				},
+				{
+					"key": "headline",
+					"value": "prova",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "shortname",
+					"value": "lamp1",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "type",
+					"value": "switch",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "room",
+					"value": "bedroom",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "on_code",
+					"value": "5201",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "off_code",
+					"value": "5396",
+					"type": "text",
+					"enabled": true
+				}
+			],
+			"dataMode": "params",
+			"name": "New card",
+			"description": "POST request to create a new Card.",
+			"descriptionFormat": "html",
+			"time": 1452826956350,
+			"version": 2,
+			"responses": [],
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {}
+		},
+		{
+			"id": "c1924bc0-41c1-1bc5-debd-6ad97c85fc8b",
+			"headers": "",
+			"url": "127.0.0.1:8080/api/cards/delete/[card-shortname]",
+			"pathVariables": {},
+			"preRequestScript": "",
+			"method": "GET",
+			"collectionId": "d9f1a733-05df-add2-1dd9-5910ad167bf4",
+			"data": [],
+			"dataMode": "params",
+			"name": "delete a Card",
+			"description": "delete a card given his shortname.",
+			"descriptionFormat": "html",
+			"time": 1453438062517,
+			"version": 2,
+			"responses": [],
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {}
+		},
+		{
+			"id": "d874cfc4-19c4-e361-40c4-aac696e5a361",
+			"headers": "",
+			"url": "127.0.0.1:8080/api/codes/all",
+			"pathVariables": {},
+			"preRequestScript": "",
+			"method": "GET",
+			"collectionId": "d9f1a733-05df-add2-1dd9-5910ad167bf4",
+			"data": [],
+			"dataMode": "urlencoded",
+			"name": "list all codes",
+			"description": "Request all codes in DB",
+			"descriptionFormat": "html",
+			"time": 1452559794507,
+			"version": 2,
+			"responses": [],
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {}
+		},
+		{
+			"id": "f866bae2-5d72-8666-bd89-0bd71487bf44",
+			"headers": "",
+			"url": "127.0.0.1:8080/api/codes/ignored",
+			"pathVariables": {},
+			"preRequestScript": "",
+			"method": "GET",
+			"collectionId": "d9f1a733-05df-add2-1dd9-5910ad167bf4",
+			"data": [],
+			"dataMode": "params",
+			"name": "list all ignored codes",
+			"description": "Request all the ignored codes from DB",
+			"descriptionFormat": "html",
+			"time": 1452559915921,
+			"version": 2,
+			"responses": [],
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {}
+		}
+	]
+}
