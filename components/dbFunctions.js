@@ -12,7 +12,6 @@ function _initializeRFcodes(data){ // data is the code received through serial
 }
 
 function _initializeCard(params, img_path){ // params received through API
-	if (typeof img_path === 'undefined') img_path = false;
 	// Card table structure
 	var selected_device = {};
 	if (params.type === 'switch')
@@ -26,6 +25,7 @@ function _initializeCard(params, img_path){ // params received through API
 		selected_device = {
 			last_alert: 'No alert yet',
 			notification_sound: true,
+			armed: params.armed || true,
 			trigger_code: parseInt(params.trigger_code)
 		};
 	else if (params.type === 'info')
@@ -35,11 +35,11 @@ function _initializeCard(params, img_path){ // params received through API
 		active: true,
 		date: Math.floor(Date.now() / 1000),
 		headline: params.headline,
-		shortname: params.shortname,
+		shortname: params.shortname.trim().toLowerCase().replace(new RegExp(' ', 'g'), '-'),
 		card_body: params.card_body,
 		background_color: params.background_color || '#FAFAFA',
-		img: img_path, // false if card got no img.
-		room: params.room,
+		img: img_path || false, // false if card got no img.
+		room: params.room.trim().toLowerCase().replace(new RegExp(' ', 'g'), '-'),
 		type: params.type,
 		device: selected_device
 	};
