@@ -23,7 +23,7 @@ function _initializeCard(params, img_path){ // params received through API
 		};
 	else if (params.type === 'alarm')
 		selected_device = {
-			last_alert: 'No alert yet',
+			last_alert: false,
 			notification_sound: true,
 			armed: params.armed || true,
 			trigger_code: parseInt(params.trigger_code)
@@ -236,6 +236,32 @@ module.exports = function(db, config){
 							  	reject('error updating last_alert');
 							});
 						}else resolve(undefined);
+					});
+
+				});
+			},
+			muteCard: function(card_id){
+				return new Promise(function(resolve, reject){
+					// TODO
+
+				});
+			},
+			armCard: function(identifiers){
+				return new Promise(function(resolve, reject){
+					// arm/disarm alarm type card
+					if (!identifiers.hasOwnProperty('_id') && !identifiers.hasOwnProperty('shortname')) return reject('No valid parameters.');
+					var query = (identifiers.hasOwnProperty('_id')) ? {_id: identifiers._id} : {shortname: identifiers.shortname};
+					query.type = 'alarm';
+
+					db.CARDS.find(query, function(err, docs){
+						if (docs.length){
+							var new_val = !docs[0].device.armed;
+							if (typeof identifiers.arm === 'boolean') new_val = identifiers.arm; // for api arm/disarm requests
+							db.CARDS.update(query, { $set: { "device.armed": new_val } }, {}, function (err, affected) {
+							  if (affected !== 1) return reject('error: no value updated');
+							  resolve({affected: affected, is_armed: new_val});
+							});
+						} else return reject('error: no card found with ', identifiers);
 					});
 
 				});
