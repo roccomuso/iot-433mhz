@@ -47,10 +47,10 @@
                       <ul class="dropdown-menu">
                         <li class="disabled"><a href="#"><i class="fa fa-terminal fa-fw"></i> Type: {{type}}</a></li>
                         <li class="disabled"><a href="#"><i class="fa fa-home fa-fw"></i> Room: {{room}}</a></li>
-                        <li><a href="#"><i class="fa fa-volume-up fa-fw"></i> Mute</a></li>
+                        <li><a href="#" onClick="events.emit('muteCard', '{{_id}}');"><i class="fa fa-volume-up fa-fw"></i> Mute</a></li>
                         {{#device}}
                         {{#trigger_code}}
-                        <li><a href="#"><i class="fa fa-rocket fa-fw"></i> Arm/Disarm</a></li> 
+                        <li><a href="#" onClick="events.emit('arm_disarm', '{{_id}}');"><i class="fa fa-rocket fa-fw"></i> Arm/Disarm</a></li> 
                         {{/trigger_code}}
                         {{/device}}
                         <li class="divider"></li>
@@ -75,11 +75,10 @@
                     {{/on_code}}
                     {{#trigger_code}} {{! Alarm section}}
                     
-                        <div class="siren center-block" alarm-id="{{_id}}"></div>
-                        notification sound: {{notification_sound}},
-                        ARM/DISARM: (...for email notification - already on menù)
-                        trigger_code: {{trigger_code}},
-                        Last alert: <span class='last_alert'>{{last_alert}}</span>
+                        <div class="siren center-block text-center" alarm-id="{{_id}}"></div>
+                        <div class="text-center">
+                            <b>Last alert</b>: <span class='last_alert'>{{#last_alert}}{{last_alert}}{{/last_alert}}{{^last_alert}}never fired{{/last_alert}}</span>
+                        </div>
                     
                     {{/trigger_code}}
                 {{/device}}
