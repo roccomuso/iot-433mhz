@@ -142,19 +142,20 @@ async.series({
                                     io.emit('newRFCode', codeData); // sent to every open socket.
                                 else{
                                     // code not available, check if the code is assigned to an alarm card
-                                    console.log(result.isAvailable, result.assignedTo);
+                                    console.log('code available: '+result.isAvailable+' assigned to: '+result.assignedTo);
                                     var card_shortname = result.assignedTo;
                                     dbFunctions.alarmTriggered(card_shortname, 'alarm').then(function(card){
                                             if (card){
                                                io.emit('uiTriggerAlarm', card);
-                                               // TODO: send email or other kind of notification (IFTTT) if Armed.
-
+                                               // TODO: send email or other kind of notification (Telegram mex) if Armed.
+                                               // if (card.device.armed) ...
+                                               // WebHook call (alarm triggered)
 
                                             }
                                     }, function(err){ console.error(err);});
 
                                 }
-                                // TODO: WebHook call
+                                // TODO: WebHook call (code detected)
                                 
                             }).catch(function(err) {
                                 console.error(err);
