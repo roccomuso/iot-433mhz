@@ -82,8 +82,10 @@ module.exports = function(db, config){
 					db.RFCODES.find({code: code, isIgnored: false}, function(err, docs){
 						if (err) return reject(err);
 
-						if (docs.length === 0) resolve({isAvailable: true, assignedTo: docs[0].assignedTo}); 
-						else if (docs.length === 1)
+						if (docs.length === 0) reject('no code founded');
+						else if (docs.length === 1 && docs[0].assignedTo === 'none')
+							resolve({isAvailable: true, assignedTo: docs[0].assignedTo});
+						else if (docs.length === 1 && docs[0].assignedTo !== 'none')
 							resolve({isAvailable: false, assignedTo: docs[0].assignedTo});
 						else return reject('More than one code reference in DB');
 
