@@ -8,7 +8,11 @@
 		"37f4de17-c746-012d-0629-dbf1693faf94",
 		"63dc519c-d481-abe1-9b24-b0c1e39ca5a8",
 		"65c20876-02b3-1d3e-8562-2427577455ca",
-		"c1924bc0-41c1-1bc5-debd-6ad97c85fc8b"
+		"c1924bc0-41c1-1bc5-debd-6ad97c85fc8b",
+		"68605113-24e1-74fc-366d-51053d1fd39c",
+		"2ad5b93b-c522-3391-048a-bd7c54877023",
+		"8c3d062c-d57d-eb68-d16b-7ebd5cd3b788",
+		"82b603b5-39bc-37cd-17f8-2beae124a18c"
 	],
 	"folders": [],
 	"timestamp": 1452386878140,
@@ -16,6 +20,25 @@
 	"remoteLink": "",
 	"public": false,
 	"requests": [
+		{
+			"id": "2ad5b93b-c522-3391-048a-bd7c54877023",
+			"headers": "",
+			"url": "127.0.0.1:8080/api/cards/disarm/alarm-test",
+			"preRequestScript": "",
+			"pathVariables": {},
+			"method": "GET",
+			"data": [],
+			"dataMode": "params",
+			"version": 2,
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1453999208067,
+			"name": "Disarm alarm card type",
+			"description": "Disarm an alarm card type. Once disarmed it will not send notifications and call the WebHooks anymore.",
+			"collectionId": "d9f1a733-05df-add2-1dd9-5910ad167bf4",
+			"responses": []
+		},
 		{
 			"id": "37f4de17-c746-012d-0629-dbf1693faf94",
 			"headers": "",
@@ -59,15 +82,14 @@
 		{
 			"id": "65c20876-02b3-1d3e-8562-2427577455ca",
 			"headers": "",
-			"url": "127.0.0.1:8080/api/card/new",
-			"pathVariables": {},
+			"url": "127.0.0.1:8080/api/cards/new",
 			"preRequestScript": "",
+			"pathVariables": {},
 			"method": "POST",
-			"collectionId": "d9f1a733-05df-add2-1dd9-5910ad167bf4",
 			"data": [
 				{
 					"key": "card_img",
-					"value": "Rocco Musolino.jpg",
+					"value": "433mhz-rf.jpg",
 					"type": "file",
 					"enabled": true
 				},
@@ -79,7 +101,13 @@
 				},
 				{
 					"key": "shortname",
-					"value": "lamp1",
+					"value": "lamp 12",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "card_body",
+					"value": "Body example. <b>html available</b>",
 					"type": "text",
 					"enabled": true
 				},
@@ -91,33 +119,91 @@
 				},
 				{
 					"key": "room",
-					"value": "bedroom",
+					"value": "Bedroom",
 					"type": "text",
 					"enabled": true
 				},
 				{
 					"key": "on_code",
-					"value": "5201",
+					"value": "5393",
 					"type": "text",
 					"enabled": true
 				},
 				{
 					"key": "off_code",
-					"value": "5396",
+					"value": "5463",
 					"type": "text",
 					"enabled": true
 				}
 			],
 			"dataMode": "params",
+			"version": 2,
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1453951763384,
 			"name": "New card",
 			"description": "POST request to create a new Card.",
+			"collectionId": "d9f1a733-05df-add2-1dd9-5910ad167bf4",
+			"responses": []
+		},
+		{
+			"id": "68605113-24e1-74fc-366d-51053d1fd39c",
+			"headers": "",
+			"url": "127.0.0.1:8080/api/cards/arm/alarm-test",
+			"pathVariables": {},
+			"preRequestScript": "",
+			"method": "GET",
+			"collectionId": "d9f1a733-05df-add2-1dd9-5910ad167bf4",
+			"data": [],
+			"dataMode": "params",
+			"name": "Arm alarm card type.",
+			"description": "Arm an alarm card type. Once armed it will send notifications and call the WebHooks URL if any.",
 			"descriptionFormat": "html",
-			"time": 1452826956350,
+			"time": 1453998830763,
 			"version": 2,
 			"responses": [],
 			"tests": "",
 			"currentHelper": "normal",
 			"helperAttributes": {}
+		},
+		{
+			"id": "82b603b5-39bc-37cd-17f8-2beae124a18c",
+			"headers": "",
+			"url": "127.0.0.1:8080/api/codes/available",
+			"preRequestScript": "",
+			"pathVariables": {},
+			"method": "GET",
+			"data": [],
+			"dataMode": "params",
+			"version": 2,
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1454031848617,
+			"name": "get available codes",
+			"description": "Return all the available codes stored in DB. Available codes can be assigned to a new device card.",
+			"collectionId": "d9f1a733-05df-add2-1dd9-5910ad167bf4",
+			"responses": []
+		},
+		{
+			"id": "8c3d062c-d57d-eb68-d16b-7ebd5cd3b788",
+			"headers": "",
+			"url": "127.0.0.1:8080/api/cards/get/alarm-test",
+			"preRequestScript": "",
+			"pathVariables": {},
+			"method": "GET",
+			"data": [],
+			"dataMode": "params",
+			"version": 2,
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1454031783703,
+			"name": "get card",
+			"description": "Return a single card with the specified shortname",
+			"collectionId": "d9f1a733-05df-add2-1dd9-5910ad167bf4",
+			"responses": []
 		},
 		{
 			"id": "c1924bc0-41c1-1bc5-debd-6ad97c85fc8b",
