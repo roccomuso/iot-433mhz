@@ -136,13 +136,13 @@ async.series({
                             if (config.DEBUG) console.log(mex);
 
                             dbFunctions.isCodeAvailable(codeData.code).then(function(result) { // a code is available if not ignored and not assigned.
-                                if (config.DEBUG) console.log(codeData.code, 'isAvailable: '+ result.isAvailable);
-
+                                if (config.DEBUG) console.log('code available: '+result.isAvailable+' assigned to: '+result.assignedTo);
+                                
                                 if (result.isAvailable)
                                     io.emit('newRFCode', codeData); // sent to every open socket.
                                 else{
                                     // code not available, check if the code is assigned to an alarm card
-                                    console.log('code available: '+result.isAvailable+' assigned to: '+result.assignedTo);
+                                    
                                     var card_shortname = result.assignedTo;
                                     dbFunctions.alarmTriggered(card_shortname, 'alarm').then(function(card){
                                             if (card){
