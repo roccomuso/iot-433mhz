@@ -45,6 +45,15 @@ module.exports = function(app, rf433mhz, dbFunctions){
 		});
 	});
 
+	// list available codes
+	app.route('/api/codes/available').get(function (req, res){
+		dbFunctions.getAvailableCodes().then(function(codes){
+			res.status(200).json(codes);
+		}, function(err){
+			res.status(500).json({status: 'error', error: err});
+		});
+	});
+
 	// return all the codes in DB
 	app.route('/api/cards/all').get(function (req, res){
 		dbFunctions.getAllCards().then(function(codes){
@@ -52,6 +61,17 @@ module.exports = function(app, rf433mhz, dbFunctions){
 		}, function(err){
 			res.status(500).json({status: 'error', error: err});
 		});
+	});
+
+	// return a signle card with the specified shortname
+	app.route('/api/cards/get/:shortname').get(function (req, res){
+		if (typeof req.params.shortname !== 'undefined')
+			dbFunctions.getCard({shortname: req.params.shortname}).then(function(card){
+				res.status(200).json(card);
+			}, function(err){
+				res.status(500).json({status: 'error', error: err});
+			});
+		else res.status(500).json({status: 'error', error: 'Please provide a shortname.'});
 	});
 
 	// delete a card given his _id or shortname
@@ -125,6 +145,7 @@ module.exports = function(app, rf433mhz, dbFunctions){
 		else
 			res.status(500).json({status: 'error', error: 'Please provide the shortname if you wanna disarm a card'});
 	});
+
 
 	// handle 404 error for API
 	app.all('/api/*', function(req, res){

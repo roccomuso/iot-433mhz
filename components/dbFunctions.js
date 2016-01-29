@@ -90,6 +90,14 @@ module.exports = function(db, config){
 					});
 				});
 			},
+			getAvailableCodes: function(){
+				return new Promise(function (resolve, reject){
+					db.RFCODES.find({isIgnored: false, assignedTo: 'none'}, function(err, docs){
+						if (err) return reject(err);
+						resolve(docs);
+					});
+				});
+			},
 			ignoreCode: function(code, val){
 				return new Promise(function(resolve, reject){
 					db.RFCODES.update({ code: code }, {$set: {isIgnored: val} }, {}, function (err, numReplaced) {
@@ -119,6 +127,15 @@ module.exports = function(db, config){
 			getAllCards: function(){
 				return new Promise(function(resolve, reject){
 					db.CARDS.find({}).sort({date: -1}).exec(function(err, docs){
+						if (err) return reject(err);
+						resolve(docs);
+					});
+				});
+			},
+			getCard: function(identifiers){
+				return new Promise(function(resolve, reject){
+					if (!identifiers.hasOwnProperty('_id') && !identifiers.hasOwnProperty('shortname')) return reject('No valid parameters.');
+					db.CARDS.find(identifiers, function(err, docs){
 						if (err) return reject(err);
 						resolve(docs);
 					});

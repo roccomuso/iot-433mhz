@@ -193,8 +193,14 @@ Return a list of ignored codes stored in DB.
 - <code>GET /api/codes/all</code>
 Return all the registered codes stored in DB.
 
+- <code>GET /api/codes/available</code>
+Return all the available codes stored in DB. Available codes can be assigned to a new device card.
+
 - <code>GET /api/cards/all</code>
 Return all the cards stored in DB.
+
+- <code>GET /api/cards/get/[shortname]</code>
+Return a single card with the specified shortname.
 
 - <code>POST /api/cards/new</code>
 form-data required parameters:
