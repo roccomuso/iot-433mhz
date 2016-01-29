@@ -70,7 +70,7 @@ module.exports = function(io, rf433mhz, dbFunctions){
             // mute/unmute card
             dbFunctions.muteCard(_id).then(function(result){
                 // update every UI
-                io.emit('uiMuteStatus', {card_id: _id, is_mute: result});
+                io.emit('uiMuteStatus', {card_id: _id, notification_sound: result});
             }).catch(function(err){
                 if (err) console.error(err);
             });

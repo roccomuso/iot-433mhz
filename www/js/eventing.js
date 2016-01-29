@@ -244,16 +244,26 @@ events.on('arm_disarm', function(_id){
 
 // update card dropdown menu mute status
 events.on('uiMuteStatus', function(data){
-	// data.card_id, data.is_mute
+	// data.card_id, data.notification_sound
 	console.log(data);
-	var $menu_entry = $('');
+	var $dropdown_entry = $('#mute-'+data.card_id);
+	if (data.notification_sound)
+		$dropdown_entry.html('<i class="fa fa-volume-off fa-fw"></i> Mute');
+	else
+		$dropdown_entry.html('<i class="fa fa-volume-up fa-fw"></i> Un-mute');
+		
 });
 
 // update card dropdown menu arm/disarm status
 events.on('uiArmStatus', function(data){
 	// data.card_id, data.is_armed
 	console.log(data);
-	var $menu_entry = $('');
+	var $dropdown_entry = $('#arm-'+data.card_id);
+	if (data.is_armed)
+		$dropdown_entry.html('<i class="fa fa-times-circle fa-fw"></i> Disarm');
+	else
+		$dropdown_entry.html('<i class="fa fa-rocket fa-fw"></i> Arm');
+
 });
 
 

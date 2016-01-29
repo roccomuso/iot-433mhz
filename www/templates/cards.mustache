@@ -47,10 +47,10 @@
                       <ul class="dropdown-menu">
                         <li class="disabled"><a href="#"><i class="fa fa-terminal fa-fw"></i> Type: {{type}}</a></li>
                         <li class="disabled"><a href="#"><i class="fa fa-home fa-fw"></i> Room: {{room}}</a></li>
-                        <li><a href="#" onClick="events.emit('muteCard', '{{_id}}');"><i class="fa fa-volume-up fa-fw"></i> Mute</a></li>
+                        <li><a href="#" onClick="events.emit('muteCard', '{{_id}}');" id="mute-{{_id}}">{{#device.notification_sound}}<i class="fa fa-volume-off fa-fw"></i> Mute{{/device.notification_sound}}{{^device.notification_sound}}<i class="fa fa-volume-up fa-fw"></i> Un-mute{{/device.notification_sound}}</a></li>
                         {{#device}}
                         {{#trigger_code}}
-                        <li><a href="#" onClick="events.emit('arm_disarm', '{{_id}}');"><i class="fa fa-rocket fa-fw"></i> Arm/Disarm</a></li> 
+                        <li><a href="#" onClick="events.emit('arm_disarm', '{{_id}}');" id="arm-{{_id}}">{{#armed}}<i class="fa fa-times-circle fa-fw"></i> Disarm{{/armed}}{{^armed}}<i class="fa fa-rocket fa-fw"></i> Arm{{/armed}}</a></li>
                         {{/trigger_code}}
                         {{/device}}
                         <li class="divider"></li>

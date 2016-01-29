@@ -242,8 +242,17 @@ module.exports = function(db, config){
 			},
 			muteCard: function(card_id){
 				return new Promise(function(resolve, reject){
-					// TODO
-
+					// mute/unmute a card
+					db.CARDS.find({_id: card_id}, function(err, docs){
+						if (docs.length){
+							var new_val = !docs[0].device.notification_sound;
+							db.CARDS.update({_id: card_id}, { $set: { "device.notification_sound": new_val } }, {}, function (err, affected) {
+							  if (affected !== 1) return reject('error: no value updated');
+							  resolve(new_val);
+							});
+						} else return reject('error: no card found with _id', card_id);
+					});		
+					
 				});
 			},
 			armCard: function(identifiers){
