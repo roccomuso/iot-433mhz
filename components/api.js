@@ -12,7 +12,7 @@ var upload = multer({ dest: 'www/uploads/',
 				else cb(null, false);
 	} });
 
-module.exports = function(app, rf433mhz, dbFunctions){
+module.exports = function(app, io, rf433mhz, dbFunctions){
 
 	// send the specified code
 	app.route('/api/code/send/:code').get(function(req, res) {
@@ -145,6 +145,31 @@ module.exports = function(app, rf433mhz, dbFunctions){
 		else
 			res.status(500).json({status: 'error', error: 'Please provide the shortname if you wanna disarm a card'});
 	});
+
+	// switch: /api/switch/[shortname]/on
+	app.route('/api/switch/:shortname/on').get(function (req, res){
+		if (typeof req.params.shortname !== 'undefined')
+			dbFunctions.getCard({shortname: req.params.shortname, type: 'switch'}).then(function(docs){
+				if (docs.length === 0) return res.status(500).json({status: 'error', error: 'no device found for given shortname'});
+				var card = docs[0];
+				var on_code = card.device.on_code;
+				// send the on_code.
+				rf433mhz.send(on_code, function(err, out){
+	    			if(err) return res.status(500).json({status: 'error', error: err});
+	    			dbFunctions.setSwitchStatus(card._id, true);
+	    			// eventually update UI
+	    			io.emit('uiSwitchToggle', {card_id: card._id, set: true, sound: card.device.notification_sound});
+	    			res.status(200).json({status: 'ok', switch_toggled: req.params.shortname, code_sent: on_code});
+
+	    		});
+				
+			}, function(err){
+				res.status(500).json({status: 'error', error: err});
+			});
+		else
+			res.status(500).json({status: 'error', error: 'Please provide a valid shortname'});
+	});	
+
 
 
 	// handle 404 error for API
