@@ -72,13 +72,14 @@ async.series({
         },
         server: function(callback) {
             // Starting HTTP Server, API, and Web Socket
-            require('./components/server.js')(function(app) {
-                // Handling routes
+            require('./components/server.js')(function(server) {
+                // Handling routes and Web Socket Handler.
+                var http = server.http;
+                var io = server.io;
 
-                require('./components/api.js')(app, rf433mhz, dbFunctions);
-
-            }, function(io) { // Web Socket handler
-
+                require('./components/api.js')(http, io, rf433mhz, dbFunctions);
+                
+                // Web Socket handler
                 require('console-mirroring')(io); // Console mirroring
 
                 var socketFunctions = require('./components/socketFunctions.js')(io, rf433mhz, dbFunctions);
@@ -137,7 +138,7 @@ async.series({
 
                             dbFunctions.isCodeAvailable(codeData.code).then(function(result) { // a code is available if not ignored and not assigned.
                                 if (config.DEBUG) console.log('code available: '+result.isAvailable+' assigned to: '+result.assignedTo);
-                                
+
                                 if (result.isAvailable)
                                     io.emit('newRFCode', codeData); // sent to every open socket.
                                 else{

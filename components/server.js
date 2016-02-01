@@ -8,13 +8,10 @@ server.listen(config.server_port);
 
 console.info('Server started on', getLocalIPAddress(), '- Port', config.server_port);
 
-module.exports = function(server_cb, socket_cb){
+module.exports = function(_cb){
   
-  // API and Web Server part
-  server_cb(app);
-
-  // Socket part
-  socket_cb(io);
+  // API and Web Server + Socket part
+  _cb({http: app, io: io});
 
 };
 
