@@ -148,53 +148,24 @@ module.exports = function(app, io, rf433mhz, dbFunctions){
 
 	// switch: /api/switch/[shortname]/on
 	app.route('/api/switch/:shortname/on').get(function (req, res){
-		if (typeof req.params.shortname !== 'undefined')
-			dbFunctions.getCard({shortname: req.params.shortname, type: 'switch'}).then(function(docs){
-				if (docs.length === 0) return res.status(500).json({status: 'error', error: 'no device found for given shortname'});
-				var card = docs[0];
-				var on_code = card.device.on_code;
-				// send the on_code.
-				rf433mhz.send(on_code, function(err, out){
-	    			if(err) return res.status(500).json({status: 'error', error: err});
-	    			dbFunctions.setSwitchStatus(card._id, true);
-	    			// eventually update UI
-	    			io.emit('uiSwitchToggle', {card_id: card._id, set: true, sound: card.device.notification_sound});
-	    			res.status(200).json({status: 'ok', switch_toggled: req.params.shortname, code_sent: on_code});
-
-	    		});
-				
-			}, function(err){
-				res.status(500).json({status: 'error', error: err});
-			});
-		else
-			res.status(500).json({status: 'error', error: 'Please provide a valid shortname'});
+		commuteSwitch(req, res, dbFunctions, rf433mhz, io, true);
 	});	
 
 	// switch: /api/switch/[shortname]/off
 	app.route('/api/switch/:shortname/off').get(function (req, res){
-		if (typeof req.params.shortname !== 'undefined')
-			dbFunctions.getCard({shortname: req.params.shortname, type: 'switch'}).then(function(docs){
-				if (docs.length === 0) return res.status(500).json({status: 'error', error: 'no device found for given shortname'});
-				var card = docs[0];
-				var off_code = card.device.off_code;
-				// send the off_code.
-				rf433mhz.send(off_code, function(err, out){
-	    			if(err) return res.status(500).json({status: 'error', error: err});
-	    			dbFunctions.setSwitchStatus(card._id, false);
-	    			// eventually update UI
-	    			io.emit('uiSwitchToggle', {card_id: card._id, set: false, sound: card.device.notification_sound});
-	    			res.status(200).json({status: 'ok', switch_toggled: req.params.shortname, code_sent: off_code});
-
-	    		});
-				
-			}, function(err){
-				res.status(500).json({status: 'error', error: err});
-			});
-		else
-			res.status(500).json({status: 'error', error: 'Please provide a valid shortname'});
+		commuteSwitch(req, res, dbFunctions, rf433mhz, io, false);
 	});		
 
-
+	// switch /api/switch/[shortname]/toggle
+	app.route('/api/switch/:shortname/toggle').get(function (req, res){
+		if (typeof req.params.shortname !== 'undefined')
+			dbFunctions.getSwitchStatus({shortname: req.params.shortname}).then(function(status){
+				commuteSwitch(req, res, dbFunctions, rf433mhz, io, !status);
+			}).catch(function(err){
+				res.status(500).json({status: 'error', error: err});
+			});
+		else res.status(500).json({status: 'error', error: 'Please provide a valid shortname'});
+	});
 
 	// handle 404 error for API
 	app.all('/api/*', function(req, res){
@@ -212,6 +183,29 @@ module.exports = function(app, io, rf433mhz, dbFunctions){
 
 
 };
+
+function commuteSwitch(req, res, dbFunctions, rf433mhz, io, on){
+	if (typeof req.params.shortname !== 'undefined')
+		dbFunctions.getCard({shortname: req.params.shortname, type: 'switch'}).then(function(docs){
+			if (docs.length === 0) return res.status(500).json({status: 'error', error: 'no device found for given shortname'});
+			var card = docs[0];
+			var code_to_send = (on) ? card.device.on_code : card.device.off_code;
+			// send the code.
+			rf433mhz.send(code_to_send, function(err, out){
+    			if(err) return res.status(500).json({status: 'error', error: err});
+    			dbFunctions.setSwitchStatus(card._id, on);
+    			// eventually update UI
+    			io.emit('uiSwitchToggle', {card_id: card._id, set: on, sound: card.device.notification_sound});
+    			res.status(200).json({status: 'ok', switch_toggled: req.params.shortname, code_sent: code_to_send});
+
+    		});
+			
+		}, function(err){
+			res.status(500).json({status: 'error', error: err});
+		});
+	else
+		res.status(500).json({status: 'error', error: 'Please provide a valid shortname'});
+}
 
 
 function checkRequiredParams(params){ // required params (headline, shortname, room, type, on_code/off_code)
