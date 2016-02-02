@@ -1,0 +1,65 @@
+        <div id="settings-dialog" class="modal fade" tabindex="-1" style="display: none;">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 class="modal-title">Settings:</h3>
+              </div>
+              <div class="modal-body text-center">
+                <div class="btn-group btn-group-vertical btn-group-raised" id="notification-btns">
+              
+              {{#telegram}}
+                {{#notification_enabled}}
+                  <a href="#" class="btn btn-telegram" onClick="events.emit('stopTelegram');"><i class="fa fa-stop"></i> Stop <i class="fa fa-paper-plane-o"></i> Telegram Notification</a>
+                {{/notification_enabled}}
+                {{^notification_enabled}}
+                  <a href="#" class="btn btn-telegram" onClick="events.emit('startTelegram');"><i class="fa fa-play"></i> Start <i class="fa fa-paper-plane-o"></i> Telegram Notification</a>
+                {{/notification_enabled}}
+              {{/telegram}}
+
+              {{#email}}
+                {{#notification_enabled}}
+                  <a href="#" class="btn btn-email" onClick="events.emit('stopEmail');"><i class="fa fa-stop"></i> Stop <i class="fa fa-envelope-o"></i> Email Notification</a>
+                {{/notification_enabled}}
+                {{^notification_enabled}}
+                  <a href="#" class="btn btn-email" onClick="events.emit('startEmail');"><i class="fa fa-play"></i> Start <i class="fa fa-envelope-o"></i> Email Notification</a>
+                {{/notification_enabled}}
+              {{/email}}
+
+                </div>
+
+                <br/></br>
+                <div class="text-center" id="settings-outcome">
+
+                  {{#telegram}}
+                    <div class="panel panel-default">
+                      <div class="panel-heading"><i class="fa fa-paper-plane-o"></i> How to configure Telegram Notification</div>
+                      <div class="panel-body" style="text-align: left">
+                        <ol>
+                          <li>Go to <a href="https://web.telegram.org/#/im?p=@my_iot_bot" target="_new" rel="nofollow">web.telegram.com</a> and start talking with the bot <strong>@my_iot_bot</strong></li>
+                          <li>We need to associate your <em>IoT System UID</em> to you Telegram user, type and send this to the bot:<br/> <kbd>/register {{uid}}</kbd></li>
+                          <li>You're good to go! Every time an armed alarm is triggered you'll get a message from the bot.</li>
+                          <li><b>Remember</b>: whoever got your UID and do the above procedure will get notifications message from your IoT System too.</li>
+                          <li>If you run the IoT System on a different Machine, you'll get a different UID, then you'll have to do again the whole procedure.</li>
+                        </ol>
+                      </div>
+                    </div>
+                  {{/telegram}}
+                  {{#email}}
+                  {{#notification_enabled}}
+                    <div class="panel panel-default">
+                      <div class="panel-heading">Email</div>
+                      <div class="panel-body">
+                        {{recipient_email}}
+                      </div>
+                    </div>
+                  {{/notification_enabled}}
+                  {{/email}}
+                </div>
+              </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-check"></i> Close<div class="ripple-container"><div class="ripple ripple-on ripple-out" style="left: 51.1563px; top: 12px; transform: scale(10.875); background-color: rgb(0, 150, 136);"></div><div class="ripple ripple-on ripple-out" style="left: 45.6563px; top: 21px; transform: scale(10.875); background-color: rgb(0, 150, 136);"></div></div></button>
+                </div>
+              </div>
+            </div>
+          </div>

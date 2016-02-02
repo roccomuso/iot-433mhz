@@ -266,6 +266,43 @@ events.on('uiArmStatus', function(data){
 
 });
 
+events.on('startTelegram', function(){
+	// enable telegram notification
+	$.get('/api/system/telegram/enable', function(data){
+		if (data.status === 'ok'){
+			$('#notification-btns .btn-telegram').replaceWith('<a href="#" class="btn btn-telegram" onClick="events.emit(\'stopTelegram\');"><i class="fa fa-stop"></i> Stop <i class="fa fa-paper-plane-o"></i> Telegram Notification</a>');
+		}else notie.alert(2, data.error, 0);
+	});
+});
+
+events.on('stopTelegram', function(){
+	// disable telegram notification
+	$.get('/api/system/telegram/disable', function(data){
+		if (data.status === 'ok'){
+			$('#notification-btns .btn-telegram').replaceWith('<a href="#" class="btn btn-telegram" onClick="events.emit(\'startTelegram\');"><i class="fa fa-play"></i> Start <i class="fa fa-paper-plane-o"></i> Telegram Notification</a>');
+		}else notie.alert(2, data.error, 0);		
+	});
+});
+
+events.on('startEmail', function(){
+	// enable Email notification
+	$.get('/api/system/email/enable', function(data){
+		if (data.status === 'ok'){
+			$('#notification-btns .btn-email').replaceWith('<a href="#" class="btn btn-email" onClick="events.emit(\'stopEmail\');"><i class="fa fa-stop"></i> Stop <i class="fa fa-envelope-o"></i> Email Notification</a>');
+		}else notie.alert(2, data.error, 0);		
+	});
+});
+
+events.on('stopEmail', function(){
+	// disable Email notification
+	$.get('/api/system/email/disable', function(data){
+		if (data.status === 'ok'){
+			$('#notification-btns .btn-email').replaceWith('<a href="#" class="btn btn-email" onClick="events.emit(\'startEmail\');"><i class="fa fa-play"></i> Start <i class="fa fa-envelope-o"></i> Email Notification</a>');
+		}else notie.alert(2, data.error, 0);		
+	});
+});
+
+
 
 /* Menu Buttons */
 
@@ -317,6 +354,26 @@ events.on('clickAddCard', function(){
 events.on('clickSettings', function(){
 	// TODO
 	console.log('Settings button clicked.');
+
+	$.get('/api/settings/get', function(data) {
+		var settings = data.settings[0];
+		console.log(settings);
+		// get IoT system UID (generated using server MAC Address)
+		$.get('/api/system/get/uid', function(_data){
+			var uid = _data.uid;
+			if (uid){
+				settings.uid = uid;
+				templating.renderTemplate('settings.mustache', $('#main_modal_box'), settings).then(function(){
+					$('#settings-dialog').modal('show');
+				}).catch(function(err){ // err
+					notie.alert(2, err, 0);
+				});
+			}else notie.alert(2, 'Error: Can\'t retrieve System UID.', 0);
+		});
+
+
+	});
+
 	$('#c-circle-nav__toggle').click(); // Close Menu
 });
 
