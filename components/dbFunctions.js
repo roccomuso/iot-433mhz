@@ -289,7 +289,7 @@ module.exports = function(db, config){
 							  if (affected !== 1) return reject('error: no value updated');
 							  resolve({affected: affected, is_armed: new_val});
 							});
-						} else return reject('error: no card found with ', identifiers);
+						} else return reject('error: no card found with given identifiers ', identifiers.toString());
 					});
 
 				});

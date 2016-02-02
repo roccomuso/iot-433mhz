@@ -1,10 +1,10 @@
 ![IoT 433Mhz Logo](https://github.com/roccomuso/iot-433mhz/blob/master/other/pics/logo128x128.png?raw=true "Iot 433Mhz Logo")
 
-                                    ___    _____     _  _  __________ __  __ _
-                                   |_ _|__|_   _|   | || ||___ /___ /|  \/  | |__  ____
-                                    | |/ _ \| |_____| || |_ |_ \ |_ \| |\/| | '_ \|_  /
-                                    | | (_) | |_____|__   _|__) |__) | |  | | | | |/ /
-                                   |___\___/|_|        |_||____/____/|_|  |_|_| |_/___|
+      ___    _____     _  _  __________ __  __ _
+     |_ _|__|_   _|   | || ||___ /___ /|  \/  | |__  ____
+      | |/ _ \| |_____| || |_ |_ \ |_ \| |\/| | '_ \|_  /
+      | | (_) | |_____|__   _|__) |__) | |  | | | | |/ /
+     |___\___/|_|        |_||____/____/|_|  |_|_| |_/___|
 
 
 # UI Demo
@@ -218,19 +218,19 @@ Json response: 200 OK - <code>{"done": true, "newCard": ...}</code> where newCar
 - <code>GET /api/cards/delete/[shortname]</code>
 Delete the card with the specified shortname, it returns <code>{"status": "ok", cards_deleted: 1}</code> or <code>{"status": "error", "error": "error description.."}</code>
 
-- <code>GET /api/cards/arm/[shortname]</code>
+- <code>GET /api/alarm/[shortname]/arm</code>
 Only alarm type cards can be armed.
 
-- <code>GET /api/cards/disarm/[shortname]</code>
+- <code>GET /api/alarm/[shortname]/disarm</code>
 Only alarm type cards can be disarmed. (If disarmed no WebHook callbacks or email notifications will be sent)
 
-- <code>GET /api/room/[room-name]/[shortname]/on</code>
+- <code>GET /api/switch/[shortname]/on</code>
 Turn on a switch. Example: GET /api/bedroom/lamp1/on
 
-- <code>GET /api/room/[room-name]/[shortname]/off</code>
+- <code>GET /api/switch/[shortname]/off</code>
 Turn off a switch
 
-- <code>GET /api/room/[room-name]/[shortname]/toggle</code>
+- <code>GET /api/switch/[shortname]/toggle</code>
 Toggle a switch
 
 - <code>GET /api/webhook/all</code>

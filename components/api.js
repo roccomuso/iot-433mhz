@@ -123,7 +123,7 @@ module.exports = function(app, io, rf433mhz, dbFunctions){
 	});
 
 	// arm card 
-	app.route('/api/cards/arm/:shortname').get(function (req, res){
+	app.route('/api/alarm/:shortname/arm').get(function (req, res){
 		if (typeof req.params.shortname !== 'undefined')
 			dbFunctions.armCard({shortname: req.params.shortname, arm: true}).then(function(result){
 				res.status(200).json({status: 'ok', cards_affected: result.affected, armed: true});
@@ -135,7 +135,7 @@ module.exports = function(app, io, rf433mhz, dbFunctions){
 	});
 
 	// disarm card
-	app.route('/api/cards/disarm/:shortname').get(function (req, res){
+	app.route('/api/alarm/:shortname/disarm').get(function (req, res){
 		if (typeof req.params.shortname !== 'undefined')
 			dbFunctions.armCard({shortname: req.params.shortname, arm: false}).then(function(result){
 				res.status(200).json({status: 'ok', cards_affected: result.affected, armed: false});
