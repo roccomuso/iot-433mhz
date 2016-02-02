@@ -294,10 +294,15 @@ events.on('clickIgnoredCodes', function(){
 	$('#c-circle-nav__toggle').click(); // Close Menu
 });
 
-// Timer Menu Button
-events.on('clickTimer', function(){
+// About Menu Button
+events.on('clickAbout', function(){
 	// TODO
-	console.log('Timer button clicked.');
+	console.log('About button clicked.');
+	templating.renderTemplate('about.mustache', $('#main_modal_box'), {}).then(function(){
+		$('#about-dialog').modal('show');
+	}).catch(function(err){ // err
+		notie.alert(2, err, 0);
+	});
 	$('#c-circle-nav__toggle').click(); // Close Menu
 });
 
