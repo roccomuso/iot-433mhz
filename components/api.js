@@ -126,6 +126,7 @@ module.exports = function(app, io, rf433mhz, dbFunctions){
 	app.route('/api/alarm/:shortname/arm').get(function (req, res){
 		if (typeof req.params.shortname !== 'undefined')
 			dbFunctions.armCard({shortname: req.params.shortname, arm: true}).then(function(result){
+				io.emit('uiArmStatus', {card_id: result.card_id, is_armed: true});
 				res.status(200).json({status: 'ok', cards_affected: result.affected, armed: true});
 			}, function(err){
 				res.status(500).json({status: 'error', error: err});
@@ -138,6 +139,7 @@ module.exports = function(app, io, rf433mhz, dbFunctions){
 	app.route('/api/alarm/:shortname/disarm').get(function (req, res){
 		if (typeof req.params.shortname !== 'undefined')
 			dbFunctions.armCard({shortname: req.params.shortname, arm: false}).then(function(result){
+				io.emit('uiArmStatus', {card_id: result.card_id, is_armed: false});
 				res.status(200).json({status: 'ok', cards_affected: result.affected, armed: false});
 			}, function(err){
 				res.status(500).json({status: 'error', error: err});

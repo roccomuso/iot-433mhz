@@ -299,7 +299,7 @@ module.exports = function(db, config){
 							if (typeof identifiers.arm === 'boolean') new_val = identifiers.arm; // for api arm/disarm requests
 							db.CARDS.update(query, { $set: { "device.armed": new_val } }, {}, function (err, affected) {
 							  if (affected !== 1) return reject('error: no value updated');
-							  resolve({affected: affected, is_armed: new_val});
+							  resolve({card_id: docs[0]._id, affected: affected, is_armed: new_val});
 							});
 						} else return reject('error: no card found with given identifiers ', identifiers.toString());
 					});
