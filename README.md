@@ -184,6 +184,24 @@ Use the API below to set up and interacts with WebHooks.
 
 Below every single API available is documented. Too lazy to copy and paste? just download and import the Postman collection ([download](https://github.com/roccomuso/iot-433mhz/blob/master/other/IoT-433Mhz.json.postman_collection)).
 
+- <code>GET /api/settings/get</code>
+Return the current settings. Useful to see notification status.
+
+- <code>GET /api/system/get/uid</code>
+Return the unique IoT System UID (a unique ID generated concatenating all the machine' mac addresses and applying base64 encoding function).
+
+- <code>GET /api/system/telegram/enable</code>
+Enable notification through Telegram Bot.
+
+- <code>GET /api/system/telegram/disable</code>
+Disable notification through Telegram Bot.
+
+- <code>GET /api/system/email/enable</code>
+Enable notification through Email.
+
+- <code>GET /api/system/email/disable</code>
+Disable notification through Email.
+
 - <code>GET /api/code/send/[RFcode]</code>
 send the specified rfcode. Return a status object: <code>{"status": "ok"}</code> or <code>{"status": "error", "error": "error description.."}</code>
 
@@ -274,6 +292,7 @@ Delete the specified webhook.
 # Telegram Bot & Notifications
 
 Out of the box, the iot-433mhz provides notifications through email and through a Telegram Bot. Of course you're free to develop your own notification system using our WebHooks API.
+**Notifications should be enabled and configured through the <code>Menu > Settings</code> page.**
 
 The telegram bot is under construction (TODO).
 ...

@@ -14,6 +14,61 @@ var upload = multer({ dest: 'www/uploads/',
 
 module.exports = function(app, io, rf433mhz, dbFunctions){
 
+	// get settings
+	app.route('/api/settings/get').get(function(req, res){
+		dbFunctions.getDBSettings().then(function(docs){
+			res.status(200).json({status: 'ok', settings: docs});
+		}).catch(function(err){
+			res.status(500).json({status: 'error', error: err});
+		});
+	});
+
+	// get IoT System UID
+	app.route('/api/system/get/uid').get(function(req, res){
+		var UID = dbFunctions.getIotUID(); // base64 ( all the machine mac addresses concatenated )
+		if (UID)
+			res.status(200).json({status: 'ok', uid: UID});
+		else
+			res.status(500).json({status: 'error', error: 'can\'t generate the IoT System UID'});
+	});
+
+	// start Telegram API
+	app.route('/api/system/telegram/enable').get(function(req, res){
+		dbFunctions.toggleTelegram(true).then(function(outcome){
+			res.status(200).json({status: 'ok', enabled: outcome});
+		}).catch(function(err){
+			res.status(500).json({status: 'error', error: err});
+		});
+	});	
+
+	// stop Telegram API
+	app.route('/api/system/telegram/disable').get(function(req, res){
+		dbFunctions.toggleTelegram(false).then(function(outcome){
+			res.status(200).json({status: 'ok', enabled: outcome});
+		}).catch(function(err){
+			res.status(500).json({status: 'error', error: err});
+		});
+	});	
+
+	// start Email Notification API
+	app.route('/api/system/email/enable').get(function(req, res){
+		dbFunctions.toggleEmail(true).then(function(outcome){
+			res.status(200).json({status: 'ok', enabled: outcome});
+		}).catch(function(err){
+			res.status(500).json({status: 'error', error: err});
+		});
+	});	
+
+	// stop Email Notification API
+	app.route('/api/system/email/disable').get(function(req, res){
+		dbFunctions.toggleEmail(false).then(function(outcome){
+			res.status(200).json({status: 'ok', enabled: outcome});
+		}).catch(function(err){
+			res.status(500).json({status: 'error', error: err});
+		});
+	});	
+
+
 	// send the specified code
 	app.route('/api/code/send/:code').get(function(req, res) {
 		if (typeof req.params.code !== 'undefined'){
