@@ -1,3 +1,4 @@
+var macaddress = require('macaddress');
 
 function _initializeRFcodes(data){ // data is the code received through serial
 	if (typeof data === 'undefined') data = {};
@@ -45,6 +46,21 @@ function _initializeCard(params, img_path){ // params received through API
 	};
 }
 
+function _initializeDBSettings(){
+	// return settings DB structure
+
+	var settings = {
+		telegram: {
+			notification_enabled: false
+		},
+		email: {
+			notification_enabled: false,
+			recipient_email: false
+		}
+	};
+
+	return settings;
+}
 
 module.exports = function(db, config){
 
@@ -177,7 +193,7 @@ module.exports = function(db, config){
 					// normalize 'room' text before DB insertion
 					db.CARDS.insert(_initializeCard(req.body, destination_path), function(err, newDoc){
 							if (err) return reject(err);
-							// set as assigned the codes in DB (handles both 'swtich' and 'alarm' type)
+							// set as assigned the codes in DB (handles both 'switch' and 'alarm' type)
 							db.RFCODES.update({ $or: [{ code: parseInt(req.body.on_code) }, { code: parseInt(req.body.off_code) }, {code: parseInt(req.body.trigger_code)}] }, { $set: { assignedTo: req.body.shortname } }, { multi: true }, function (err, numReplaced) {
 							  // numReplaced = 2
 							  resolve(newDoc); // return the new Card just inserted
@@ -202,6 +218,41 @@ module.exports = function(db, config){
 					});
 
 				});
+			},
+			getDBSettings: function(){
+				return new Promise(function(resolve, reject){
+					db.SETTINGS.find({}, function (err, docs){
+						if (err) return reject(err);
+						resolve(docs);
+					});
+				});
+			},
+			initDBSettings: function(){
+				return new Promise(function(resolve, reject){
+					methods.getDBSettings().then(function(settings){
+						if (settings.length)
+							return resolve(settings);
+						// no settings, let's init settings DB
+						db.SETTINGS.insert(_initializeDBSettings(), function(err, newDocs){
+							if (err) return reject(err);
+							resolve(newDocs);
+						});
+					}).catch(function(err){
+						reject(err);
+					});
+				});
+			},
+			getIotUID: function(){ // sync function
+				// get IoT UID:
+				try{
+					var addresses = macaddress.networkInterfaces();
+					var _uid = '';
+					for (x in addresses)
+						if (addresses[x].mac) _uid += addresses[x].mac;
+
+					var uid = new Buffer(_uid).toString('base64');
+					return uid;
+				}catch(e){ console.error('Error generating UID: ', e); return false; }
 			},
 			deleteCard: function(identifiers){
 				return new Promise(function(resolve, reject){
@@ -305,6 +356,28 @@ module.exports = function(db, config){
 					});
 
 				});
+			},
+			toggleTelegram: function(status){
+				return new Promise(function(resolve, reject){
+					// enable/disable telegram notification
+					if (typeof status !== 'boolean') return reject('toggleTelegram: boolean expected');
+					db.SETTINGS.update({}, {$set: {"telegram.notification_enabled": status} }, {}, function (err, numReplaced) {
+						if (err) return reject(err);
+						if (numReplaced === 1) resolve(status);
+						else reject('Error: Zero or More than one telegram entry modified in settings.');
+					});
+				});
+			},
+			toggleEmail: function(status){
+				return new Promise(function(resolve, reject){
+					// enable/disable Email notification
+					if (typeof status !== 'boolean') return reject('toggleEmail: boolean expected');
+					db.SETTINGS.update({}, {$set: {"email.notification_enabled": status} }, {}, function (err, numReplaced) {
+						if (err) return reject(err);
+						if (numReplaced === 1) resolve(status);
+						else reject('Error: Zero or More than one Email entry modified in settings.');
+					});
+				});				
 			}
 	};
 

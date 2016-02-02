@@ -22,11 +22,16 @@ db.CARDS = new Datastore({
     filename: 'DB/cards.db',
     autoload: true
 });
+db.SETTINGS = new Datastore({
+    filename: 'DB/settings.db',
+    autoload: true
+})
 
 // Compact DB at regular intervals (see nedb: #Persistence)
 if (config.db_compact_interval > 0){
     db.RFCODES.persistence.setAutocompactionInterval(config.db_compact_interval * 60000 * 60);
     db.CARDS.persistence.setAutocompactionInterval(config.db_compact_interval * 60000 * 60);
+    db.SETTINGS.persistence.setAutocompactionInterval(config.db_compact_interval * 60000 * 60);
 }
 
 var dbFunctions = require('./components/dbFunctions.js')(db, config);
@@ -54,12 +59,11 @@ async.series({
         },
         init_db: function(callback) {
             // Put default demo cards if CARDS DB is empty
-            dbFunctions.initDBCards(require('./components/demo_cards.json')).then(function() {
+            dbFunctions.initDBCards(require('./components/demo_cards.json')).then(dbFunctions.initDBSettings).then(function(settings) {
                 callback(null, 1);
             }).catch(function(err) {
                 console.log('init_db error:', err);
             });
-
         },
         init_rf: function(callback) {
             // Listen on Arduino Serial Port or RF433Mhz chip if on RPi platform.
@@ -149,14 +153,19 @@ async.series({
                                             if (card){
                                                io.emit('uiTriggerAlarm', card);
                                                // TODO: send email or other kind of notification (Telegram mex) if Armed.
-                                               // if (card.device.armed) ...
-                                               // WebHook call (alarm triggered)
+                                               if (card.device.armed){
+                                                    // TODO
+                                                    // if dbFunctions.isTelegramEnabled().then(function(outcome){ ... });
+                                                    //dbFunctions.getIotUID();
+                                                    // TODO
+                                                    // WebHook call (alarm triggered)
+                                                }
 
                                             }
                                     }, function(err){ console.error(err);});
 
                                 }
-                                // TODO: WebHook call (code detected)
+                                // TODO: another WebHook call type (code detected)
                                 
                             }).catch(function(err) {
                                 console.error(err);
