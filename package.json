@@ -32,6 +32,7 @@
     "console-mirroring": "1.0.2",
     "express": "4.13.3",
     "figlet": "1.1.1",
+    "macaddress": "^0.2.8",
     "multer": "1.1.0",
     "nedb": "1.6.2",
     "prompt": "0.2.14",
