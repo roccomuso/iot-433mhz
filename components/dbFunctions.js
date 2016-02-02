@@ -230,6 +230,18 @@ module.exports = function(db, config){
 					});
 				});
 			},
+			getSwitchStatus: function(identifiers){
+				return new Promise(function(resolve, reject){
+					// get switch status, given card _id or shortname.
+					if (!identifiers.hasOwnProperty('_id') && !identifiers.hasOwnProperty('shortname')) return reject('No valid parameters.');
+					identifiers.type = 'switch';
+					db.CARDS.find(identifiers, function(err, docs){
+						if (err) return reject(err);
+						if (docs.length === 0) return reject('No card found for given identifiers');
+						resolve(docs[0].device.is_on);
+					});
+				});
+			},
 			setSwitchStatus: function(card_id, is_on){
 				return new Promise(function(resolve, reject){
 					db.CARDS.update({ _id: card_id }, { $set: { "device.is_on": is_on } }, {}, function (err, numReplaced) {
