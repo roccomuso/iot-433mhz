@@ -1,4 +1,4 @@
-var macaddress = require('macaddress');
+var crypto = require('crypto');
 
 function _initializeRFcodes(data){ // data is the code received through serial
 	if (typeof data === 'undefined') data = {};
@@ -51,7 +51,8 @@ function _initializeDBSettings(){
 
 	var settings = {
 		telegram: {
-			notification_enabled: false
+			notification_enabled: false,
+			iot_uid: false,
 		},
 		email: {
 			notification_enabled: false,
@@ -242,17 +243,39 @@ module.exports = function(db, config){
 					});
 				});
 			},
+			generateNewUID: function(){
+				return new Promise(function(resolve, reject){
+					// generate and save a new IoT UID.
+					var new_uid = crypto.randomBytes(20).toString('hex');
+					db.SETTINGS.update({}, { $set: { "telegram.iot_uid": new_uid } }, {}, function (err, numReplaced) {
+						if (err) return reject(err);
+						if (numReplaced === 1) resolve(new_uid);
+						else reject('error saving the new IoT UID');
+					});
+				});
+			},
 			getIotUID: function(){ // sync function
-				// get IoT UID:
-				try{
-					var addresses = macaddress.networkInterfaces();
-					var _uid = '';
-					for (x in addresses)
-						if (addresses[x].mac) _uid += addresses[x].mac;
+				return new Promise(function(resolve, reject){
+					// get IoT UID from DB, it not exists let's create one:
+					db.SETTINGS.find({}, function(err, docs){
+						if (err) return reject(err);
+						if (docs.length === 1){
+							var _uid = docs[0].telegram.iot_uid;
 
-					var uid = new Buffer(_uid).toString('base64');
-					return uid;
-				}catch(e){ console.error('Error generating UID: ', e); return false; }
+							// doesn't exists let's generate one, save it and return it
+							if (_uid === false)
+							methods.generateNewUID().then(function(uid){
+								resolve(uid);
+							}).catch(function(err){
+								reject(err);
+							});
+							else resolve(_uid); // already exists, return it
+
+						}else reject('No DB Structure found');
+
+					});
+
+				});				
 			},
 			deleteCard: function(identifiers){
 				return new Promise(function(resolve, reject){

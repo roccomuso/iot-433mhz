@@ -19,25 +19,37 @@ module.exports = function(app, io, rf433mhz, dbFunctions){
 		dbFunctions.getDBSettings().then(function(docs){
 			res.status(200).json({status: 'ok', settings: docs});
 		}).catch(function(err){
-			res.status(500).json({status: 'error', error: err});
+			res.status(500).json({status: 'error', error: err.toString()});
 		});
 	});
 
 	// get IoT System UID
 	app.route('/api/system/get/uid').get(function(req, res){
-		var UID = dbFunctions.getIotUID(); // base64 ( all the machine mac addresses concatenated )
-		if (UID)
-			res.status(200).json({status: 'ok', uid: UID});
-		else
-			res.status(500).json({status: 'error', error: 'can\'t generate the IoT System UID'});
+		dbFunctions.getIotUID().then(function(UID){
+			if (UID)
+				res.status(200).json({status: 'ok', uid: UID});
+			else
+				res.status(500).json({status: 'error', error: 'can\'t generate the IoT System UID'});
+		}).catch(function(err){
+			res.status(500).json({status: 'error', error: err.toString()});
+		}); 
 	});
+
+	// generate a new IoT System UID
+	app.route('/api/system/new/uid').get(function(req, res){
+		dbFunctions.generateNewUID().then(function(UID){
+			res.status(200).json({status: 'ok', uid: UID});
+		}).catch(function(err){
+			res.status(500).json({status: 'error', error: err.toString()});
+		});
+	});	
 
 	// start Telegram API
 	app.route('/api/system/telegram/enable').get(function(req, res){
 		dbFunctions.toggleTelegram(true).then(function(outcome){
 			res.status(200).json({status: 'ok', enabled: outcome});
 		}).catch(function(err){
-			res.status(500).json({status: 'error', error: err});
+			res.status(500).json({status: 'error', error: err.toString()});
 		});
 	});	
 
@@ -46,7 +58,7 @@ module.exports = function(app, io, rf433mhz, dbFunctions){
 		dbFunctions.toggleTelegram(false).then(function(outcome){
 			res.status(200).json({status: 'ok', enabled: outcome});
 		}).catch(function(err){
-			res.status(500).json({status: 'error', error: err});
+			res.status(500).json({status: 'error', error: err.toString()});
 		});
 	});	
 
@@ -55,7 +67,7 @@ module.exports = function(app, io, rf433mhz, dbFunctions){
 		dbFunctions.toggleEmail(true).then(function(outcome){
 			res.status(200).json({status: 'ok', enabled: outcome});
 		}).catch(function(err){
-			res.status(500).json({status: 'error', error: err});
+			res.status(500).json({status: 'error', error: err.toString()});
 		});
 	});	
 
@@ -64,7 +76,7 @@ module.exports = function(app, io, rf433mhz, dbFunctions){
 		dbFunctions.toggleEmail(false).then(function(outcome){
 			res.status(200).json({status: 'ok', enabled: outcome});
 		}).catch(function(err){
-			res.status(500).json({status: 'error', error: err});
+			res.status(500).json({status: 'error', error: err.toString()});
 		});
 	});	
 
@@ -86,7 +98,7 @@ module.exports = function(app, io, rf433mhz, dbFunctions){
 		dbFunctions.getIgnoredCodes().then(function(ignored){
 			res.status(200).json(ignored);
 		}, function(err){
-			res.status(500).json({status: 'error', error: err});
+			res.status(500).json({status: 'error', error: err.toString()});
 		});
 
 	});
@@ -96,7 +108,7 @@ module.exports = function(app, io, rf433mhz, dbFunctions){
 		dbFunctions.getAllCodes().then(function(codes){
 			res.status(200).json(codes);
 		}, function(err){
-			res.status(500).json({status: 'error', error: err});
+			res.status(500).json({status: 'error', error: err.toString()});
 		});
 	});
 
@@ -105,7 +117,7 @@ module.exports = function(app, io, rf433mhz, dbFunctions){
 		dbFunctions.getAvailableCodes().then(function(codes){
 			res.status(200).json(codes);
 		}, function(err){
-			res.status(500).json({status: 'error', error: err});
+			res.status(500).json({status: 'error', error: err.toString()});
 		});
 	});
 
@@ -114,7 +126,7 @@ module.exports = function(app, io, rf433mhz, dbFunctions){
 		dbFunctions.getAllCards().then(function(codes){
 			res.status(200).json(codes);
 		}, function(err){
-			res.status(500).json({status: 'error', error: err});
+			res.status(500).json({status: 'error', error: err.toString()});
 		});
 	});
 
@@ -124,7 +136,7 @@ module.exports = function(app, io, rf433mhz, dbFunctions){
 			dbFunctions.getCard({shortname: req.params.shortname}).then(function(card){
 				res.status(200).json(card);
 			}, function(err){
-				res.status(500).json({status: 'error', error: err});
+				res.status(500).json({status: 'error', error: err.toString()});
 			});
 		else res.status(500).json({status: 'error', error: 'Please provide a shortname.'});
 	});
@@ -135,7 +147,7 @@ module.exports = function(app, io, rf433mhz, dbFunctions){
 			dbFunctions.deleteCard({shortname: req.params.shortname}).then(function(numDeleted){
 				res.status(200).json({status: 'ok', cards_deleted: numDeleted});
 			}, function(err){
-				res.status(500).json({status: 'error', error: err});
+				res.status(500).json({status: 'error', error: err.toString()});
 			});
 		else
 			res.status(500).json({status: 'error', error: 'Please provide the shortname if you wanna delete a card'});
@@ -153,12 +165,12 @@ module.exports = function(app, io, rf433mhz, dbFunctions){
 						var origin_path = path.resolve(__dirname, '..', req.file.path);
 						var destination_path = path.resolve(__dirname, '../www/uploads/', file_name);
 						fs.rename(origin_path, destination_path, function (err) { // rename file uploaded
-							if (err) return res.status(500).json({done: false, err: err});
+							if (err) return res.status(500).json({done: false, err: err.toString()});
 							// put data in DB
 							dbFunctions.putCardInDatabase(req, './uploads/'+file_name).then(function(newCard){
 								res.status(200).json({done: true, newCard: newCard});
 							}).catch(function(err){
-								res.status(500).json({done: false, err: err});
+								res.status(500).json({done: false, err: err.toString()});
 							});
 						});
 					}else{
@@ -166,7 +178,7 @@ module.exports = function(app, io, rf433mhz, dbFunctions){
 						dbFunctions.putCardInDatabase(req).then(function(newCard){
 								res.status(200).json({done: true, newCard: newCard});
 							}).catch(function(err){
-								res.status(500).json({done: false, err: err});
+								res.status(500).json({done: false, err: err.toString()});
 							});
 						
 					}
@@ -184,7 +196,7 @@ module.exports = function(app, io, rf433mhz, dbFunctions){
 				io.emit('uiArmStatus', {card_id: result.card_id, is_armed: true});
 				res.status(200).json({status: 'ok', cards_affected: result.affected, armed: true});
 			}, function(err){
-				res.status(500).json({status: 'error', error: err});
+				res.status(500).json({status: 'error', error: err.toString()});
 			});
 		else
 			res.status(500).json({status: 'error', error: 'Please provide the shortname if you wanna arm a card'});
@@ -197,7 +209,7 @@ module.exports = function(app, io, rf433mhz, dbFunctions){
 				io.emit('uiArmStatus', {card_id: result.card_id, is_armed: false});
 				res.status(200).json({status: 'ok', cards_affected: result.affected, armed: false});
 			}, function(err){
-				res.status(500).json({status: 'error', error: err});
+				res.status(500).json({status: 'error', error: err.toString()});
 			});
 		else
 			res.status(500).json({status: 'error', error: 'Please provide the shortname if you wanna disarm a card'});
@@ -219,7 +231,7 @@ module.exports = function(app, io, rf433mhz, dbFunctions){
 			dbFunctions.getSwitchStatus({shortname: req.params.shortname}).then(function(status){
 				commuteSwitch(req, res, dbFunctions, rf433mhz, io, !status);
 			}).catch(function(err){
-				res.status(500).json({status: 'error', error: err});
+				res.status(500).json({status: 'error', error: err.toString()});
 			});
 		else res.status(500).json({status: 'error', error: 'Please provide a valid shortname'});
 	});
@@ -249,7 +261,7 @@ function commuteSwitch(req, res, dbFunctions, rf433mhz, io, on){
 			var code_to_send = (on) ? card.device.on_code : card.device.off_code;
 			// send the code.
 			rf433mhz.send(code_to_send, function(err, out){
-    			if(err) return res.status(500).json({status: 'error', error: err});
+    			if(err) return res.status(500).json({status: 'error', error: err.toString()});
     			dbFunctions.setSwitchStatus(card._id, on);
     			// eventually update UI
     			io.emit('uiSwitchToggle', {card_id: card._id, set: on, sound: card.device.notification_sound});
@@ -258,7 +270,7 @@ function commuteSwitch(req, res, dbFunctions, rf433mhz, io, on){
     		});
 			
 		}, function(err){
-			res.status(500).json({status: 'error', error: err});
+			res.status(500).json({status: 'error', error: err.toString()});
 		});
 	else
 		res.status(500).json({status: 'error', error: 'Please provide a valid shortname'});
