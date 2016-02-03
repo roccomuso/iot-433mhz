@@ -36,11 +36,12 @@
                       <div class="panel-heading"><i class="fa fa-paper-plane-o"></i> How to configure Telegram Notification</div>
                       <div class="panel-body" style="text-align: left">
                         <ol>
+                          <li>Get a UID: <a href="#" onClick="events.emit('generateNewUID');"><i class="fa fa-cogs"></i> Generate</a></li>
                           <li>Go to <a href="https://web.telegram.org/#/im?p=@my_iot_bot" target="_new" rel="nofollow">web.telegram.com</a> and start talking with the bot <strong>@my_iot_bot</strong></li>
-                          <li>We need to associate your <em>IoT System UID</em> to you Telegram user, type and send this to the bot:<br/> <kbd>/register {{uid}}</kbd></li>
+                          <li>You need to associate your <em>IoT System UID</em> to your Telegram user; type and send this to the bot:<br/> <kbd>/register {{uid}}</kbd></li>
                           <li>You're good to go! Every time an armed alarm is triggered you'll get a message from the bot.</li>
                           <li><b>Remember</b>: whoever got your UID and do the above procedure will get notifications message from your IoT System too.</li>
-                          <li>If you run the IoT System on a different Machine, you'll get a different UID, then you'll have to do again the whole procedure.</li>
+                          <li>If you run the IoT System on a different Server, you'll get a different UID. Whenever you get a new UID, you'll have to do again the whole telegram registration procedure.</li>
                         </ol>
                       </div>
                     </div>

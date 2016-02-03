@@ -266,8 +266,17 @@ events.on('uiArmStatus', function(data){
 
 });
 
+// generate a new IoT System UID
+events.on('generateNewUID', function(){
+	$.get('/api/system/new/uid', function(data){
+		if (data.status === 'ok'){
+			$('#settings-outcome kbd').html('/register '+data.uid);
+		}else notie.alert(2, data.error, 0);
+	});
+});
+
+// enable telegram notification
 events.on('startTelegram', function(){
-	// enable telegram notification
 	$.get('/api/system/telegram/enable', function(data){
 		if (data.status === 'ok'){
 			$('#notification-btns .btn-telegram').replaceWith('<a href="#" class="btn btn-telegram" onClick="events.emit(\'stopTelegram\');"><i class="fa fa-stop"></i> Stop <i class="fa fa-paper-plane-o"></i> Telegram Notification</a>');
@@ -275,8 +284,8 @@ events.on('startTelegram', function(){
 	});
 });
 
+// disable telegram notification
 events.on('stopTelegram', function(){
-	// disable telegram notification
 	$.get('/api/system/telegram/disable', function(data){
 		if (data.status === 'ok'){
 			$('#notification-btns .btn-telegram').replaceWith('<a href="#" class="btn btn-telegram" onClick="events.emit(\'startTelegram\');"><i class="fa fa-play"></i> Start <i class="fa fa-paper-plane-o"></i> Telegram Notification</a>');
@@ -284,8 +293,8 @@ events.on('stopTelegram', function(){
 	});
 });
 
+// enable Email notification
 events.on('startEmail', function(){
-	// enable Email notification
 	$.get('/api/system/email/enable', function(data){
 		if (data.status === 'ok'){
 			$('#notification-btns .btn-email').replaceWith('<a href="#" class="btn btn-email" onClick="events.emit(\'stopEmail\');"><i class="fa fa-stop"></i> Stop <i class="fa fa-envelope-o"></i> Email Notification</a>');
@@ -293,8 +302,8 @@ events.on('startEmail', function(){
 	});
 });
 
+// disable Email notification
 events.on('stopEmail', function(){
-	// disable Email notification
 	$.get('/api/system/email/disable', function(data){
 		if (data.status === 'ok'){
 			$('#notification-btns .btn-email').replaceWith('<a href="#" class="btn btn-email" onClick="events.emit(\'startEmail\');"><i class="fa fa-play"></i> Start <i class="fa fa-envelope-o"></i> Email Notification</a>');
@@ -358,7 +367,7 @@ events.on('clickSettings', function(){
 	$.get('/api/settings/get', function(data) {
 		var settings = data.settings[0];
 		console.log(settings);
-		// get IoT system UID (generated using server MAC Address)
+		// get IoT system UID (generated using random algorithm)
 		$.get('/api/system/get/uid', function(_data){
 			var uid = _data.uid;
 			if (uid){
