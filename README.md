@@ -188,7 +188,10 @@ Below every single API available is documented. Too lazy to copy and paste? just
 Return the current settings. Useful to see notification status.
 
 - <code>GET /api/system/get/uid</code>
-Return the unique IoT System UID (a unique ID generated concatenating all the machine' mac addresses and applying base64 encoding function).
+Return the unique IoT System UID (a unique random ID generated from the system).
+
+- <code>GET /api/system/new/uid</code>
+Generate a new unique IoT System UID (a unique random ID generated from the system).
 
 - <code>GET /api/system/telegram/enable</code>
 Enable notification through Telegram Bot.
