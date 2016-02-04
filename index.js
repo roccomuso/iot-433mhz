@@ -35,6 +35,7 @@ if (config.db_compact_interval > 0){
 }
 
 var dbFunctions = require('./components/dbFunctions.js')(db, config);
+var notification = require('./components/notification.js')(dbFunctions, config);
 
 // Radio Frequency Class platform-independent
 var rf433mhz;
@@ -152,13 +153,9 @@ async.series({
                                     dbFunctions.alarmTriggered(card_shortname, 'alarm').then(function(card){
                                             if (card){
                                                io.emit('uiTriggerAlarm', card);
-                                               // TODO: send email or other kind of notification (Telegram mex) if Armed.
+                                               // if Alarm is armed send email or other kind of notification (Telegram mex).
                                                if (card.device.armed){
-                                                    // TODO
-                                                    // if dbFunctions.isTelegramEnabled().then(function(outcome){ ... });
-                                                    //dbFunctions.getIotUID();
-                                                    // TODO
-                                                    // WebHook call (alarm triggered)
+                                                    notification.alarmAdviseAll(card);  
                                                 }
 
                                             }
@@ -166,7 +163,7 @@ async.series({
 
                                 }
                                 // TODO: another WebHook call type (code detected)
-                                
+                                notification.webHookCodeDetected();
                             }).catch(function(err) {
                                 console.error(err);
                             });

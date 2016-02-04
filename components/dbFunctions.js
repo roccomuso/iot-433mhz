@@ -401,6 +401,16 @@ module.exports = function(db, config){
 						else reject('Error: Zero or More than one Email entry modified in settings.');
 					});
 				});				
+			},
+			isTelegramEnabled: function(){
+				return new Promise(function(resolve, reject){
+					// check whether telegram is enabled or disabled.
+					db.SETTINGS.find({"telegram.notification_enabled": true}, function(err, docs){
+						if (err) return reject(err);
+						if (docs.length) resolve(true);
+						else resolve(false);
+					});
+				});
 			}
 	};
 
