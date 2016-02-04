@@ -21,6 +21,7 @@ function _postRequestJSON(url, json_data, callback){
 	request({
 	    method: 'POST',
 	    uri: url,
+	    strictSSL: false, // because we're using a self-signed certificate
 	    headers: {'cache-control': 'no-cache'},
 	    body: JSON.stringify(json_data) 
 	  },
