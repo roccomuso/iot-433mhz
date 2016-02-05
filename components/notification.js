@@ -23,7 +23,7 @@ function _postRequestJSON(url, json_data, uid, callback){
 	    method: 'POST',
 	    uri: url+'/'+uid, // always attach the uid as entrypoint.
 	    strictSSL: false, // because we're using a self-signed certificate
-	    headers: {'cache-control': 'no-cache'},
+	    headers: {'cache-control': 'no-cache', 'Content-Type': 'application/json'},
 	    body: JSON.stringify(json_data) 
 	  },
 	  callback
