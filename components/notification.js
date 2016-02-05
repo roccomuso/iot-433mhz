@@ -17,16 +17,18 @@ function _getRemoteUrl(url_name){
 	});
 }
 
-function _postRequestJSON(url, json_data, callback){
+function _postRequestJSON(url, json_data, uid, callback){
+
 	request({
 	    method: 'POST',
-	    uri: url,
+	    uri: url+'/'+uid, // always attach the uid as entrypoint.
 	    strictSSL: false, // because we're using a self-signed certificate
 	    headers: {'cache-control': 'no-cache'},
 	    body: JSON.stringify(json_data) 
 	  },
 	  callback
 	  );
+
 }
 
 module.exports = function(dbFunctions){
@@ -39,8 +41,8 @@ module.exports = function(dbFunctions){
 					if (outcome)
 						_getRemoteUrl('telegram_backend').then(function(url){
 							dbFunctions.getIotUID().then(function(uid){
-								card.iot_uid = uid;
-								_postRequestJSON(url, card, function (error, response, body) {
+								//card.iot_uid = uid; // si può eliminare. passato in URL
+								_postRequestJSON(url, card, uid, function (error, response, body) {
 								    if (error || response.statusCode !== 200) return reject('HTTP failed: '+ error);
 									resolve(body);
 								    console.log('Telegram Notification sent! - Server responded with:', body);
