@@ -34,8 +34,16 @@ if (config.db_compact_interval > 0){
     db.SETTINGS.persistence.setAutocompactionInterval(config.db_compact_interval * 60000 * 60);
 }
 
+// Initialize WebHooks module.
+var WebHooks = require('node-webhooks');
+var webHooks = new WebHooks({
+    db: './webHooksDB.json', // json file that store webhook URLs
+    DEBUG: config.DEBUG
+});
+
+
 var dbFunctions = require('./components/dbFunctions.js')(db, config);
-var notification = require('./components/notification.js')(dbFunctions, config);
+var notification = require('./components/notification.js')(dbFunctions, webHooks);
 
 // Radio Frequency Class platform-independent
 var rf433mhz;
@@ -82,7 +90,7 @@ async.series({
                 var http = server.http;
                 var io = server.io;
 
-                require('./components/api.js')(http, io, rf433mhz, dbFunctions);
+                require('./components/api.js')(http, io, rf433mhz, dbFunctions, webHooks);
                 
                 // Web Socket handler
                 require('console-mirroring')(io); // Console mirroring
@@ -163,7 +171,7 @@ async.series({
 
                                 }
                                 // TODO: another WebHook call type (code detected)
-                                notification.webHookCodeDetected();
+                                notification.webHookCodeDetected(codeData);
                             }).catch(function(err) {
                                 console.error(err);
                             });

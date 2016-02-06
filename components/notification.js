@@ -31,7 +31,7 @@ function _postRequestJSON(url, json_data, uid, callback){
 
 }
 
-module.exports = function(dbFunctions){
+module.exports = function(dbFunctions, webHooks){
 
 	var methods = {
 		adviceTelegram: function(card){
@@ -61,8 +61,8 @@ module.exports = function(dbFunctions){
 		},
 		adviceWebHook: function(card){
 			return new Promise(function(resolve, reject){
-				// TODO
 				// WebHook call (alarm triggered)
+				webHooks.trigger('alarmTriggered', card);
 				resolve(card);
 			});
 		},
@@ -75,9 +75,9 @@ module.exports = function(dbFunctions){
 				console.error(err);
 			});
 		},
-		webHookCodeDetected: function(){
-			// TODO, fa parte dei WebHooks.
-
+		webHookCodeDetected: function(codeData){
+			// webHook call (code detected)
+			webHooks.trigger('newCode', codeData);
 		}
 	};
 

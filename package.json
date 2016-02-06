@@ -1,6 +1,6 @@
 {
   "name": "iot-433mhz",
-  "version": "1.0.18",
+  "version": "1.0.19",
   "description": "Node server to handle 433mhz outlets and sensors.",
   "main": "index.js",
   "preferGlobal": "true",
@@ -22,18 +22,23 @@
     "433mhz",
     "domotic",
     "arduino",
-    "raspberry"
+    "raspberry",
+    "433",
+    "rc-switch",
+    "pir"
   ],
   "author": "Rocco Musolino",
   "license": "MIT",
   "dependencies": {
     "async": "1.5.0",
+    "body-parser": "^1.14.2",
     "chalk": "1.1.1",
     "console-mirroring": "1.0.2",
     "express": "4.13.3",
     "figlet": "1.1.1",
     "multer": "1.1.0",
     "nedb": "1.6.2",
+    "node-webhooks": "^1.0.0",
     "prompt": "0.2.14",
     "request": "^2.69.0",
     "serialport": "2.0.5",

@@ -1,5 +1,6 @@
 var express = require('express'); // Get the module
 var app = express();
+var bodyParser = require('body-parser');
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 var config = require('../config.json'); // config file
@@ -10,6 +11,9 @@ console.info('Server started on', getLocalIPAddress(), '- Port', config.server_p
 
 module.exports = function(_cb){
   
+  // set middleware
+  app.use(bodyParser.json());
+
   // API and Web Server + Socket part
   _cb({http: app, io: io});
 

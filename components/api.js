@@ -12,7 +12,7 @@ var upload = multer({ dest: 'www/uploads/',
 				else cb(null, false);
 	} });
 
-module.exports = function(app, io, rf433mhz, dbFunctions){
+module.exports = function(app, io, rf433mhz, dbFunctions, webHooks){
 
 	// get settings
 	app.route('/api/settings/get').get(function(req, res){
@@ -225,7 +225,7 @@ module.exports = function(app, io, rf433mhz, dbFunctions){
 		commuteSwitch(req, res, dbFunctions, rf433mhz, io, false);
 	});		
 
-	// switch /api/switch/[shortname]/toggle
+	// switch: /api/switch/[shortname]/toggle
 	app.route('/api/switch/:shortname/toggle').get(function (req, res){
 		if (typeof req.params.shortname !== 'undefined')
 			dbFunctions.getSwitchStatus({shortname: req.params.shortname}).then(function(status){
@@ -235,6 +235,75 @@ module.exports = function(app, io, rf433mhz, dbFunctions){
 			});
 		else res.status(500).json({status: 'error', error: 'Please provide a valid shortname'});
 	});
+
+	// webHooks: GET /api/webhook/get (get all the stored webHooks)
+	app.route('/api/webhook/get').get(function (req, res){
+		webHooks.getDB().then(function(data){
+			if (data)
+				res.status(200).json({status: 'OK', data: data});
+			else res.status(500).json({status: 'error', error: 'error retrieving the data'});
+		}).catch(function(err){ res.status(500).json({status: 'error', error: err }); });
+	});
+
+	// webHooks: GET /api/webhook/get/:webHookShortname (get the selected webHook data)
+	app.route('/api/webhook/get/:webHookShortname').get(function (req, res){
+		if (typeof req.params.webHookShortname !== 'undefined'){
+			webHooks.getWebHook(req.params.webHookShortname).then(function(data){
+				if (data)
+					res.status(200).json({status: 'OK', data: data});
+				else res.status(500).json({status: 'error', error: 'error retrieving the data'});
+			}).catch(function(err){ res.status(500).json({status: 'error', error: err }); });
+		} else res.status(500).json({status: 'error', error: 'Please provide a valid webHook shortname'});
+	});
+
+	// webHooks: POST /api/webhook/add/:webHookShortname (add a new webHook url for a specified webhook event name)
+	app.route('/api/webhook/add/:webHookShortname').post(function (req, res){
+		if (typeof req.params.webHookShortname !== 'undefined'){
+			if (req.body.hasOwnProperty('url'))
+				webHooks.add(req.params.webHookShortname, req.body.url).then(function(outcome){
+					if (outcome)
+						res.status(200).json({status: 'OK', message: 'webHook added!', added: true});
+					else res.status(500).json({status: 'error', message: 'webHook not added.', added: false});
+				}).catch(function(err){ res.status(500).json({status: 'error', error: err, added: false }); });
+			else res.status(500).json({status: 'error', error: 'JSON url parameter is required'});
+		} else res.status(500).json({status: 'error', error: 'Please provide a valid webHook shortname'});
+	});
+
+	// webHooks: GET /api/webhook/delete/:webHookShortname (remove all the urls attached to the webHook selected)
+	app.route('/api/webhook/delete/:webHookShortname').get(function (req, res){
+		if (typeof req.params.webHookShortname !== 'undefined'){
+			webHooks.remove(req.params.webHookShortname).then(function(outcome){
+				if (outcome)
+					res.status(200).json({status: 'OK', message: 'webHook removed!', deleted: true});
+				else res.status(500).json({status: 'OK', message: 'webHook not found', deleted: false});
+			}).catch(function(err){ res.status(500).json({status: 'error', error: err }); });
+		}else res.status(500).json({status: 'error', error: 'Please provide a valid webHook shortname'});
+	});
+
+	// webHooks: POST /api/webhook/delete/:webHookShortname (remove a single webhook url for the selected webHook.)
+	app.route('/api/webhook/delete/:webHookShortname').post(function (req, res){
+		if (typeof req.params.webHookShortname !== 'undefined'){
+			var body = req.body;
+			if (body)
+			webHooks.remove(req.params.webHookShortname, body.url).then(function(outcome){
+				if (outcome)
+					res.status(200).json({status: 'OK', message: 'webHook removed!', deleted: true});
+				else res.status(500).json({status: 'OK', message: 'webHook not found', deleted: false});
+			}).catch(function(err){ res.status(500).json({status: 'error', error: err }); });
+			else res.status(500).json({status: 'error', error: 'Body not valid.'});
+		} else res.status(500).json({status: 'error', error: 'Please provide a valid webHook shortname'});
+	});
+
+	// webHooks: POST /api/webhook/trigger/:webHookShortname (trigger a webHook. It requires a JSON body that will be turned over to the webHook URLs.)
+	app.route('/api/webhook/trigger/:webHookShortname').post(function (req, res){
+		if (typeof req.params.webHookShortname !== 'undefined'){
+			var body = req.body;
+			webHooks.trigger(req.params.webHookShortname, body);
+			res.status(200).json({status: 'OK', message: 'webHooks called!', called: true});
+			
+		} else res.status(500).json({status: 'error', error: 'Please provide a valid webHook shortname'});
+	});
+
 
 	// handle 404 error for API
 	app.all('/api/*', function(req, res){

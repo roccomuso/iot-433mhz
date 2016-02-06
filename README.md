@@ -140,6 +140,7 @@ Through the Settings page from the Web Interface, you can change the general set
     arduino_baudrate: 9600, // The arduino default baudrate (no need to change it)
     server_port: 8080, // Choose on which port you wanna run the web interface
     db_compact_interval: 12, // Database needs to be compacted to have better performance, by default every 12 hours it will be compacted, put 0 to avoid DB compacting.
+    "backend_urls": "..." // You can specify a backend json file containing the urls to carry out notifications. (NB. this requires the iot-433mhz-backend repo)
 
 If you made a change to the settings from the Web interface, then to make it effective, you need to restart the app.
 
@@ -254,24 +255,14 @@ Turn off a switch
 - <code>GET /api/switch/[shortname]/toggle</code>
 Toggle a switch
 
-- <code>GET /api/webhook/all</code>
-List all the registered webhooks.
-
-- <code>GET /api/webhook/get/[WebHookShortname]</code>
-Get the WebHook stored information.
-
-- <code>POST /api/webhook/put</code>
-Insert a new WebHook.
+- <code>POST /api/webhook/add/[WebHookShortname]</code>
+Add a new URL for the selected webHook.
 Required parameters:
 
-        webHookShortname - a brief shortname (it will be made lower case and without blank spaces).
-        description - a brief WebHook description.
+        webHookShortname - Provided in url, it must be one of these*: alarmTriggered, newCard, cardDeleted, newCode, switchToggle.
         url - the URL to which a HTTP POST request will be sent when the event get fired (the request carries a JSON payload field that gotta be parsed).
-        active - true/false (if true the POST request will be sent).
-        eventName - It must be one of these*: alarmTriggered, newCard, cardDeleted, newCode, switchToggle
 
-This API call returns the new generated WebHook *_id* and a valid *shortname*
-Let's describe every event JSON payload you're gonna listen for according to the supplied <code>eventName</code>:
+Let's describe every event JSON payload you're gonna listen for according to the supplied <code>webHookShortname</code>:
 
 <code>alarmTriggered = {"card_id": "...", "last_alert": 1453..., "code": ..., "shortname": "...", "room": "..." }</code> * NB. an alarmTriggered WebHook callback will be executed only if the alarm card is armed!
 
@@ -283,14 +274,21 @@ Let's describe every event JSON payload you're gonna listen for according to the
 
 <code>switchToggle = {"card_id": "...", "is_on": true/false, "sent_code": ..., "timestamp": 1453... }</code>
 
-- <code>GET /api/webhook/active/[WebHookShortname]</code>
-Active the specified WebHook.
+- <code>GET /api/webhook/get</code>
+Return the whole webHook DB file.
 
-- <code>GET /api/webhook/deactive/[WebHookShortname]</code>
-Deactive the specified WebHook.
+- <code>GET /api/webhook/get/[WebHookShortname]</code>
+Return the selected WebHook.
 
 - <code>GET /api/webhook/delete/[WebHookShortname]</code>
-Delete the specified webhook.
+Remove all the urls attached to the selected webHook.
+
+- <code>POST /api/webhook/delete/[WebHookShortname]</code>
+Remove only one single url attached to the selected webHook.
+A json body with the url parameter is required: { "url": "http://..." }
+
+- <code>POST /api/webhook/trigger/[WebHookShortname]</code>
+Trigger a webHook. It requires a JSON body that will be turned over to the webHook URLs.
 
 # Telegram Bot & Notifications
 
