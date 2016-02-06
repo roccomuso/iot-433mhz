@@ -166,21 +166,6 @@ The web interface provides along with supported browsers the ability to add the 
 
 See the [Hardware page](https://github.com/roccomuso/iot-433mhz/tree/master/hardware-layer).
 
-
-## WebHooks
-
-Webhooks allow you to build or set up integrations which subscribe to certain events on the iot-433mhz system. When one of those events is triggered, we'll send a HTTP POST payload to the webhook's configured URL.
-Webhooks can be used to catch several events:
-- alarm triggered event.
-- new card event.
-- card deleted event.
-- new code detected event.
-- switch toggle event.
-
-NB. In this current release WebHooks are not card-specific. For example, a single *alarmTriggered* event type catches every alarm trigger. It's up to you parse the payload and make sure that was the sensor you were wishing for.
-
-Use the API below to set up and interacts with WebHooks.
-
 ## API
 
 Below every single API available is documented. Too lazy to copy and paste? just download and import the Postman collection ([download](https://github.com/roccomuso/iot-433mhz/blob/master/other/IoT-433Mhz.json.postman_collection)).
@@ -254,6 +239,20 @@ Turn off a switch
 
 - <code>GET /api/switch/[shortname]/toggle</code>
 Toggle a switch
+
+## WebHooks
+
+Webhooks allow you to build or set up integrations which subscribe to certain events on the iot-433mhz system. When one of those events is triggered, we'll send a HTTP POST payload to the webhook's configured URL. (thanks to [node-webhooks](https://github.com/roccomuso/node-webhooks))
+Webhooks can be used to catch several events:
+- alarm triggered event.
+- new card event.
+- card deleted event.
+- new code detected event.
+- switch toggle event.
+
+NB. In this current release WebHooks are not card-specific. For example, a single *alarmTriggered* event type catches every alarm trigger. It's up to you parse the payload and make sure that was the sensor you were wishing for.
+
+Use the API below to set up and interacts with WebHooks.
 
 - <code>POST /api/webhook/add/[WebHookShortname]</code>
 Add a new URL for the selected webHook.
