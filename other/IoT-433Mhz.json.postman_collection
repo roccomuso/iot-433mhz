@@ -125,7 +125,7 @@
 			"data": [],
 			"dataMode": "raw",
 			"name": "remove the whole webHook",
-			"description": "No url param given so it will remove the webHook and all the URL attached to him.",
+			"description": "No url param given so it will remove the webHook and all the URL attached to him.\nThis works with both GET/POST methods.",
 			"descriptionFormat": "html",
 			"time": 1454791073335,
 			"version": 2,

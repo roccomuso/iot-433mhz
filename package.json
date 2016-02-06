@@ -38,7 +38,7 @@
     "figlet": "1.1.1",
     "multer": "1.1.0",
     "nedb": "1.6.2",
-    "node-webhooks": "^1.0.0",
+    "node-webhooks": "^1.0.10",
     "prompt": "0.2.14",
     "request": "^2.69.0",
     "serialport": "2.0.5",
