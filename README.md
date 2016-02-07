@@ -11,19 +11,16 @@
 
 ![iot-433mhz UI](https://github.com/roccomuso/iot-433mhz/blob/master/other/pics/web-ui.gif?raw=true "Iot-433mhz Web UI")
 
-# Inspiration
-
-Inspired by [pimatic-homeduino](https://www.npmjs.com/package/pimatic-homeduino-dst-dev) this is a project in his Alpha stage. Documentation is under construction.
-
 # Features
 
 - Multi-platform (Windows, Mac OS X, Linux).
-- Intuitive API to build your own interface.
+- Intuitive API & WebHooks to build your own interface.
 - Built-In Material design cards-based template.
 - Real-time UI refresh.
 - Detect Radio Frequency codes (433mhz).
 - Generate Cards and assign it to your rooms.
 - Control RC power sockets, PIR sensors, Door sensors and much more.
+- Telegram Bot for alarm notifications.
 - Totally Open Source & Open Hardware.
 
 ## Recommended Hardware
@@ -146,7 +143,16 @@ If you made a change to the settings from the Web interface, then to make it eff
 
 # Usage
 
-You can use the system through the beautiful web interface (thumbs up for material-design) or use the API.
+Start the system with the console global command:
+
+    iot-433mhz
+
+Then you'll have to select the right serial port to which the Arduino is attached to
+
+![start iot-433mhz](https://github.com/roccomuso/iot-433mhz/blob/master/other/pics/start-iot-433mhz.PNG?raw=true "Console start iot-433mhz")
+
+Once selected you're ready to go!
+You're then free to use the system through the beautiful web interface (thumbs up for material-design) on the address: <code>http://<YOUR_SERVER_IP>:8080/</code> or use the API to build your own interface.
 
 ## Built-in Web Interface
 
@@ -309,3 +315,11 @@ If you submit a pull request, thanks! There are a couple rules to follow though 
 - Please stick to the current coding style. It's important that the code uses a coherent style for readability.
 - Do not include sylistic improvements ("housekeeping"). If you think one part deserves lots of housekeeping, use a separate pull request so as not to pollute the code.
 - Don't forget tests for your new feature.
+
+# Inspiration
+
+Inspired by [pimatic-homeduino](https://www.npmjs.com/package/pimatic-homeduino-dst-dev) this is a project in his Beta stage. Documentation is under construction.
+
+# Author
+
+### @ Rocco Musolino - [hackerstribe.com](http://www.hackerstribe.com)
