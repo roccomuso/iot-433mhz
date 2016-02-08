@@ -14,6 +14,7 @@
 # Features
 
 - Multi-platform (Windows, Mac OS X, Linux).
+- Basic Authentication.
 - Intuitive API & WebHooks to build your own interface.
 - Built-In Material design cards-based template.
 - Real-time UI refresh.
@@ -134,6 +135,8 @@ Is recommended to run the server on the RPi through a "terminal session". (see [
 Through the Settings page from the Web Interface, you can change the general settings (stored in <code>config.json</code>). Few of those settings are there listed with their default values:
 
     DEBUG: true, // Start the app in Debugging mode.
+    username: root, // Username required to authenticate (required also during API calls)
+    password: root,  // Password required to authenticate (required also during API calls)
     arduino_baudrate: 9600, // The arduino default baudrate (no need to change it)
     server_port: 8080, // Choose on which port you wanna run the web interface
     db_compact_interval: 12, // Database needs to be compacted to have better performance, by default every 12 hours it will be compacted, put 0 to avoid DB compacting.
@@ -158,6 +161,9 @@ You're then free to use the system through the beautiful web interface (thumbs u
 
 Reachable on the <code>http://serverAddress:PORT</code>, the web <code>server_port</code> is defined in <code>config.json</code>, default's value is 8080. It works well in browsers like Chrome (*reccomended*), Firefox, Safari, Opera, Microsoft Edge (it doesn't on Internet Explorer, avoid it).
 
+Once you open the address on your browser an **authentication is required**.
+Username and password are stored inside the *config.json* file (default values are: root, root).
+
 If you wanna have a **live console** output of your iot-433mhz running on Node. There's a real time console-mirroring web-console on <code>http://serverAddress:PORT/console.html</code>. (Thanks to [console-mirroring](https://github.com/roccomuso/console-mirroring)).
 
 ### Add to Homescreen
@@ -175,6 +181,8 @@ See the [Hardware page](https://github.com/roccomuso/iot-433mhz/tree/master/hard
 ## API
 
 Below every single API available is documented. Too lazy to copy and paste? just download and import the Postman collection ([download](https://github.com/roccomuso/iot-433mhz/blob/master/other/IoT-433Mhz.json.postman_collection)).
+
+**Tip**: The iot-433mhz server requires a basic Authentication also for the API calls. Username and Password are defined inside the *config.json* file (default username and password: root, root).
 
 - <code>GET /api/settings/get</code>
 Return the current settings. Useful to see notification status.

@@ -1,6 +1,8 @@
 {
 	"app_title": "IoT-433Mhz",
 	"DEBUG": true,
+	"username": "root",
+	"password": "root",
 	"arduino_baudrate": 9600,
 	"server_port": 8080,
 	"db_compact_interval": 12,
