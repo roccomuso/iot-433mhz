@@ -155,7 +155,7 @@ Then you'll have to select the right serial port to which the Arduino is attache
 ![start iot-433mhz](https://github.com/roccomuso/iot-433mhz/blob/master/other/pics/start-iot-433mhz.PNG?raw=true "Console start iot-433mhz")
 
 Once selected you're ready to go!
-You're then free to use the system through the beautiful web interface (thumbs up for material-design) on the address: <code>http://<YOUR_SERVER_IP>:8080/</code> or use the API to build your own interface.
+You're then free to use the system through the beautiful web interface (thumbs up for material-design) or use the API to build your own interface.
 
 ## Built-in Web Interface
 
