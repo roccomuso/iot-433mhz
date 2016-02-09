@@ -1,7 +1,7 @@
 /*
   Simple example for sender
   
-  http://code.google.com/p/rc-switch/
+  https://github.com/sui77/rc-switch
 
   How to connect the 433mhz transmitter to Arduino: GND - 5V - pin D10
   

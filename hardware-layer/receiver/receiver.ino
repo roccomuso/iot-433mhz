@@ -1,9 +1,9 @@
 /*
   Example for receiving
   
-  http://code.google.com/p/rc-switch/
+  https://github.com/sui77/rc-switch
 
-  How to connect the 433mhz receiver to arduino: GND - 5V - D2
+  How to connect the 433mhz receiver to arduino: GND - 5V - pin D2
   
 */
 

@@ -2,10 +2,10 @@
   Simple example for both sender and receiver
 
   - Dependencies:
-  http://code.google.com/p/rc-switch/ (RC 433mhz library)
-  https://github.com/bblanchon/ArduinoJson (Arduino JSON Librari)
+  https://github.com/sui77/rc-switch/releases/latest (RC 433mhz library)
+  https://github.com/bblanchon/ArduinoJson (Arduino JSON Library)
 
-  How to connect the 433mhz receiver to arduino: GND - 5V - D2
+  How to connect the 433mhz receiver to arduino: GND - 5V - pin D2
   How to connect the 433mhz transmitter to Arduino: GND - 5V - pin D10
   
 */
