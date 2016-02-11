@@ -7,6 +7,11 @@
      |___\___/|_|        |_||____/____/|_|  |_|_| |_/___|
 
 
+# Summary
+
+IoT System to control 433 MHz RC power sockets, PIR sensors, Door Sensors and much more. 
+To start is required a 433mhz transmitter and receiver, a connected Arduino with the iot-433mhz sketch or directly with capable hardware like the Raspberry Pi.
+
 # UI Demo
 
 ![iot-433mhz UI](https://github.com/roccomuso/iot-433mhz/blob/master/other/pics/web-ui.gif?raw=true "Iot-433mhz Web UI")
@@ -182,7 +187,7 @@ See the [Hardware page](https://github.com/roccomuso/iot-433mhz/tree/master/hard
 
 Below every single API available is documented. Too lazy to copy and paste? just download and import the Postman collection ([download](https://github.com/roccomuso/iot-433mhz/blob/master/other/IoT-433Mhz.json.postman_collection)).
 
-**Tip**: The iot-433mhz server requires a basic Authentication also for the API calls. Username and Password are defined inside the *config.json* file (default username and password: root, root).
+**Tip**: The iot-433mhz server requires a basic Authentication also for the API calls. Username and Password are defined inside the *config.json* file (default username and password: root, root). What you need to take into account is to set the following header field during your HTTP requests: <code>Authorization: Basic cm9vdDpyb290</code> where the last string is the base64 encoding of <code>root:root</code>, if you changed default username and password you should update the base64 text too ([learn more](https://en.wikipedia.org/wiki/Basic_access_authentication) on Basic Authentication Access).
 
 - <code>GET /api/settings/get</code>
 Return the current settings. Useful to see notification status.
