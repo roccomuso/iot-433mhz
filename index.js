@@ -170,7 +170,7 @@ async.series({
                                     }, function(err){ console.error(err);});
 
                                 }
-                                // TODO: another WebHook call type (code detected)
+                                // another WebHook call type (code detected)
                                 notification.webHookCodeDetected(codeData);
                             }).catch(function(err) {
                                 console.error(err);
@@ -194,7 +194,7 @@ async.series({
     function(err, results) {
         // results is now equal to: {one: 1, two: 2}
 
-        // console.log('Risultati: ', results);
+        // console.log('Results: ', results);
 
     });
 
