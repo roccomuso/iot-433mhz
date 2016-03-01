@@ -248,10 +248,10 @@ Delete the card with the specified shortname, it returns <code>{"status": "ok", 
 Only alarm type cards can be armed.
 
 - <code>GET /api/alarm/[shortname]/disarm</code>
-Only alarm type cards can be disarmed. (If disarmed no WebHook callbacks or email notifications will be sent)
+Only alarm type cards can be disarmed. (If disarmed no WebHook callbacks or any kind of notifications will be sent)
 
 - <code>GET /api/switch/[shortname]/on</code>
-Turn on a switch. Example: GET /api/bedroom/lamp1/on
+Turn on a switch.
 
 - <code>GET /api/switch/[shortname]/off</code>
 Turn off a switch
