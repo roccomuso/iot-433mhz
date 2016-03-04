@@ -137,7 +137,7 @@ Is recommended to run the server on the RPi through a "terminal session". (see [
 
 # Config
 
-Through the Settings page from the Web Interface, you can change the general settings (stored in <code>config.json</code>). Few of those settings are there listed with their default values:
+Through the Settings page from the Web Interface, you can more or less change the general settings (stored in <code>config.json</code>). Few of those settings are there listed with their default values:
 
     DEBUG: true, // Start the app in Debugging mode.
     username: root, // Username required to authenticate (required also during API calls)
@@ -148,6 +148,7 @@ Through the Settings page from the Web Interface, you can change the general set
     "backend_urls": "..." // You can specify a backend json file containing the urls to carry out notifications. (NB. this requires the iot-433mhz-backend repo)
 
 If you made a change to the settings from the Web interface, then to make it effective, you need to restart the app.
+The best way to set custom settings is through the CLI optional parameters, shown below.
 
 # Usage
 
@@ -161,6 +162,14 @@ Then you'll have to select the right serial port to which the Arduino is attache
 
 Once selected you're ready to go!
 You're then free to use the system through the beautiful web interface (thumbs up for material-design) or use the API to build your own interface.
+
+To custom your system settings simply use the CLI options:
+
+    iot-433mhz --help
+
+That shows something like that:
+
+![iot-433mhz cli options](https://github.com/roccomuso/iot-433mhz/blob/master/other/pics/iot-433mhz-cli-options.PNG?raw=true "iot-433mhz cli options")
 
 ## Built-in Web Interface
 

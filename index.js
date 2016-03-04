@@ -10,6 +10,9 @@ var chalk = require('chalk');
 var fs = require('fs');
 var path = require('path');
 var config = require('./config.json');
+var argv = require('./components/arguments-handler.js');
+
+if (typeof argv.debug !== 'undefined') config.DEBUG = argv.debug; // if defined use CLI debug (NB. current choice is not stored inside the config.json file, so other scripts that are including the file from the disk and are not using this variable istance may not retrieve the right DEBUG choice from the User)
 
 // Create or open the underlying DB store
 var Datastore = require('./EventedDatastore.js'); // nedb doesn't provide listener on DB events by default
@@ -60,7 +63,7 @@ async.series({
 
             console.log(chalk.bgYellow('Debug Mode:', config.DEBUG));
 
-            require('./components/platform.js')(function(rf) {
+            require('./components/platform.js')(argv, function(rf) {
                 rf433mhz = rf; // platform independent class
                 callback(null, rf433mhz);
             });
@@ -72,6 +75,7 @@ async.series({
                 callback(null, 1);
             }).catch(function(err) {
                 console.log('init_db error:', err);
+                console.log(err.stack);
             });
         },
         init_rf: function(callback) {
@@ -85,7 +89,7 @@ async.series({
         },
         server: function(callback) {
             // Starting HTTP Server, API, and Web Socket
-            require('./components/server.js')(function(server) {
+            require('./components/server.js')(argv, function(server) {
                 // Handling routes and Web Socket Handler.
                 var http = server.http;
                 var io = server.io;

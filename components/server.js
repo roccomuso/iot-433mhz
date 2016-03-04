@@ -6,11 +6,37 @@ var io = require('socket.io')(server);
 var config = require('../config.json'); // config file
 var basicAuth = require('basic-auth');
 
-server.listen(config.server_port);
 
-console.info('Server started on', getLocalIPAddress(), '- Port', config.server_port);
 
-module.exports = function(_cb){
+module.exports = function(argv, _cb){
+
+  // Setting up parameters passed by CLI
+  if (argv.username && argv.password) { config.username = argv.username; config.password = argv.password;}
+  if (argv.port){ config.server_port = argv.port; }
+
+  // Starting Server
+  server.listen(config.server_port);
+  console.info('Server started on', getLocalIPAddress(), '- Port', config.server_port);
+
+  // Auth function
+  var auth = function (req, res, next) {
+    function unauthorized(res) {
+      res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
+      return res.status(401).send('Unauthorized');
+    };
+
+    var user = basicAuth(req);
+
+    if (!user || !user.name || !user.pass) {
+      return unauthorized(res);
+    };
+
+    if (user.name === config.username && user.pass === config.password) {
+      return next();
+    } else {
+      return unauthorized(res);
+    };
+  };
 
   // set authentication middleware
   app.use(auth);
@@ -23,25 +49,7 @@ module.exports = function(_cb){
 
 };
 
-// Auth function
-var auth = function (req, res, next) {
-  function unauthorized(res) {
-    res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
-    return res.status(401).send('Unauthorized');
-  };
 
-  var user = basicAuth(req);
-
-  if (!user || !user.name || !user.pass) {
-    return unauthorized(res);
-  };
-
-  if (user.name === config.username && user.pass === config.password) {
-    return next();
-  } else {
-    return unauthorized(res);
-  };
-};
 
 // utility function
 function getLocalIPAddress() {

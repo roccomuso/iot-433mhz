@@ -105,35 +105,42 @@ var rf433mhz = function(board){
 
 };
 
-module.exports = function(module_callback){
+module.exports = function(argv, module_callback){
 
 	function choose_port(whatToUse){
 		var serialPort = require('serialport');
 		serialPort.list(function (err, ports) {
 			if (ports.length === 0) { console.log('No ports available'); return;}
 
-			console.log('Choose a port:');
+			console.log('Selectable serial ports:');
 			var k = 1;
 			ports.forEach(function(port) {
 				console.log('('+k+') '+port.comName); k++;
 			    //console.log(port);
 			});
 
-			prompt.start();
 
-			prompt.get({properties: {port: {required: true, type: 'number', conform: function(value){
-				if (value > 0 && value <= ports.length) return true;
-				else return false;
-			}}}}, function (err, result) {
-				if (err) return console.error(err);
-	    		// choices:
-	    		console.log('Choosen port:', ports[result.port-1].comName);
-	    		// return choosen port
-	    		var classe = new rf433mhz({platform: whatToUse, port: ports[result.port-1].comName});
+			if (argv.serialport){
+				// return choosen port
+				var classe = new rf433mhz({platform: whatToUse, port: argv.serialport});
+		   		module_callback(classe);
+			}else{
+				prompt.start();
+				prompt.get({properties: {port: {required: true, type: 'number', conform: function(value){
+					if (value > 0 && value <= ports.length) return true;
+					else return false;
+				}}}}, function (err, result) {
+					if (err) return console.error(err);
+		    		// choices:
+		    		console.log('Choosen port:', ports[result.port-1].comName);
+		    		// return choosen port
+		    		var classe = new rf433mhz({platform: whatToUse, port: ports[result.port-1].comName});
 
-	   			 module_callback(classe);
-	    
-			});
+		   			 module_callback(classe);
+		    
+				});
+
+			}
 
 		});
 
