@@ -18,15 +18,15 @@ if (typeof argv.debug !== 'undefined') config.DEBUG = argv.debug; // if defined 
 var Datastore = require('./EventedDatastore.js'); // nedb doesn't provide listener on DB events by default
 var db = {};
 db.RFCODES = new Datastore({
-    filename: 'DB/rfcodes.db',
+    filename: path.resolve(__dirname, './DB/rfcodes.db'),
     autoload: true
 });
 db.CARDS = new Datastore({
-    filename: 'DB/cards.db',
+    filename: path.resolve(__dirname, './DB/cards.db'),
     autoload: true
 });
 db.SETTINGS = new Datastore({
-    filename: 'DB/settings.db',
+    filename: path.resolve(__dirname, './DB/settings.db'),
     autoload: true
 })
 
@@ -40,7 +40,7 @@ if (config.db_compact_interval > 0){
 // Initialize WebHooks module.
 var WebHooks = require('node-webhooks');
 var webHooks = new WebHooks({
-    db: './webHooksDB.json', // json file that store webhook URLs
+    db: path.resolve(__dirname, './webHooksDB.json'), // json file that store webhook URLs
     DEBUG: config.DEBUG
 });
 

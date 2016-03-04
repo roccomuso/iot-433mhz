@@ -3,7 +3,7 @@ var path = require('path');
 var fs = require('fs');
 var validator = require('validator');
 var multer  = require('multer');
-var upload = multer({ dest: 'www/uploads/', 
+var upload = multer({ dest: path.resolve(__dirname,'../www/uploads/'), 
 	fileFilter: function(req, file, cb){ // file filter operations
 		var allowed_img_ext = ['.jpg','.jpeg','.png','.gif','.bmp'];
 		console.log(file);
