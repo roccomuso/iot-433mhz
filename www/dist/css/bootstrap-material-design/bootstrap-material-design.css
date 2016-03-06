@@ -2818,9 +2818,16 @@ fieldset[disabled] .navbar .btn-link:focus {
 .card .card-image {
   height: 200px; /* on chrome app 50% */
   position: relative;
+
+  /*background-image: setted dinamically */
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
   /*overflow: hidden;*/ /* rimosso per l'utilizzo delle cards di bootstrap assieme alle webkit-columns */
 }
-.card .card-image img {
+.card .card-image img { /* not used in this version */
   width: 100%;
   height: 100%;
   border-top-left-radius: 2px;
