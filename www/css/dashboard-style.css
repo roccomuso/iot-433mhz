@@ -31,7 +31,7 @@ body {
     -webkit-column-fill: auto;
     -moz-column-count: 4;
     -moz-column-gap: 5px;
-    -moz-column-fill: auto;
+    -moz-column-fill: balance;
     column-count: 4;
     column-gap: 10px;
     column-fill: auto;
