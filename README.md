@@ -320,7 +320,9 @@ Trigger a webHook. It requires a JSON body that will be turned over to the webHo
 # Telegram Bot & Notifications
 
 Out of the box, the iot-433mhz provides notifications through email and through a Telegram Bot. Of course you're free to develop your own notification system using our WebHooks API.
-**Notifications should be enabled and configured through the <code>Menu > Settings</code> page.**
+**Notifications should be enabled and configured through the <code>Menu > Settings</code> page.** This is how the Settings page looks like:
+
+![Telegram settings](https://github.com/roccomuso/iot-433mhz/blob/master/other/pics/iot-433mhz-telegram-settings.PNG?raw=true "Telegram Settings")
 
 The Email notification system is under construction (TODO).
 
