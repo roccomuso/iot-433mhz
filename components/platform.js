@@ -45,6 +45,7 @@ var rf433mhz = function(board){
 		serial.open(function (error) {
 		  if ( error ) {
 		    console.log('failed to open: '+error);
+		    throw error;
 		  } else {
 		    if (config.DEBUG) console.log('Serial port opened');
 			    onOpen();
@@ -122,7 +123,7 @@ module.exports = function(argv, module_callback){
 
 			if (argv.serialport){
 				// return choosen port
-				var classe = new rf433mhz({platform: whatToUse, port: argv.serialport});
+				var classe = new rf433mhz({platform: whatToUse, port: argv.serialport.trim()});
 		   		module_callback(classe);
 			}else{
 				prompt.start();

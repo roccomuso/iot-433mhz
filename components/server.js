@@ -11,7 +11,7 @@ var basicAuth = require('basic-auth');
 module.exports = function(argv, _cb){
 
   // Setting up parameters passed by CLI
-  if (argv.username && argv.password) { config.username = argv.username; config.password = argv.password;}
+  if (argv.username && argv.password) { config.username = argv.username.trim(); config.password = argv.password.trim();}
   if (argv.port){ config.server_port = argv.port; }
 
   // Starting Server
