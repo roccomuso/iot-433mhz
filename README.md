@@ -62,7 +62,7 @@ If running on different platforms follow the platform-specific setup below:
 # Specific Setup
 
 Iot-433Mhz is built on top of Node.js.
-The server is multi-platform, can runs on different hardware combinations shown below:
+The server is multi-platform, can run on different hardware combinations shown below:
 
 ## A. Computer with Arduino connected and a 433 MHz transmitter and receiver.
 
@@ -156,7 +156,7 @@ Start the system with the console global command:
 
     iot-433mhz
 
-Then you'll have to select the right serial port to which the Arduino is attached to
+Then you'll have to select the correct serial port to which the Arduino is attached to
 
 ![start iot-433mhz](https://github.com/roccomuso/iot-433mhz/blob/master/other/pics/start-iot-433mhz.PNG?raw=true "Console start iot-433mhz")
 
