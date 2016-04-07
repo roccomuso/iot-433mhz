@@ -1,9 +1,9 @@
 {
   "name": "iot-433mhz",
-  "version": "1.0.25",
+  "version": "1.0.26",
   "description": "Node server to handle 433mhz outlets and sensors.",
   "main": "index.js",
-  "preferGlobal": "true",
+  "preferGlobal": true,
   "bin": {
     "iot-433mhz": "./index.js"
   },
@@ -31,20 +31,20 @@
   "license": "MIT",
   "dependencies": {
     "async": "1.5.0",
-    "basic-auth": "^1.0.3",
-    "body-parser": "^1.14.2",
+    "basic-auth": "1.0.3",
+    "body-parser": "1.14.2",
     "chalk": "1.1.1",
     "console-mirroring": "1.0.2",
     "express": "4.13.3",
     "figlet": "1.1.1",
     "multer": "1.1.0",
     "nedb": "1.6.2",
-    "node-webhooks": "^1.0.10",
+    "node-webhooks": "1.0.10",
     "prompt": "0.2.14",
-    "request": "^2.69.0",
+    "request": "2.69.0",
     "serialport": "2.0.5",
     "socket.io": "1.3.7",
     "validator": "4.5.0",
-    "yargs": "^4.2.0"
+    "yargs": "4.2.0"
   }
 }
