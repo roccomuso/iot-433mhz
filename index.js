@@ -28,7 +28,7 @@ db.CARDS = new Datastore({
 db.SETTINGS = new Datastore({
     filename: path.resolve(__dirname, './DB/settings.db'),
     autoload: true
-})
+});
 
 // Compact DB at regular intervals (see nedb: #Persistence)
 if (config.db_compact_interval > 0){
@@ -95,7 +95,7 @@ async.series({
                 var io = server.io;
 
                 require('./components/api.js')(http, io, rf433mhz, dbFunctions, webHooks);
-                
+
                 // Web Socket handler
                 require('console-mirroring')(io); // Console mirroring
 
@@ -160,14 +160,14 @@ async.series({
                                     io.emit('newRFCode', codeData); // sent to every open socket.
                                 else{
                                     // code not available, check if the code is assigned to an alarm card
-                                    
+
                                     var card_shortname = result.assignedTo;
                                     dbFunctions.alarmTriggered(card_shortname, 'alarm').then(function(card){
                                             if (card){
                                                io.emit('uiTriggerAlarm', card);
                                                // if Alarm is armed send email or other kind of notification (Telegram mex).
                                                if (card.device.armed){
-                                                    notification.alarmAdviseAll(card);  
+                                                    notification.alarmAdviseAll(card);
                                                 }
 
                                             }

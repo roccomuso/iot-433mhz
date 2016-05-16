@@ -8,7 +8,7 @@ events.on('shakeOccurred', function(){
 });
 
 events.on('ignoreCode', function(code){
-	// send ignore's command to the Server 
+	// send ignore's command to the Server
 	socket.emit('ignoreCode', code); // NB. socket defined below eventing.js
 	RFcodes.deleteCode(code); // remove code from the incoming_codes.
 });
@@ -24,7 +24,7 @@ events.on('assignCode', function(code){
   	$('#assign-dialog').modal('show');
   }).catch(function(err){ // err
   	notie.alert(2, err, 0);
-  });  
+  });
 });
 
 
@@ -33,10 +33,15 @@ events.on('newCardClick', function(code){
 	templating.renderTemplate('newCardForm.mustache', $('#main_modal_box'), view).then(function(){
 		$('#new-card-dialog').modal('show');
 		// all lower case, no blank space or non alpha numeric chars are admitted for this 2 fields
-		$('#shortname, #roomname').keyup(function(){
+		$('#roomname').keyup(function(){
 		    this.value = this.value.replace(/\W+/g, ' ');
     		this.value = this.value.replace(/\s+/g, '-').toLowerCase();
 		});
+    $('#headline').keyup(function(){ // shortname = headline, see enhancement #21
+        var _shortname = this.value.replace(/\W+/g, ' ');
+        _shortname = _shortname.replace(/\s+/g, '-').toLowerCase();
+        $('#shortname').val(_shortname);
+    });
 		// color picker
 		var background_color = '#FAFAFA';
 		$('.pick_colors .btn-fab').click(function(){
@@ -44,7 +49,7 @@ events.on('newCardClick', function(code){
 		console.log('Card BG color selected:', background_color);
 		$('.btn-fab .fa-check').remove();
 		$(this).html('<i class="fa fa-check" style="margin-top: 15px; color: #000"></i>');
-			
+
 		});
 		// dynamic form adapter
 		$('#type').change(function() {
@@ -67,7 +72,7 @@ events.on('newCardClick', function(code){
 		}
 		RFcodes.on('newCode', updateSelectBoxes); // set listener
 		RFcodes.on('removedCode', updateSelectBoxes); // set listener
-		
+
 		// remove listeners when modal gets closed
 		$('#new-card-dialog').on('hidden.bs.modal', function (e) {
 		  RFcodes.off('newCode', updateSelectBoxes);
@@ -122,12 +127,12 @@ events.on('newCardClick', function(code){
 				notie.alert(2, JSON.parse(error.responseText).err, 0);
 				console.log('Ajax error', error);
 			});
-	
+
 		});
 
 	}).catch(function(err){ // err
 		notie.alert(2, err, 0);
-	}); 
+	});
 });
 
 
@@ -251,7 +256,7 @@ events.on('uiMuteStatus', function(data){
 		$dropdown_entry.html('<i class="fa fa-volume-off fa-fw"></i> Mute');
 	else
 		$dropdown_entry.html('<i class="fa fa-volume-up fa-fw"></i> Un-mute');
-		
+
 });
 
 // update card dropdown menu arm/disarm status
@@ -289,7 +294,7 @@ events.on('stopTelegram', function(){
 	$.get('/api/system/telegram/disable', function(data){
 		if (data.status === 'ok'){
 			$('#notification-btns .btn-telegram').replaceWith('<a href="#" class="btn btn-telegram" onClick="events.emit(\'startTelegram\');"><i class="fa fa-play"></i> Start <i class="fa fa-paper-plane-o"></i> Telegram Notification</a>');
-		}else notie.alert(2, data.error, 0);		
+		}else notie.alert(2, data.error, 0);
 	});
 });
 
@@ -298,7 +303,7 @@ events.on('startEmail', function(){
 	$.get('/api/system/email/enable', function(data){
 		if (data.status === 'ok'){
 			$('#notification-btns .btn-email').replaceWith('<a href="#" class="btn btn-email" onClick="events.emit(\'stopEmail\');"><i class="fa fa-stop"></i> Stop <i class="fa fa-envelope-o"></i> Email Notification</a>');
-		}else notie.alert(2, data.error, 0);		
+		}else notie.alert(2, data.error, 0);
 	});
 });
 
@@ -307,7 +312,7 @@ events.on('stopEmail', function(){
 	$.get('/api/system/email/disable', function(data){
 		if (data.status === 'ok'){
 			$('#notification-btns .btn-email').replaceWith('<a href="#" class="btn btn-email" onClick="events.emit(\'startEmail\');"><i class="fa fa-play"></i> Start <i class="fa fa-envelope-o"></i> Email Notification</a>');
-		}else notie.alert(2, data.error, 0);		
+		}else notie.alert(2, data.error, 0);
 	});
 });
 
