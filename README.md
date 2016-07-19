@@ -9,7 +9,7 @@
 
 # Summary
 
-IoT System to control 433 MHz RC power sockets, PIR sensors, Door Sensors and much more. 
+IoT System to control 433 MHz RC power sockets, PIR sensors, Door Sensors and much more.
 To start is required a 433mhz transmitter and receiver, a connected Arduino with the iot-433mhz sketch or directly with capable hardware like the Raspberry Pi.
 
 # UI Demo
@@ -51,6 +51,8 @@ or Clone this Repo:
 
 Then don't forget to install all the dependencies with <code>npm install</code> (on UNIX system root privileges are required).
 
+Tested and fully-working with **Node 4.4**.
+
 **Heads Up**: On Raspberry Pi, you can encounter some issue installing all the dependencies, due to permission errors. If that happens try this: <code>sudo chown -R $USER:$GROUP ~/.npm</code> combined with running <code>npm cache clean</code> to get any busted packages out of your cache. In addition, if the error still persist, try adding the flag <code>--unsafe-perm</code>:
 
     sudo npm install --unsafe-perm   (if installing from git)
@@ -91,9 +93,9 @@ and then execute with:
 
 ## B. Raspberry Pi (Raspbian Jessie) with 433 MHz transmitter and receiver
 
-To use iot-433mhz on Raspberry Pi first do a **system update**: 
+To use iot-433mhz on Raspberry Pi first do a **system update**:
 - Update <code>/etc/apt/sources.list</code> to have <code>jessie</code> wherever you've currently got <code>wheezy</code>.
-- <code>sudo apt-get update && sudo apt-get dist-upgrade</code>. 
+- <code>sudo apt-get update && sudo apt-get dist-upgrade</code>.
 - <code>sudo rpi-update</code>.
 - Reboot.
 
@@ -239,12 +241,12 @@ Return a single card with the specified shortname.
 
 - <code>POST /api/cards/new</code>
 form-data required parameters:
-    
+
         headline - a brief headline.
         shortname - lower case, no spaces.
         card_body - a description, html allowed.
         room - lower case, no spaces.
-        type - must be one of the following types: switch/alarm/info 
+        type - must be one of the following types: switch/alarm/info
         device - if type==switch gotta have on_code and off_code parameters. if type==alarm just the trigger_code parameter
 
 Optional parameter: <code>card_img</code>, <code>background_color</code> (must be an hex color with).
