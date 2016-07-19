@@ -23,18 +23,17 @@ var rf433mhz = function(board){
 		type = (board.platform == 'rpi' && !config.platforms.rpi['use-external-arduino']) ? 'rpi' : 'arduino';
 		if (type === 'arduino'){
 			port = board.port;
-			var serialport = require('serialport');
-			var SerialPort = serialport.SerialPort; // localize object constructor
-
+			var SerialPort = require('serialport');
 			serial = new SerialPort(board.port, {
-  				parser: serialport.parsers.readline('\n'),
-  				baudRate: config.arduino_baudrate
-			}, false); // openImmediately flag set to false
+  				parser: SerialPort.parsers.readline('\n'),
+  				baudRate: config.arduino_baudrate,
+					autoOpen: false // autoOpen flag set to false, manually need to open the port
+			});
 
 		}else{
 			// rpi
 			rpi433 = require('rpi-433');
-    		
+
 		}
 
 	}
@@ -53,7 +52,7 @@ var rf433mhz = function(board){
 		});
 	  else{ // rpi
 	  	// initialize rpi-433 module
-	  	rfSniffer = rpi433.sniffer(config.platforms.rpi['sniff-pin'], config.platforms.rpi['debounce-delay']); //Snif on PIN 2 with a 500ms debounce delay 
+	  	rfSniffer = rpi433.sniffer(config.platforms.rpi['sniff-pin'], config.platforms.rpi['debounce-delay']); //Snif on PIN 2 with a 500ms debounce delay
     	rfSend    = rpi433.sendCode;
 	  }
 	};
@@ -73,11 +72,11 @@ var rf433mhz = function(board){
 					}
 				});
 			}
-		
+
 	};
 
 	this.send = function(code, callback){
-		
+
 		if (type === 'rpi'){ // rpi
 			// WATCH OUT code CASTING, it has to be a number type. Just check on RPi.
 			rfSend(code, config.platforms.rpi['transmitter-pin'], callback);
@@ -138,7 +137,7 @@ module.exports = function(argv, module_callback){
 		    		var classe = new rf433mhz({platform: whatToUse, port: ports[result.port-1].comName});
 
 		   			 module_callback(classe);
-		    
+
 				});
 
 			}
@@ -178,7 +177,7 @@ module.exports = function(argv, module_callback){
 					// Running on RPi
 					// Only on RPi will successfully works.
 					eventEmitter.emit('choose_port', 'rpi');
-					
+
 				}else{
 
 				// we're on a standard linux
