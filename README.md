@@ -149,6 +149,8 @@ Through the Settings page from the Web Interface, you can more or less change th
     db_compact_interval: 12, // Database needs to be compacted to have better performance, by default every 12 hours it will be compacted, put 0 to avoid DB compacting.
     "backend_urls": "..." // You can specify a backend json file containing the urls to carry out notifications. (NB. this requires the iot-433mhz-backend repo)
 
+iot-433mhz makes use of the node DEBUG module. It's enabled by default, but you can enable or disable it using the environment variable <code>DEBUG=iot-433mhz:*</code>. You could also debug a specific part of the application providing as secondary param the file name, like <code>DEBUG=iot-433mhz:socketFunctions.js</code>.
+
 If you made a change to the settings from the Web interface, then to make it effective, you need to restart the app.
 The best way to set custom settings is through the CLI optional parameters, shown below.
 
