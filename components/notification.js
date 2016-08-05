@@ -32,6 +32,7 @@ function _postRequestJSON(url, json_data, uid, callback){
 }
 
 module.exports = function(dbFunctions, webHooks){
+	var t = +new Date();
 
 	var methods = {
 		adviceTelegram: function(card){
@@ -68,12 +69,17 @@ module.exports = function(dbFunctions, webHooks){
 		},
 		alarmAdviseAll: function(card){
 			// advice telegram, email, webhooks
-			methods.adviceEmail(card)
-			.then(methods.adviceTelegram)
-			.then(methods.adviceWebHook)
-			.catch(function(err){
-				console.error(err);
-			});
+			var now = +new Date();
+			var elapsed = now - t;
+			if (elapsed > config.notificationDelay * 1000){
+				methods.adviceEmail(card)
+				.then(methods.adviceTelegram)
+				.then(methods.adviceWebHook)
+				.catch(function(err){
+					console.error(err);
+				});
+				t = now;
+			} else console.log('Notification delayed'); // 1 notification every 5 sec
 		},
 		webHookCodeDetected: function(codeData){
 			// webHook call (code detected)

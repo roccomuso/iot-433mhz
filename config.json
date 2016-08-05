@@ -7,6 +7,7 @@
 	"server_port": 8080,
 	"db_compact_interval": 12,
 	"backend_urls": "https://raw.githubusercontent.com/roccomuso/iot-433mhz/master/other/backend_urls.json",
+        "notificationDelay": 5,
 	"platforms":{
 		"rpi": {
 			"sniff-pin": 2,
