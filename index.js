@@ -13,6 +13,7 @@ var config = require('./config.json');
 var argv = require('./components/arguments-handler.js');
 
 if (typeof argv.debug !== 'undefined') config.DEBUG = argv.debug; // if defined use CLI debug (NB. current choice is not stored inside the config.json file, so other scripts that are including the file from the disk and are not using this variable istance may not retrieve the right DEBUG choice from the User)
+var debug = require('./components/debug.js')();
 
 // Create or open the underlying DB store
 var Datastore = require('./EventedDatastore.js'); // nedb doesn't provide listener on DB events by default
@@ -146,15 +147,15 @@ async.series({
 
                 rf433mhz.on(function(codeData) {
 
-                    if (config.DEBUG) console.log('RFcode received: ', codeData);
+                    debug('RFcode received: ', codeData);
 
                     if (codeData.status === 'received') {
                         // put in DB if doesn't exists yet
                         dbFunctions.putCodeInDB(codeData).then(function(mex) {
-                            if (config.DEBUG) console.log(mex);
+                            debug(mex);
 
                             dbFunctions.isCodeAvailable(codeData.code).then(function(result) { // a code is available if not ignored and not assigned.
-                                if (config.DEBUG) console.log('code available: '+result.isAvailable+' assigned to: '+result.assignedTo);
+                                debug('code available: '+result.isAvailable+' assigned to: '+result.assignedTo);
 
                                 if (result.isAvailable)
                                     io.emit('newRFCode', codeData); // sent to every open socket.
@@ -198,7 +199,7 @@ async.series({
     function(err, results) {
         // results is now equal to: {one: 1, two: 2}
 
-        // console.log('Results: ', results);
+        // debug('Results: ', results);
 
     });
 

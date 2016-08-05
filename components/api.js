@@ -1,12 +1,13 @@
 var express = require('express');
 var path = require('path');
 var fs = require('fs');
+var debug = require('./debug.js')();
 var validator = require('validator');
 var multer  = require('multer');
 var upload = multer({ dest: path.resolve(__dirname,'../www/uploads/'), 
 	fileFilter: function(req, file, cb){ // file filter operations
 		var allowed_img_ext = ['.jpg','.jpeg','.png','.gif','.bmp'];
-		console.log(file);
+		debug(file);
 		if (file) // img file not mandatory
 			if (validator.isIn(path.extname(file.originalname).toLowerCase(), allowed_img_ext)) cb(null, true);
 				else cb(null, false);
@@ -85,7 +86,7 @@ module.exports = function(app, io, rf433mhz, dbFunctions, webHooks){
 	app.route('/api/code/send/:code').get(function(req, res) {
 		if (typeof req.params.code !== 'undefined'){
 			rf433mhz.send(req.params.code, function(err, out){
-	    		if(err) console.log('Error:', err);
+	    		if(err) debug('Error:', err);
 	    		res.status(200).json({status: 'ok'});
 	    	});
 	  		
@@ -348,7 +349,7 @@ function commuteSwitch(req, res, dbFunctions, rf433mhz, io, on){
 
 function checkRequiredParams(params){ // required params (headline, shortname, room, type, on_code/off_code)
 
-	console.log('API:/api/cards/new - Received parameters: ', params);
+	debug('API:/api/cards/new - Received parameters: ', params);
 
 	if (typeof params === 'undefined') return false;
 

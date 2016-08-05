@@ -7,7 +7,6 @@ var config = require('../config.json'); // config file
 var basicAuth = require('basic-auth');
 
 
-
 module.exports = function(argv, _cb){
 
   // Setting up parameters passed by CLI

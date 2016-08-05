@@ -1,5 +1,6 @@
 {
 	"app_title": "IoT-433Mhz",
+        "debug_namespace": "iot-433mhz",
 	"DEBUG": true,
 	"username": "root",
 	"password": "root",

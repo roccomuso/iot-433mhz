@@ -1,3 +1,4 @@
+var debug = require('./debug.js')();
 
 // For socket sending methods see http://stackoverflow.com/questions/10058226/send-response-to-all-clients-except-sender-socket-io
 
@@ -20,7 +21,7 @@ module.exports = function(io, rf433mhz, dbFunctions){
 		onIgnoreCode: function(code){
 			// ignore the specified code, isIgnored = true in DB
             dbFunctions.ignoreCode(code, true).then(function(ok){
-            	console.log('code ignored: ', code); 
+            	debug('code ignored: ', code); 
             }).catch(function(err){
             	console.error(err);
             });
@@ -29,7 +30,7 @@ module.exports = function(io, rf433mhz, dbFunctions){
         onRemoveIgnoreCode: function(code){
         	// make the code no more ignored (putting isIgnored = false)
         	dbFunctions.ignoreCode(code, false).then(function(ok){
-            	console.log('code no more ignored: ', code); 
+            	debug('code no more ignored: ', code); 
             }).catch(function(err){
             	console.error(err);
             });
@@ -41,12 +42,12 @@ module.exports = function(io, rf433mhz, dbFunctions){
                 var is_on = (data.set === 'on') ? true : false;
         		rf433mhz.send(codeToSend, function(err, out){
 	    			if(err) return console.log('Error:', err);
-	    			console.log('Code '+codeToSend+' sent!');
+	    			debug('Code '+codeToSend+' sent!');
                     // let's commute the switch on UI
                     io.emit('uiSwitchToggle', {card_id: data.card_id, set: is_on, sound: switch_codes.sound});
                     // save it on DB
                     dbFunctions.setSwitchStatus(data.card_id, is_on).then(function(numDocs){
-                        console.log('DB records updated:', numDocs);
+                        debug('DB records updated:', numDocs);
                     }, function(err){ console.error(err);});
 	    		});
         	}).catch(function(err){
@@ -55,7 +56,7 @@ module.exports = function(io, rf433mhz, dbFunctions){
 
         },
         onDeviceShake: function(){
-        	console.info('Randomizing Cards on the UI');
+        	debug('Randomizing Cards on the UI');
         	io.emit('randomizeCards');
         },
         onDeleteCard: function(_id){
@@ -91,13 +92,13 @@ module.exports = function(io, rf433mhz, dbFunctions){
 		
 		onConnection: function(client_socket){ // single user socket
             
-            console.log('Client connected via socket.io:', client_socket.id);
+            debug('Client connected via socket.io:', client_socket.id);
 
             // Save the user:
             clients.push(client_socket); 
 		    client_socket.on('disconnect', function() {
 		        clients.splice(clients.indexOf(client_socket), 1);
-		        console.log('Client disconnected:', client_socket.id);
+		        debug('Client disconnected:', client_socket.id);
 		        // remaining clients
 		        // clients.forEach(function(sckt){ console.log(sckt.id);} );
 		    });

@@ -1,5 +1,6 @@
 var request = require('request');
 var config = require('../config.json');
+var debug = require('./debug.js')();
 
 function _getRemoteUrl(url_name){
 	return new Promise(function(resolve, reject){
@@ -46,11 +47,11 @@ module.exports = function(dbFunctions, webHooks){
 								_postRequestJSON(url, card, uid, function (error, response, body) {
 								    if (error || response.statusCode !== 200) return reject('HTTP failed: '+ error);
 									resolve(body);
-								    console.log('Telegram Notification sent! - Server responded with:', body);
+								    debug('Telegram Notification sent! - Server responded with:', body);
 							  	});
 						  	});
 						}).catch(function(err){ reject(err); });
-					else console.log('Telegram Notification disabled. Menu > Settings.');
+					else debug('Telegram Notification disabled. Menu > Settings.');
 				}).catch(function(err){ reject(err); });
 			});
 		},
@@ -79,7 +80,7 @@ module.exports = function(dbFunctions, webHooks){
 					console.error(err);
 				});
 				t = now;
-			} else console.log('Notification delayed'); // 1 notification every 5 sec
+			} else debug('Notification delayed'); // 1 notification every 5 sec
 		},
 		webHookCodeDetected: function(codeData){
 			// webHook call (code detected)

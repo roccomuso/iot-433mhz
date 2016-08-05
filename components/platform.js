@@ -2,6 +2,7 @@ var config = require('../config.json');
 var prompt = require('prompt');
 var fs = require('fs');
 var chalk = require('chalk');
+var config = require('./config.js')();
 // Import events module and create an eventEmitter object
 var events = require('events');
 var eventEmitter = new events.EventEmitter();
@@ -43,11 +44,11 @@ var rf433mhz = function(board){
 	  if (type === 'arduino') // arduino
 		serial.open(function (error) {
 		  if ( error ) {
-		    console.log('failed to open: '+error);
+		    debug('failed to open: '+error);
 		    throw error;
 		  } else {
-		    if (config.DEBUG) console.log('Serial port opened');
-			    onOpen();
+		     debug('Serial port opened');
+	             onOpen();
 		  }
 		});
 	  else{ // rpi
@@ -68,7 +69,7 @@ var rf433mhz = function(board){
 					try{
 						callback(JSON.parse(data)); // returning JSON parsed
 					}catch(e){
-						console.log('Error parsing this JSON: ', data);
+						debug('Error parsing this JSON: ', data);
 					}
 				});
 			}
@@ -84,7 +85,7 @@ var rf433mhz = function(board){
 			if (serial.isOpen()){
 				serial.write(String(code), callback);
 			}else{
-				console.log('SerialPort not open!');
+				debug('SerialPort not open!');
 			}
 		}
 	};
@@ -110,7 +111,7 @@ module.exports = function(argv, module_callback){
 	function choose_port(whatToUse){
 		var serialPort = require('serialport');
 		serialPort.list(function (err, ports) {
-			if (ports.length === 0) { console.log('No ports available'); return;}
+			if (ports.length === 0) { debug('No ports available'); return;}
 
 			console.log('Selectable serial ports:');
 			var k = 1;
