@@ -326,7 +326,9 @@ Out of the box, the iot-433mhz provides notifications through email and through 
 
 ![Telegram settings](https://github.com/roccomuso/iot-433mhz/blob/master/other/pics/iot-433mhz-telegram-settings.PNG?raw=true "Telegram Settings")
 
-The Email notification system is under construction (TODO).
+By default there is a 5 second notification delay (editable from <code>config.json:notificationDelay</code>). So you won't be flooded by alarms signals.
+
+The Email notification system is under construction [#18](https://github.com/roccomuso/iot-433mhz/issues/18).
 
 # Android & iOS Apps
 
