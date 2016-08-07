@@ -12,7 +12,7 @@ var path = require('path');
 var config = require('./config.json');
 var argv = require('./components/arguments-handler.js');
 
-if (typeof argv.debug !== 'undefined') config.DEBUG = argv.debug; // if defined use CLI debug (NB. current choice is not stored inside the config.json file, so other scripts that are including the file from the disk and are not using this variable istance may not retrieve the right DEBUG choice from the User)
+if (typeof argv.debug !== 'undefined') config.debug = argv.debug; // if defined use CLI debug (NB. current choice is not stored inside the config.json file, so other scripts that are including the file from the disk and are not using this variable istance may not retrieve the right DEBUG choice from the User)
 var debug = require('./components/debug.js')();
 
 // Create or open the underlying DB store
@@ -42,7 +42,7 @@ if (config.db_compact_interval > 0){
 var WebHooks = require('node-webhooks');
 var webHooks = new WebHooks({
     db: path.resolve(__dirname, './webHooksDB.json'), // json file that store webhook URLs
-    DEBUG: config.DEBUG
+    DEBUG: config.debug
 });
 
 
@@ -61,8 +61,6 @@ async.series({
             });
         },
         platform: function(callback) {
-
-            console.log(chalk.bgYellow('Debug Mode:', config.DEBUG));
 
             require('./components/platform.js')(argv, function(rf) {
                 rf433mhz = rf; // platform independent class

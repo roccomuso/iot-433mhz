@@ -1,8 +1,8 @@
-var config = require('../config.json');
 var prompt = require('prompt');
 var fs = require('fs');
 var chalk = require('chalk');
-var config = require('./config.js')();
+var config = require('../config.json');
+var debug = require('./debug.js')();
 // Import events module and create an eventEmitter object
 var events = require('events');
 var eventEmitter = new events.EventEmitter();

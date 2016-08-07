@@ -1,7 +1,7 @@
 {
 	"app_title": "IoT-433Mhz",
         "debug_namespace": "iot-433mhz",
-	"DEBUG": true,
+	"debug": true,
 	"username": "root",
 	"password": "root",
 	"arduino_baudrate": 9600,
