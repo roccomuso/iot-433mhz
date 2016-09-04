@@ -9,8 +9,10 @@
 
 # Summary
 
-IoT System to control 433 MHz RC power sockets, PIR sensors, Door Sensors and much more.
-To start is required a 433mhz transmitter and receiver, a connected Arduino with the iot-433mhz sketch or directly with capable hardware like the Raspberry Pi.
+Iot-433mhz is a home automation framework for 433mhz devices that runs on node.js. You can control 433MHz RC power sockets, PIR sensors, Door Sensors and much more.
+To get started you just need a:
+- 433mhz transmitter and receiver, both connected to an Arduino with the iot-433mhz sketch on it.
+- A PC/RaspberryPi that runs the iot-433mhz platform, connected to Arduino through USB.
 
 # UI Demo
 
