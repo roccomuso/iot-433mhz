@@ -5,6 +5,7 @@ var server = require('http').Server(app);
 var io = require('socket.io')(server);
 var config = require('../config.json'); // config file
 var basicAuth = require('basic-auth');
+var cons = require('consolidate');
 
 
 module.exports = function(argv, _cb){
@@ -43,6 +44,13 @@ module.exports = function(argv, _cb){
   // set middleware
   app.use(bodyParser.json());
 
+  // assign the mustache engine to .html files
+  app.engine('html', cons.mustache);
+
+  // set .html as the default extension
+  app.set('view engine', 'html');
+  app.set('views', __dirname + '/../www/views');
+  
   // API and Web Server + Socket part
   _cb({http: app, io: io});
 

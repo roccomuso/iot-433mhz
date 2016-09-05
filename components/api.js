@@ -4,7 +4,7 @@ var fs = require('fs');
 var debug = require('./debug.js')();
 var validator = require('validator');
 var multer  = require('multer');
-var upload = multer({ dest: path.resolve(__dirname,'../www/uploads/'), 
+var upload = multer({ dest: path.resolve(__dirname,'../www/uploads/'),
 	fileFilter: function(req, file, cb){ // file filter operations
 		var allowed_img_ext = ['.jpg','.jpeg','.png','.gif','.bmp'];
 		debug(file);
@@ -12,6 +12,10 @@ var upload = multer({ dest: path.resolve(__dirname,'../www/uploads/'),
 			if (validator.isIn(path.extname(file.originalname).toLowerCase(), allowed_img_ext)) cb(null, true);
 				else cb(null, false);
 	} });
+
+// loading backgrounds imgs
+var BACKGROUNDS = fs.readdirSync(path.join(__dirname, '../www/assets/img/backgrounds'));
+debug('Available UI backgrounds:', BACKGROUNDS);
 
 module.exports = function(app, io, rf433mhz, dbFunctions, webHooks){
 
@@ -33,7 +37,7 @@ module.exports = function(app, io, rf433mhz, dbFunctions, webHooks){
 				res.status(500).json({status: 'error', error: 'can\'t generate the IoT System UID'});
 		}).catch(function(err){
 			res.status(500).json({status: 'error', error: err.toString()});
-		}); 
+		});
 	});
 
 	// generate a new IoT System UID
@@ -43,7 +47,7 @@ module.exports = function(app, io, rf433mhz, dbFunctions, webHooks){
 		}).catch(function(err){
 			res.status(500).json({status: 'error', error: err.toString()});
 		});
-	});	
+	});
 
 	// start Telegram API
 	app.route('/api/system/telegram/enable').get(function(req, res){
@@ -52,7 +56,7 @@ module.exports = function(app, io, rf433mhz, dbFunctions, webHooks){
 		}).catch(function(err){
 			res.status(500).json({status: 'error', error: err.toString()});
 		});
-	});	
+	});
 
 	// stop Telegram API
 	app.route('/api/system/telegram/disable').get(function(req, res){
@@ -61,7 +65,7 @@ module.exports = function(app, io, rf433mhz, dbFunctions, webHooks){
 		}).catch(function(err){
 			res.status(500).json({status: 'error', error: err.toString()});
 		});
-	});	
+	});
 
 	// start Email Notification API
 	app.route('/api/system/email/enable').get(function(req, res){
@@ -70,7 +74,7 @@ module.exports = function(app, io, rf433mhz, dbFunctions, webHooks){
 		}).catch(function(err){
 			res.status(500).json({status: 'error', error: err.toString()});
 		});
-	});	
+	});
 
 	// stop Email Notification API
 	app.route('/api/system/email/disable').get(function(req, res){
@@ -79,7 +83,7 @@ module.exports = function(app, io, rf433mhz, dbFunctions, webHooks){
 		}).catch(function(err){
 			res.status(500).json({status: 'error', error: err.toString()});
 		});
-	});	
+	});
 
 
 	// send the specified code
@@ -89,7 +93,7 @@ module.exports = function(app, io, rf433mhz, dbFunctions, webHooks){
 	    		if(err) debug('Error:', err);
 	    		res.status(200).json({status: 'ok'});
 	    	});
-	  		
+
 	  	}else
 	  		res.status(500).json({status: 'error', error: 'Provide the code to sent'});
 	});
@@ -181,7 +185,7 @@ module.exports = function(app, io, rf433mhz, dbFunctions, webHooks){
 							}).catch(function(err){
 								res.status(500).json({done: false, err: err.toString()});
 							});
-						
+
 					}
 				}).catch(function(err){
 					res.status(500).json({done: false, err: err});
@@ -190,7 +194,7 @@ module.exports = function(app, io, rf433mhz, dbFunctions, webHooks){
 
 	});
 
-	// arm card 
+	// arm card
 	app.route('/api/alarm/:shortname/arm').get(function (req, res){
 		if (typeof req.params.shortname !== 'undefined')
 			dbFunctions.armCard({shortname: req.params.shortname, arm: true}).then(function(result){
@@ -219,12 +223,12 @@ module.exports = function(app, io, rf433mhz, dbFunctions, webHooks){
 	// switch: /api/switch/[shortname]/on
 	app.route('/api/switch/:shortname/on').get(function (req, res){
 		commuteSwitch(req, res, dbFunctions, rf433mhz, io, true);
-	});	
+	});
 
 	// switch: /api/switch/[shortname]/off
 	app.route('/api/switch/:shortname/off').get(function (req, res){
 		commuteSwitch(req, res, dbFunctions, rf433mhz, io, false);
-	});		
+	});
 
 	// switch: /api/switch/[shortname]/toggle
 	app.route('/api/switch/:shortname/toggle').get(function (req, res){
@@ -301,7 +305,7 @@ module.exports = function(app, io, rf433mhz, dbFunctions, webHooks){
 			var body = req.body;
 			webHooks.trigger(req.params.webHookShortname, body);
 			res.status(200).json({status: 'OK', message: 'webHooks called!', called: true});
-			
+
 		} else res.status(500).json({status: 'error', error: 'Please provide a valid webHook shortname'});
 	});
 
@@ -309,6 +313,15 @@ module.exports = function(app, io, rf433mhz, dbFunctions, webHooks){
 	// handle 404 error for API
 	app.all('/api/*', function(req, res){
 		res.status(404).json({status: 'error', error_code: 404, err: 'API entrypoint not found'});
+	});
+
+	// serving index view
+	app.get(['/', '/index.html'], function(req, res){
+		res.render('index', {
+			cache: true,
+			title: 'IoT 433Mhz',
+			backgrounds: BACKGROUNDS
+		});
 	});
 
 	// serve as static all the other routes
@@ -338,7 +351,7 @@ function commuteSwitch(req, res, dbFunctions, rf433mhz, io, on){
     			res.status(200).json({status: 'ok', switch_toggled: req.params.shortname, code_sent: code_to_send});
 
     		});
-			
+
 		}, function(err){
 			res.status(500).json({status: 'error', error: err.toString()});
 		});
