@@ -22,24 +22,24 @@ module.exports = function(argv, _cb){
     function unauthorized(res) {
       res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
       return res.status(401).send('Unauthorized');
-    };
+    }
 
     var user = basicAuth(req);
 
     if (!user || !user.name || !user.pass) {
       return unauthorized(res);
-    };
+    }
 
     if (user.name === config.username && user.pass === config.password) {
       return next();
     } else {
       return unauthorized(res);
-    };
+    }
   };
 
   // set authentication middleware
   app.use(auth);
-  
+
   // set middleware
   app.use(bodyParser.json());
 
