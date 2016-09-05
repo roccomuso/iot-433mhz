@@ -41,8 +41,7 @@ if (config.db_compact_interval > 0){
 // Initialize WebHooks module.
 var WebHooks = require('node-webhooks');
 var webHooks = new WebHooks({
-    db: path.resolve(__dirname, './webHooksDB.json'), // json file that store webhook URLs
-    DEBUG: config.debug
+    db: path.resolve(__dirname, './DB/webHooksDB.json') // json file that store webhook URLs
 });
 
 
