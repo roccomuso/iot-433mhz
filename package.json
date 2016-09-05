@@ -1,6 +1,6 @@
 {
   "name": "iot-433mhz",
-  "version": "1.0.28",
+  "version": "1.0.29",
   "description": "Node server to handle 433mhz outlets and sensors.",
   "main": "index.js",
   "preferGlobal": true,
@@ -40,7 +40,7 @@
     "figlet": "1.1.2",
     "multer": "1.1.0",
     "nedb": "1.8.0",
-    "node-webhooks": "1.0.10",
+    "node-webhooks": "1.1.2",
     "prompt": "1.0.0",
     "request": "2.69.0",
     "serialport": "4.0.1",
