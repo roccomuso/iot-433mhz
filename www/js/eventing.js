@@ -163,7 +163,7 @@ events.on('renderSnackbar', function(_code){
 });
 
 events.on('renderInitCards', function(initData){
-	// TODO - stampare cards usando le iterazioni di Mustache! (come fatto per la tabella codici ignorati)
+
 	console.log('initData received: ', initData);
 
 	var rooms = [];
@@ -347,7 +347,6 @@ events.on('clickIgnoredCodes', function(){
 
 // About Menu Button
 events.on('clickAbout', function(){
-	// TODO
 	console.log('About button clicked.');
 	templating.renderTemplate('about.mustache', $('#main_modal_box'), {}).then(function(){
 		$('#about-dialog').modal('show');
@@ -366,7 +365,6 @@ events.on('clickAddCard', function(){
 
 // Settings Menu Button
 events.on('clickSettings', function(){
-	// TODO
 	console.log('Settings button clicked.');
 
 	$.get('/api/settings/get', function(data) {
