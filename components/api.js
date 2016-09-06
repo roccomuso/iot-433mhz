@@ -320,7 +320,7 @@ module.exports = function(app, io, rf433mhz, dbFunctions, webHooks){
 		res.render('index', {
 			cache: true,
 			title: 'IoT 433Mhz',
-			backgrounds: BACKGROUNDS
+			backgrounds: JSON.stringify(BACKGROUNDS)
 		});
 	});
 
