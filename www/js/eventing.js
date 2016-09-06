@@ -389,6 +389,13 @@ events.on('clickSettings', function(){
 	$('#c-circle-nav__toggle').click(); // Close Menu
 });
 
+// change Background
+events.on('changeBg', function(){
+  var p = ++BACKGROUNDS.p;
+  var picked = BACKGROUNDS.imgs[p % BACKGROUNDS.imgs.length];
+  document.body.style.backgroundImage = "url('../assets/img/backgrounds/"+picked+"')";
+  if (localStorage) localStorage.bg = picked;
+});
 
 /* UTILITY FUNCTIONS */
 
