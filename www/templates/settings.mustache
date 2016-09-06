@@ -7,7 +7,7 @@
               </div>
               <div class="modal-body text-center">
                 <div class="btn-group btn-group-vertical btn-group-raised" id="notification-btns">
-              
+
               {{#telegram}}
                 {{#notification_enabled}}
                   <a href="#" class="btn btn-telegram" onClick="events.emit('stopTelegram');"><i class="fa fa-stop"></i> Stop <i class="fa fa-paper-plane-o"></i> Telegram Notification</a>
@@ -57,6 +57,8 @@
                   {{/notification_enabled}}
                   {{/email}}
                 </div>
+                <hr/>
+                  <a href="#" class="btn btn-email" onClick="events.emit('changeBg');"><i class="fa fa-exchange"></i> Change Background</a>
               </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-check"></i> Close<div class="ripple-container"><div class="ripple ripple-on ripple-out" style="left: 51.1563px; top: 12px; transform: scale(10.875); background-color: rgb(0, 150, 136);"></div><div class="ripple ripple-on ripple-out" style="left: 45.6563px; top: 21px; transform: scale(10.875); background-color: rgb(0, 150, 136);"></div></div></button>
