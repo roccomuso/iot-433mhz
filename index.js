@@ -18,61 +18,71 @@ var debug = require('./components/debug.js')();
 // Create or open the underlying DB store
 var Datastore = require('./EventedDatastore.js'); // nedb doesn't provide listener on DB events by default
 var db = {};
-db.RFCODES = new Datastore({
-    filename: path.resolve(__dirname, './DB/rfcodes.db'),
-    autoload: true
-});
-db.CARDS = new Datastore({
-    filename: path.resolve(__dirname, './DB/cards.db'),
-    autoload: true
-});
-db.SETTINGS = new Datastore({
-    filename: path.resolve(__dirname, './DB/settings.db'),
-    autoload: true
-});
 
-// Compact DB at regular intervals (see nedb: #Persistence)
-if (config.db_compact_interval > 0){
-    db.RFCODES.persistence.setAutocompactionInterval(config.db_compact_interval * 60000 * 60);
-    db.CARDS.persistence.setAutocompactionInterval(config.db_compact_interval * 60000 * 60);
-    db.SETTINGS.persistence.setAutocompactionInterval(config.db_compact_interval * 60000 * 60);
-}
-
-// Initialize WebHooks module.
-var WebHooks = require('node-webhooks');
-var webHooks = new WebHooks({
-    db: path.resolve(__dirname, './DB/webHooksDB.json') // json file that store webhook URLs
-});
-
-
-var dbFunctions = require('./components/dbFunctions.js')(db, config);
-var notification = require('./components/notification.js')(dbFunctions, webHooks);
+var dbFunctions, notification, webHooks;
 
 // Radio Frequency Class platform-independent
 var rf433mhz;
 
 // Starting Flow
 async.series({
+        init_db: function(callback){
+            debug('calling init_db');
+            // load/create DB
+            db.RFCODES = new Datastore({
+                filename: path.resolve(__dirname, './DB/rfcodes.db'),
+                autoload: true
+            });
+            db.CARDS = new Datastore({
+                filename: path.resolve(__dirname, './DB/cards.db'),
+                autoload: true
+            });
+            db.SETTINGS = new Datastore({
+                filename: path.resolve(__dirname, './DB/settings.db'),
+                autoload: true
+            });
+
+            // Compact DB at regular intervals (see nedb: #Persistence)
+            if (config.db_compact_interval > 0){
+                db.RFCODES.persistence.setAutocompactionInterval(config.db_compact_interval * 60000 * 60);
+                db.CARDS.persistence.setAutocompactionInterval(config.db_compact_interval * 60000 * 60);
+                db.SETTINGS.persistence.setAutocompactionInterval(config.db_compact_interval * 60000 * 60);
+            }
+
+            dbFunctions = require('./components/dbFunctions.js')(db, config);
+            callback(null, 1);
+        },
         ascii_logo: function(callback) {
+            debug('printing ascii_logo');
             require('./components/ascii_logo.js')(function(logo) {
                 console.log(chalk.magenta(logo)); // print blue ascii logo
                 callback(null, 1);
             });
         },
+        init_webhooks: function(callback){
+            debug('calling init_webhooks');
+            // Initialize WebHooks module.
+            var WebHooks = require('node-webhooks');
+            webHooks = new WebHooks({
+                db: path.resolve(__dirname, './DB/webHooksDB.json') // json file that store webhook URLs
+            });
+            notification = require('./components/notification.js')(dbFunctions, webHooks);
+            callback(null, 1);
+        },
         platform: function(callback) {
-
+            debug('platform configuration');
             require('./components/platform.js')(argv, function(rf) {
                 rf433mhz = rf; // platform independent class
                 callback(null, rf433mhz);
             });
 
         },
-        init_db: function(callback) {
+        load_db: function(callback) {
             // Put default demo cards if CARDS DB is empty
             dbFunctions.initDBCards(require('./components/demo_cards.json')).then(dbFunctions.initDBSettings).then(function(settings) {
                 callback(null, 1);
             }).catch(function(err) {
-                console.log('init_db error:', err);
+                console.log('load_db error:', err);
                 console.log(err.stack);
             });
         },
