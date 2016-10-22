@@ -1,6 +1,7 @@
 var express = require('express');
 var path = require('path');
 var fs = require('fs');
+var version = require('../package.json').version;
 var debug = require('./debug.js')();
 var validator = require('validator');
 var multer  = require('multer');
@@ -320,7 +321,8 @@ module.exports = function(app, io, rf433mhz, dbFunctions, webHooks){
 		res.render('index', {
 			cache: true,
 			title: 'IoT 433Mhz',
-			backgrounds: JSON.stringify(BACKGROUNDS)
+			backgrounds: JSON.stringify(BACKGROUNDS),
+			version: version
 		});
 	});
 
