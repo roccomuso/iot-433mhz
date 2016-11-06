@@ -25,7 +25,7 @@ function _postRequestJSON(url, json_data, uid, callback){
 	    uri: url+'/'+uid, // always attach the uid as entrypoint.
 	    strictSSL: false, // because we're using a self-signed certificate
 	    headers: {'cache-control': 'no-cache', 'Content-Type': 'application/json'},
-	    body: JSON.stringify(json_data) 
+	    body: JSON.stringify(json_data)
 	  },
 	  callback
 	  );
@@ -51,7 +51,10 @@ module.exports = function(dbFunctions, webHooks){
 							  	});
 						  	});
 						}).catch(function(err){ reject(err); });
-					else debug('Telegram Notification disabled. Menu > Settings.');
+					else{
+						debug('Telegram Notification disabled. Menu > Settings.');
+						resolve();
+					}
 				}).catch(function(err){ reject(err); });
 			});
 		},
