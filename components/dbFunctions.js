@@ -174,14 +174,14 @@ module.exports = function(db, config){
 							if (params.type === 'switch') query = { $or: [{ code: parseInt(params.on_code), isIgnored: false, assignedTo: 'none' }, { code: parseInt(params.off_code), isIgnored: false, assignedTo: 'none' }] };
 							else if (params.type === 'alarm') query = {code: parseInt(params.trigger_code), isIgnored: false, assignedTo: 'none'};
 							else if (params.type === 'info') query = {};
-							
+
 							db.RFCODES.find(query, function(err, docs){
 								var len = (params.type === 'switch') ? 2 : 1 ; // should have found 2 records in codes' DB for switch type
 								if (params.type === 'info') return resolve(true);
 
 								if (docs.length === len)
 									resolve(true);
-								else 
+								else
 									reject('Make sure to assign free not Ignored existing codes.');
 							});
 						}
@@ -275,19 +275,19 @@ module.exports = function(db, config){
 
 					});
 
-				});				
+				});
 			},
 			deleteCard: function(identifiers){
 				return new Promise(function(resolve, reject){
 					// delete a single card, given his _id or shortname.
 					if (!identifiers.hasOwnProperty('_id') && !identifiers.hasOwnProperty('shortname')) return reject('No valid parameters.');
-					
+
 					db.CARDS.remove(identifiers, {}, function (err, numRemoved) {
 					  if (err) return reject(err);
 					  resolve(numRemoved);
 					  // NB. the listener in index.js will delete the attached codes.
 					});
-					
+
 
 				});
 			},
@@ -356,8 +356,8 @@ module.exports = function(db, config){
 							  resolve(new_val);
 							});
 						} else return reject('error: no card found with _id', card_id);
-					});		
-					
+					});
+
 				});
 			},
 			armCard: function(identifiers){
@@ -380,6 +380,16 @@ module.exports = function(db, config){
 
 				});
 			},
+			armDisarmAll: function(arm){
+				return new Promise(function(resolve, reject){
+					// arm/disarm all Alarm type cards.
+					db.CARDS.update({type: 'alarm'}, { $set: { "device.armed": arm } }, {multi: true}, function (err, affected) {
+						if (err) return reject(err);
+					  var aff = affected ? affected : 'no cards affected';
+					  resolve({affected: aff});
+					});
+				});
+			},
 			toggleTelegram: function(status){
 				return new Promise(function(resolve, reject){
 					// enable/disable telegram notification
@@ -400,7 +410,7 @@ module.exports = function(db, config){
 						if (numReplaced === 1) resolve(status);
 						else reject('Error: Zero or More than one Email entry modified in settings.');
 					});
-				});				
+				});
 			},
 			isTelegramEnabled: function(){
 				return new Promise(function(resolve, reject){

@@ -195,6 +195,26 @@ module.exports = function(app, io, rf433mhz, dbFunctions, webHooks){
 
 	});
 
+	// arm all cards
+	app.route('/api/cards/arm-all').post(function (req, res){
+			dbFunctions.armDisarmAll(true).then(function(result){
+				io.emit('refresh', '');
+				res.status(200).json({status: 'ok', cards_affected: result.affected, armed: true});
+			}, function(err){
+				res.status(400).json({status: 'error', error: err.toString()});
+			});
+	});
+
+	// disarm all cards
+	app.route('/api/cards/disarm-all').post(function (req, res){
+			dbFunctions.armDisarmAll(false).then(function(result){
+				io.emit('refresh', '');
+				res.status(200).json({status: 'ok', cards_affected: result.affected, armed: false});
+			}, function(err){
+				res.status(400).json({status: 'error', error: err.toString()});
+			});
+	});
+
 	// arm card
 	app.route('/api/alarm/:shortname/arm').get(function (req, res){
 		if (typeof req.params.shortname !== 'undefined')

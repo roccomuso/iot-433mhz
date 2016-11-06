@@ -2,6 +2,11 @@
  * Event Handling
 */
 
+events.on('refresh', function(){
+  // refresh the page
+  window.location.reload();
+});
+
 events.on('shakeOccurred', function(){
 	// request to reorder cards due to accelerometer shake.
     socket.emit('shakeOccurred');
