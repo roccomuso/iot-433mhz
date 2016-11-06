@@ -259,6 +259,12 @@ Json response: 200 OK - <code>{"done": true, "newCard": ...}</code> where newCar
 - <code>GET /api/cards/delete/[shortname]</code>
 Delete the card with the specified shortname, it returns <code>{"status": "ok", cards_deleted: 1}</code> or <code>{"status": "error", "error": "error description.."}</code>
 
+- <code>GET /api/cards/arm-all</code>
+Arm all the alarm type cards. It returns <code>{"status": "ok", cards_affected: n, armed: true}</code> or <code>{"status": "error", "error": "error description.."}</code>
+
+- <code>GET /api/cards/disarm-all</code>
+Disarm all the alarm type cards. It returns <code>{"status": "ok", cards_affected: n, armed: false}</code> or <code>{"status": "error", "error": "error description.."}</code>
+
 - <code>GET /api/alarm/[shortname]/arm</code>
 Only alarm type cards can be armed.
 
