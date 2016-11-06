@@ -25,7 +25,7 @@ module.exports = function(app, io, rf433mhz, dbFunctions, webHooks){
 		dbFunctions.getDBSettings().then(function(docs){
 			res.status(200).json({status: 'ok', settings: docs});
 		}).catch(function(err){
-			res.status(500).json({status: 'error', error: err.toString()});
+			res.status(400).json({status: 'error', error: err.toString()});
 		});
 	});
 
@@ -35,9 +35,9 @@ module.exports = function(app, io, rf433mhz, dbFunctions, webHooks){
 			if (UID)
 				res.status(200).json({status: 'ok', uid: UID});
 			else
-				res.status(500).json({status: 'error', error: 'can\'t generate the IoT System UID'});
+				res.status(400).json({status: 'error', error: 'can\'t generate the IoT System UID'});
 		}).catch(function(err){
-			res.status(500).json({status: 'error', error: err.toString()});
+			res.status(400).json({status: 'error', error: err.toString()});
 		});
 	});
 
@@ -46,7 +46,7 @@ module.exports = function(app, io, rf433mhz, dbFunctions, webHooks){
 		dbFunctions.generateNewUID().then(function(UID){
 			res.status(200).json({status: 'ok', uid: UID});
 		}).catch(function(err){
-			res.status(500).json({status: 'error', error: err.toString()});
+			res.status(400).json({status: 'error', error: err.toString()});
 		});
 	});
 
@@ -55,7 +55,7 @@ module.exports = function(app, io, rf433mhz, dbFunctions, webHooks){
 		dbFunctions.toggleTelegram(true).then(function(outcome){
 			res.status(200).json({status: 'ok', enabled: outcome});
 		}).catch(function(err){
-			res.status(500).json({status: 'error', error: err.toString()});
+			res.status(400).json({status: 'error', error: err.toString()});
 		});
 	});
 
@@ -64,7 +64,7 @@ module.exports = function(app, io, rf433mhz, dbFunctions, webHooks){
 		dbFunctions.toggleTelegram(false).then(function(outcome){
 			res.status(200).json({status: 'ok', enabled: outcome});
 		}).catch(function(err){
-			res.status(500).json({status: 'error', error: err.toString()});
+			res.status(400).json({status: 'error', error: err.toString()});
 		});
 	});
 
@@ -73,7 +73,7 @@ module.exports = function(app, io, rf433mhz, dbFunctions, webHooks){
 		dbFunctions.toggleEmail(true).then(function(outcome){
 			res.status(200).json({status: 'ok', enabled: outcome});
 		}).catch(function(err){
-			res.status(500).json({status: 'error', error: err.toString()});
+			res.status(400).json({status: 'error', error: err.toString()});
 		});
 	});
 
@@ -82,7 +82,7 @@ module.exports = function(app, io, rf433mhz, dbFunctions, webHooks){
 		dbFunctions.toggleEmail(false).then(function(outcome){
 			res.status(200).json({status: 'ok', enabled: outcome});
 		}).catch(function(err){
-			res.status(500).json({status: 'error', error: err.toString()});
+			res.status(400).json({status: 'error', error: err.toString()});
 		});
 	});
 
@@ -96,7 +96,7 @@ module.exports = function(app, io, rf433mhz, dbFunctions, webHooks){
 	    	});
 
 	  	}else
-	  		res.status(500).json({status: 'error', error: 'Provide the code to sent'});
+	  		res.status(400).json({status: 'error', error: 'Provide the code to sent'});
 	});
 
 	// return list of ignored codes.
@@ -104,7 +104,7 @@ module.exports = function(app, io, rf433mhz, dbFunctions, webHooks){
 		dbFunctions.getIgnoredCodes().then(function(ignored){
 			res.status(200).json(ignored);
 		}, function(err){
-			res.status(500).json({status: 'error', error: err.toString()});
+			res.status(400).json({status: 'error', error: err.toString()});
 		});
 
 	});
@@ -114,7 +114,7 @@ module.exports = function(app, io, rf433mhz, dbFunctions, webHooks){
 		dbFunctions.getAllCodes().then(function(codes){
 			res.status(200).json(codes);
 		}, function(err){
-			res.status(500).json({status: 'error', error: err.toString()});
+			res.status(400).json({status: 'error', error: err.toString()});
 		});
 	});
 
@@ -123,7 +123,7 @@ module.exports = function(app, io, rf433mhz, dbFunctions, webHooks){
 		dbFunctions.getAvailableCodes().then(function(codes){
 			res.status(200).json(codes);
 		}, function(err){
-			res.status(500).json({status: 'error', error: err.toString()});
+			res.status(400).json({status: 'error', error: err.toString()});
 		});
 	});
 
@@ -132,7 +132,7 @@ module.exports = function(app, io, rf433mhz, dbFunctions, webHooks){
 		dbFunctions.getAllCards().then(function(codes){
 			res.status(200).json(codes);
 		}, function(err){
-			res.status(500).json({status: 'error', error: err.toString()});
+			res.status(400).json({status: 'error', error: err.toString()});
 		});
 	});
 
@@ -142,9 +142,9 @@ module.exports = function(app, io, rf433mhz, dbFunctions, webHooks){
 			dbFunctions.getCard({shortname: req.params.shortname}).then(function(card){
 				res.status(200).json(card);
 			}, function(err){
-				res.status(500).json({status: 'error', error: err.toString()});
+				res.status(400).json({status: 'error', error: err.toString()});
 			});
-		else res.status(500).json({status: 'error', error: 'Please provide a shortname.'});
+		else res.status(400).json({status: 'error', error: 'Please provide a shortname.'});
 	});
 
 	// delete a card given his _id or shortname
@@ -153,10 +153,10 @@ module.exports = function(app, io, rf433mhz, dbFunctions, webHooks){
 			dbFunctions.deleteCard({shortname: req.params.shortname}).then(function(numDeleted){
 				res.status(200).json({status: 'ok', cards_deleted: numDeleted});
 			}, function(err){
-				res.status(500).json({status: 'error', error: err.toString()});
+				res.status(400).json({status: 'error', error: err.toString()});
 			});
 		else
-			res.status(500).json({status: 'error', error: 'Please provide the shortname if you wanna delete a card'});
+			res.status(400).json({status: 'error', error: 'Please provide the shortname if you wanna delete a card'});
 	});
 
 	// new card insertion
@@ -171,12 +171,12 @@ module.exports = function(app, io, rf433mhz, dbFunctions, webHooks){
 						var origin_path = path.resolve(__dirname, '..', req.file.path);
 						var destination_path = path.resolve(__dirname, '../www/uploads/', file_name);
 						fs.rename(origin_path, destination_path, function (err) { // rename file uploaded
-							if (err) return res.status(500).json({done: false, err: err.toString()});
+							if (err) return res.status(400).json({done: false, err: err.toString()});
 							// put data in DB
 							dbFunctions.putCardInDatabase(req, './uploads/'+file_name).then(function(newCard){
 								res.status(200).json({done: true, newCard: newCard});
 							}).catch(function(err){
-								res.status(500).json({done: false, err: err.toString()});
+								res.status(400).json({done: false, err: err.toString()});
 							});
 						});
 					}else{
@@ -184,14 +184,14 @@ module.exports = function(app, io, rf433mhz, dbFunctions, webHooks){
 						dbFunctions.putCardInDatabase(req).then(function(newCard){
 								res.status(200).json({done: true, newCard: newCard});
 							}).catch(function(err){
-								res.status(500).json({done: false, err: err.toString()});
+								res.status(400).json({done: false, err: err.toString()});
 							});
 
 					}
 				}).catch(function(err){
-					res.status(500).json({done: false, err: err});
+					res.status(400).json({done: false, err: err});
 				});
-			}else res.status(500).json({done: false, err: 'Make sure to pass all the required params.'});
+			}else res.status(400).json({done: false, err: 'Make sure to pass all the required params.'});
 
 	});
 
@@ -202,10 +202,10 @@ module.exports = function(app, io, rf433mhz, dbFunctions, webHooks){
 				io.emit('uiArmStatus', {card_id: result.card_id, is_armed: true});
 				res.status(200).json({status: 'ok', cards_affected: result.affected, armed: true});
 			}, function(err){
-				res.status(500).json({status: 'error', error: err.toString()});
+				res.status(400).json({status: 'error', error: err.toString()});
 			});
 		else
-			res.status(500).json({status: 'error', error: 'Please provide the shortname if you wanna arm a card'});
+			res.status(400).json({status: 'error', error: 'Please provide the shortname if you wanna arm a card'});
 	});
 
 	// disarm card
@@ -215,10 +215,10 @@ module.exports = function(app, io, rf433mhz, dbFunctions, webHooks){
 				io.emit('uiArmStatus', {card_id: result.card_id, is_armed: false});
 				res.status(200).json({status: 'ok', cards_affected: result.affected, armed: false});
 			}, function(err){
-				res.status(500).json({status: 'error', error: err.toString()});
+				res.status(400).json({status: 'error', error: err.toString()});
 			});
 		else
-			res.status(500).json({status: 'error', error: 'Please provide the shortname if you wanna disarm a card'});
+			res.status(400).json({status: 'error', error: 'Please provide the shortname if you wanna disarm a card'});
 	});
 
 	// switch: /api/switch/[shortname]/on
@@ -237,9 +237,9 @@ module.exports = function(app, io, rf433mhz, dbFunctions, webHooks){
 			dbFunctions.getSwitchStatus({shortname: req.params.shortname}).then(function(status){
 				commuteSwitch(req, res, dbFunctions, rf433mhz, io, !status);
 			}).catch(function(err){
-				res.status(500).json({status: 'error', error: err.toString()});
+				res.status(400).json({status: 'error', error: err.toString()});
 			});
-		else res.status(500).json({status: 'error', error: 'Please provide a valid shortname'});
+		else res.status(400).json({status: 'error', error: 'Please provide a valid shortname'});
 	});
 
 	// webHooks: GET /api/webhook/get (get all the stored webHooks)
@@ -247,8 +247,8 @@ module.exports = function(app, io, rf433mhz, dbFunctions, webHooks){
 		webHooks.getDB().then(function(data){
 			if (data)
 				res.status(200).json({status: 'OK', data: data});
-			else res.status(500).json({status: 'error', error: 'error retrieving the data'});
-		}).catch(function(err){ res.status(500).json({status: 'error', error: err }); });
+			else res.status(400).json({status: 'error', error: 'error retrieving the data'});
+		}).catch(function(err){ res.status(400).json({status: 'error', error: err }); });
 	});
 
 	// webHooks: GET /api/webhook/get/:webHookShortname (get the selected webHook data)
@@ -257,9 +257,9 @@ module.exports = function(app, io, rf433mhz, dbFunctions, webHooks){
 			webHooks.getWebHook(req.params.webHookShortname).then(function(data){
 				if (data)
 					res.status(200).json({status: 'OK', data: data});
-				else res.status(500).json({status: 'error', error: 'error retrieving the data'});
-			}).catch(function(err){ res.status(500).json({status: 'error', error: err }); });
-		} else res.status(500).json({status: 'error', error: 'Please provide a valid webHook shortname'});
+				else res.status(400).json({status: 'error', error: 'error retrieving the data'});
+			}).catch(function(err){ res.status(400).json({status: 'error', error: err }); });
+		} else res.status(400).json({status: 'error', error: 'Please provide a valid webHook shortname'});
 	});
 
 	// webHooks: POST /api/webhook/add/:webHookShortname (add a new webHook url for a specified webhook event name)
@@ -269,10 +269,10 @@ module.exports = function(app, io, rf433mhz, dbFunctions, webHooks){
 				webHooks.add(req.params.webHookShortname, req.body.url).then(function(outcome){
 					if (outcome)
 						res.status(200).json({status: 'OK', message: 'webHook added!', added: true});
-					else res.status(500).json({status: 'error', message: 'webHook not added.', added: false});
-				}).catch(function(err){ res.status(500).json({status: 'error', error: err, added: false }); });
-			else res.status(500).json({status: 'error', error: 'JSON url parameter is required'});
-		} else res.status(500).json({status: 'error', error: 'Please provide a valid webHook shortname'});
+					else res.status(400).json({status: 'error', message: 'webHook not added.', added: false});
+				}).catch(function(err){ res.status(400).json({status: 'error', error: err, added: false }); });
+			else res.status(400).json({status: 'error', error: 'JSON url parameter is required'});
+		} else res.status(400).json({status: 'error', error: 'Please provide a valid webHook shortname'});
 	});
 
 	// webHooks: GET /api/webhook/delete/:webHookShortname (remove all the urls attached to the webHook selected)
@@ -281,9 +281,9 @@ module.exports = function(app, io, rf433mhz, dbFunctions, webHooks){
 			webHooks.remove(req.params.webHookShortname).then(function(outcome){
 				if (outcome)
 					res.status(200).json({status: 'OK', message: 'webHook removed!', deleted: true});
-				else res.status(500).json({status: 'OK', message: 'webHook not found', deleted: false});
-			}).catch(function(err){ res.status(500).json({status: 'error', error: err }); });
-		}else res.status(500).json({status: 'error', error: 'Please provide a valid webHook shortname'});
+				else res.status(400).json({status: 'OK', message: 'webHook not found', deleted: false});
+			}).catch(function(err){ res.status(400).json({status: 'error', error: err }); });
+		}else res.status(400).json({status: 'error', error: 'Please provide a valid webHook shortname'});
 	});
 
 	// webHooks: POST /api/webhook/delete/:webHookShortname (remove a single webhook url for the selected webHook.)
@@ -294,10 +294,10 @@ module.exports = function(app, io, rf433mhz, dbFunctions, webHooks){
 			webHooks.remove(req.params.webHookShortname, body.url).then(function(outcome){
 				if (outcome)
 					res.status(200).json({status: 'OK', message: 'webHook removed!', deleted: true});
-				else res.status(500).json({status: 'OK', message: 'webHook not found', deleted: false});
-			}).catch(function(err){ res.status(500).json({status: 'error', error: err }); });
-			else res.status(500).json({status: 'error', error: 'Body not valid.'});
-		} else res.status(500).json({status: 'error', error: 'Please provide a valid webHook shortname'});
+				else res.status(400).json({status: 'OK', message: 'webHook not found', deleted: false});
+			}).catch(function(err){ res.status(400).json({status: 'error', error: err }); });
+			else res.status(400).json({status: 'error', error: 'Body not valid.'});
+		} else res.status(400).json({status: 'error', error: 'Please provide a valid webHook shortname'});
 	});
 
 	// webHooks: POST /api/webhook/trigger/:webHookShortname (trigger a webHook. It requires a JSON body that will be turned over to the webHook URLs.)
@@ -307,7 +307,7 @@ module.exports = function(app, io, rf433mhz, dbFunctions, webHooks){
 			webHooks.trigger(req.params.webHookShortname, body);
 			res.status(200).json({status: 'OK', message: 'webHooks called!', called: true});
 
-		} else res.status(500).json({status: 'error', error: 'Please provide a valid webHook shortname'});
+		} else res.status(400).json({status: 'error', error: 'Please provide a valid webHook shortname'});
 	});
 
 
@@ -341,12 +341,12 @@ module.exports = function(app, io, rf433mhz, dbFunctions, webHooks){
 function commuteSwitch(req, res, dbFunctions, rf433mhz, io, on){
 	if (typeof req.params.shortname !== 'undefined')
 		dbFunctions.getCard({shortname: req.params.shortname, type: 'switch'}).then(function(docs){
-			if (docs.length === 0) return res.status(500).json({status: 'error', error: 'no device found for given shortname'});
+			if (docs.length === 0) return res.status(400).json({status: 'error', error: 'no device found for given shortname'});
 			var card = docs[0];
 			var code_to_send = (on) ? card.device.on_code : card.device.off_code;
 			// send the code.
 			rf433mhz.send(code_to_send, function(err, out){
-    			if(err) return res.status(500).json({status: 'error', error: err.toString()});
+    			if(err) return res.status(400).json({status: 'error', error: err.toString()});
     			dbFunctions.setSwitchStatus(card._id, on);
     			// eventually update UI
     			io.emit('uiSwitchToggle', {card_id: card._id, set: on, sound: card.device.notification_sound});
@@ -355,10 +355,10 @@ function commuteSwitch(req, res, dbFunctions, rf433mhz, io, on){
     		});
 
 		}, function(err){
-			res.status(500).json({status: 'error', error: err.toString()});
+			res.status(400).json({status: 'error', error: err.toString()});
 		});
 	else
-		res.status(500).json({status: 'error', error: 'Please provide a valid shortname'});
+		res.status(400).json({status: 'error', error: 'Please provide a valid shortname'});
 }
 
 
