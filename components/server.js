@@ -11,8 +11,8 @@ var cons = require('consolidate');
 module.exports = function(argv, _cb){
 
   // Setting up parameters passed by CLI
-  if (argv.username && argv.password) { config.username = argv.username.trim(); config.password = argv.password.trim();}
-  if (argv.port){ config.server_port = argv.port; }
+  if (argv.username && argv.password) { config.username = argv.username.trim(); config.password = argv.password.trim(); }
+  config.server_port = argv.port || process.env.PORT || config.server_port;
 
   // Starting Server
   server.listen(config.server_port);
