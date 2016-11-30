@@ -109,6 +109,7 @@ module.exports = function(argv, module_callback){
 	function choose_port(whatToUse){
 		var serialPort = require('serialport');
 		serialPort.list(function (err, ports) {
+			if (process.env.NODE_ENV === 'development') ports.push('/dev/ttyVIRTUAL');
 			if (ports.length === 0) { debug('No ports available'); return;}
 
 			console.log('Selectable serial ports:');
