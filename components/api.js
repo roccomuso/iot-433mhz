@@ -342,7 +342,8 @@ module.exports = function(app, io, rf433mhz, dbFunctions, webHooks){
 			cache: true,
 			title: 'IoT 433Mhz',
 			backgrounds: JSON.stringify(BACKGROUNDS),
-			version: version
+			version: version,
+			googleAnalyticsID: 'UA-5606214-9'
 		});
 	});
 
