@@ -5,7 +5,7 @@ var debug = require('debug')('test-suite');
 var http = require('http');
 var fs = require('fs');
 var path = require('path');
-var iot = require('../index');
+var iot;
 var emitter;
 
 // IMPLEMENTED TESTS:
@@ -66,8 +66,8 @@ var emitter;
 describe('Auth >', function() {
 
     before(function(done) {
-        //
-
+        // TODO
+        iot = require('../index');
         done();
 
     });
@@ -83,7 +83,7 @@ describe('Serial Port >', function(){
 
     after(function(done) {
         // TODO
-            done();
+        done();
     });
 
 });
