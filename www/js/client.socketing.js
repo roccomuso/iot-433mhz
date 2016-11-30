@@ -1,6 +1,6 @@
 	// set up your socket
 
-	var socket = io.connect('http://' + location.host, {
+	var socket = io.connect('//' + location.host, {
 		'reconnect': true,
 		'reconnection delay': 50,
 		'max reconnection attempts': 300
