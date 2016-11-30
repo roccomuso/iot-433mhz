@@ -9,7 +9,9 @@
   },
   "scripts": {
     "start": "node index.js",
-    "test": "nsp check"
+    "test": "npm run integration_test && npm run security_check",
+    "integration_test": "NODE_ENV=development mocha --timeout=5000 test/**/*.js",
+    "security_check": "nsp check"
   },
   "repository": {
     "type": "git",
@@ -49,6 +51,12 @@
     "serialport": "4.0.6",
     "socket.io": "1.7.1",
     "validator": "4.5.0",
+    "virtual-serialport": "^0.3.1",
     "yargs": "4.8.1"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.2.0",
+    "nsp": "^2.6.2"
   }
 }
