@@ -8,7 +8,8 @@
     "iot-433mhz": "./index.js"
   },
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "test": "nsp check"
   },
   "repository": {
     "type": "git",
@@ -30,23 +31,23 @@
   "author": "Rocco Musolino",
   "license": "MIT",
   "dependencies": {
-    "async": "2.0.0",
+    "async": "2.1.4",
     "basic-auth": "1.0.3",
     "body-parser": "1.14.2",
     "chalk": "1.1.3",
     "console-mirroring": "1.0.21",
     "consolidate": "0.14.1",
     "debug": "^2.2.0",
-    "express": "4.13.3",
+    "express": "4.14.0",
     "figlet": "1.1.2",
     "multer": "1.1.0",
     "mustache": "2.2.1",
     "nedb": "1.8.0",
-    "node-webhooks": "1.1.2",
+    "node-webhooks": "1.1.3",
     "prompt": "1.0.0",
-    "request": "2.69.0",
-    "serialport": "4.0.1",
-    "socket.io": "1.4.8",
+    "request": "2.79.0",
+    "serialport": "4.0.6",
+    "socket.io": "1.7.1",
     "validator": "4.5.0",
     "yargs": "4.8.1"
   }
