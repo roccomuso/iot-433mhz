@@ -11,7 +11,6 @@ var rf433mhz = function(board){
 
 	var type;
 	// serialport module
-	var port;
 	var serial; // require('serialport');
 	// rpi-433 module
 	var rpi433; // require('rpi-433');
@@ -23,8 +22,7 @@ var rf433mhz = function(board){
 
 		type = (board.platform == 'rpi' && !config.platforms.rpi['use-external-arduino']) ? 'rpi' : 'arduino';
 		if (type === 'arduino'){
-			port = board.port;
-			var SerialPort = (process.env.NODE_ENV === 'development') ? require('virtual-serialport'): require('serialport');
+			var SerialPort = (process.env.NODE_ENV === 'development') ? require('./virtual-serialport'): require('serialport');
 			serial = new SerialPort(board.port, {
   				parser: SerialPort.parsers.readline('\n'),
   				baudRate: config.arduino_baudrate,
@@ -121,9 +119,10 @@ module.exports = function(argv, module_callback){
 			});
 
 
-			if (argv.serialport){
+			if (argv.serialport || process.env.SERIAL_PORT){
 				// return choosen port
-				var classe = new rf433mhz({platform: whatToUse, port: argv.serialport.trim()});
+				var port = argv.serialport ? argv.serialport.trim(): process.env.SERIAL_PORT.trim();
+				var classe = new rf433mhz({platform: whatToUse, port: port});
 		   		module_callback(classe);
 			}else{
 				prompt.start();
