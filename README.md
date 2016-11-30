@@ -178,6 +178,13 @@ That shows something like that:
 
 ![iot-433mhz cli options](https://github.com/roccomuso/iot-433mhz/blob/master/other/pics/iot-433mhz-cli-options.PNG?raw=true "iot-433mhz cli options")
 
+You can provide some parameter also as ENV variables:
+
+    NODE_ENV=development  # for virtual serial port
+    PORT=8080  # web server port
+    SERIAL_PORT=/dev/ttyUSB0  # serial port
+
+
 ## Built-in Web Interface
 
 Reachable on the <code>http://serverAddress:PORT</code>, the web <code>server_port</code> is defined in <code>config.json</code>, default's value is 8080. It works well in browsers like Chrome (*reccomended*), Firefox, Safari, Opera, Microsoft Edge (it doesn't on Internet Explorer, avoid it).
