@@ -1,6 +1,6 @@
 {
   "name": "iot-433mhz",
-  "version": "1.0.31",
+  "version": "1.0.32",
   "description": "Node server to handle 433mhz outlets and sensors.",
   "main": "index.js",
   "preferGlobal": true,
@@ -51,7 +51,6 @@
     "serialport": "4.0.6",
     "socket.io": "1.7.1",
     "validator": "4.5.0",
-    "virtual-serialport": "^0.3.1",
     "yargs": "4.8.1"
   },
   "devDependencies": {
