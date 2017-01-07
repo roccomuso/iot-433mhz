@@ -22,7 +22,7 @@ var rf433mhz = function(board){
 
 		type = (board.platform == 'rpi' && !config.platforms.rpi['use-external-arduino']) ? 'rpi' : 'arduino';
 		if (type === 'arduino'){
-			var SerialPort = (process.env.NODE_ENV === 'development') ? require('./virtual-serialport'): require('serialport');
+			var SerialPort = (process.env.NODE_ENV === 'development') ? require('virtual-serialport'): require('serialport');
 			serial = new SerialPort(board.port, {
   				parser: SerialPort.parsers.readline('\n'),
   				baudRate: config.arduino_baudrate,
