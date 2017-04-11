@@ -99,7 +99,7 @@ module.exports = function(db, config){
 					db.RFCODES.find({code: code, isIgnored: false}, function(err, docs){
 						if (err) return reject(err);
 
-						if (docs.length === 0) reject('no code founded');
+						if (docs.length === 0) reject('no code found');
 						else if (docs.length === 1 && docs[0].assignedTo === 'none')
 							resolve({isAvailable: true, assignedTo: docs[0].assignedTo});
 						else if (docs.length === 1 && docs[0].assignedTo !== 'none')
