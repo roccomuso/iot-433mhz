@@ -62,6 +62,8 @@ Tested and fully-working with **Node 4.4**.
     or
     sudo npm install iot-433mhz -g --unsafe-perm   (if installing from npm)
 
+Note: the reason for using the `--unsafe-perm` option is that when node-gyp tries to recompile any native libraries (eg. serialport) it tries to do so as a "nobody" user and then fails to get access to certain directories. Allowing it root access during install allows the dependencies to be installed correctly during the upgrade.
+
 If running on different platforms follow the platform-specific setup below:
 
 ## Browser Support
