@@ -1,6 +1,6 @@
 {
   "name": "iot-433mhz",
-  "version": "1.0.35",
+  "version": "1.0.36",
   "description": "Node server to handle 433mhz outlets and sensors.",
   "main": "index.js",
   "preferGlobal": true,

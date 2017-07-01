@@ -1,5 +1,6 @@
 ![IoT 433Mhz Logo](https://github.com/roccomuso/iot-433mhz/blob/master/other/pics/logo128x128.png?raw=true "Iot 433Mhz Logo")
 [![Build Status](https://travis-ci.org/roccomuso/iot-433mhz.svg?branch=master)](https://travis-ci.org/roccomuso/iot-433mhz) [![bitHound Overall Score](https://www.bithound.io/github/roccomuso/iot-433mhz/badges/score.svg)](https://www.bithound.io/github/roccomuso/iot-433mhz) [![NPM Version](https://img.shields.io/npm/v/iot-433mhz.svg)](https://www.npmjs.com/package/iot-433mhz) [![Dependency Status](https://david-dm.org/roccomuso/iot-433mhz.png)](https://david-dm.org/roccomuso/iot-433mhz)
+<span class="badge-patreon"><a href="https://patreon.com/roccomuso" title="Donate to this project using Patreon"><img src="https://img.shields.io/badge/patreon-donate-yellow.svg" alt="Patreon donate button" /></a></span>
 
       ___    _____     _  _  __________ __  __ _
      |_ _|__|_   _|   | || ||___ /___ /|  \/  | |__  ____
