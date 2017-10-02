@@ -40,7 +40,7 @@
     "console-mirroring": "1.0.21",
     "consolidate": "0.14.5",
     "debug": "^3.1.0",
-    "express": "4.14.0",
+    "express": "4.15.5",
     "figlet": "1.1.2",
     "multer": "1.1.0",
     "mustache": "2.2.1",
