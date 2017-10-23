@@ -377,4 +377,4 @@ Inspired by [pimatic-homeduino](https://www.npmjs.com/package/pimatic-homeduino-
 
 # Author
 
-### @ Rocco Musolino - [hackerstribe.com](http://www.hackerstribe.com)
+### Rocco Musolino - [@roccomuso](https://twitter.com/roccomuso)
