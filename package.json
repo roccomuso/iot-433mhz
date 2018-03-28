@@ -37,7 +37,7 @@
     "basic-auth": "1.1.0",
     "body-parser": "1.18.2",
     "chalk": "2.3.2",
-    "console-mirroring": "1.0.21",
+    "console-mirroring": "1.0.3",
     "consolidate": "0.14.5",
     "debug": "^3.1.0",
     "express": "4.16.3",
