@@ -46,14 +46,14 @@ module.exports = function(dbFunctions, webHooks){
 								//card.iot_uid = uid; // si può eliminare. passato in URL
 								_postRequestJSON(url, card, uid, function (error, response, body) {
 								    if (error || response.statusCode !== 200) return reject('HTTP failed: '+ error);
-									resolve(body);
 								    debug('Telegram Notification sent! - Server responded with:', body);
+								    resolve(card);
 							  	});
 						  	});
 						}).catch(function(err){ reject(err); });
 					else{
 						debug('Telegram Notification disabled. Menu > Settings.');
-						resolve();
+						resolve(card);
 					}
 				}).catch(function(err){ reject(err); });
 			});
