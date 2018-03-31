@@ -26,8 +26,8 @@ var rf433mhz;
 
 // Starting Flow
 async.series({
-        init_db: function(callback){
-            debug('calling init_db');
+        initDB: function(callback){
+            debug('calling initDB');
             // load/create DB
             db.RFCODES = new Datastore({
                 filename: path.resolve(__dirname, './DB/rfcodes.db'),
@@ -52,15 +52,15 @@ async.series({
             dbFunctions = require('./components/dbFunctions.js')(db, config);
             callback(null, 1);
         },
-        ascii_logo: function(callback) {
-            debug('printing ascii_logo');
+        asciiLogo: function(callback) {
+            debug('printing asciiLogo');
             require('./components/ascii_logo.js')(function(logo) {
                 console.log(chalk.magenta(logo)); // print blue ascii logo
                 callback(null, 1);
             });
         },
-        init_webhooks: function(callback){
-            debug('calling init_webhooks');
+        initWebHooks: function(callback){
+            debug('calling initWebHooks');
             // Initialize WebHooks module.
             var WebHooks = require('node-webhooks');
             webHooks = new WebHooks({
@@ -77,16 +77,16 @@ async.series({
             });
 
         },
-        load_db: function(callback) {
+        loadDB: function(callback) {
             // Put default demo cards if CARDS DB is empty
             dbFunctions.initDBCards(require('./components/demo_cards.json')).then(dbFunctions.initDBSettings).then(function(settings) {
                 callback(null, 1);
             }).catch(function(err) {
-                console.log('load_db error:', err);
+                console.log('loadDB error:', err);
                 console.log(err.stack);
             });
         },
-        init_rf: function(callback) {
+        initRF: function(callback) {
             // Listen on Arduino Serial Port or RF433Mhz chip if on RPi platform.
             rf433mhz.openSerialPort(function() {
                 setTimeout(function() {
