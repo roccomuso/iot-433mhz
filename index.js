@@ -9,6 +9,7 @@ var async = require('async');
 var chalk = require('chalk');
 var fs = require('fs');
 var path = require('path');
+var dotlocal = require('dotlocal')();
 var config = require('./config.json');
 var argv = require('./components/arguments-handler.js');
 
@@ -76,6 +77,13 @@ async.series({
                 callback(null, rf433mhz);
             });
 
+        },
+        dotLocal: function (callback) {
+            var name = config.app_title.toLowerCase()
+            dotlocal.announce(name).on('question', function() {
+              debug('Somebody resolving '+name+'.local')
+            })
+            callback(null)
         },
         loadDB: function(callback) {
             // Put default demo cards if CARDS DB is empty

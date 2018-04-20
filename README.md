@@ -198,6 +198,8 @@ You can provide some parameter also as ENV variables:
 
 Reachable on the <code>http://serverAddress:PORT</code>, the web <code>server_port</code> is defined in <code>config.json</code>, default's value is 8080. It works well in browsers like Chrome (*reccomended*), Firefox, Safari, Opera, Microsoft Edge (it doesn't on Internet Explorer, avoid it).
 
+**It also announce itself over mdns on the address `iot-433mhz.local`**, so you don't have to struggle to get the server ip address.
+
 Once you open the address on your browser an **authentication is required**.
 Username and password are stored inside the *config.json* file (default values are: root, root).
 
