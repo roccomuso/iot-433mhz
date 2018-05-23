@@ -6,6 +6,7 @@ var io = require('socket.io')(server)
 var config = require('../config.json') // config file
 var basicAuth = require('basic-auth')
 var cons = require('consolidate')
+var cors = require('cors')
 
 module.exports = function (argv, _cb) {
   // Setting up parameters passed by CLI
@@ -15,6 +16,9 @@ module.exports = function (argv, _cb) {
   // Starting Server
   server.listen(config.server_port)
   console.info('Server started on', getLocalIPAddress(), '- Port', config.server_port)
+
+  // enable cors
+  app.use(cors())
 
   // Auth function
   var auth = function (req, res, next) {
