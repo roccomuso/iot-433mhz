@@ -8,6 +8,14 @@ var basicAuth = require('basic-auth')
 var cons = require('consolidate')
 var cors = require('cors')
 
+var corsOptions = {
+  origin: function(origin, cb) {
+    cb(null, true)
+  },
+  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+  credentials: true
+}
+
 module.exports = function (argv, _cb) {
   // Setting up parameters passed by CLI
   if (argv.username && argv.password) { config.username = argv.username.trim(); config.password = argv.password.trim() }
@@ -18,7 +26,7 @@ module.exports = function (argv, _cb) {
   console.info('Server started on', getLocalIPAddress(), '- Port', config.server_port)
 
   // enable cors
-  app.use(cors())
+  app.use(cors(corsOptions))
 
   // Auth function
   var auth = function (req, res, next) {
