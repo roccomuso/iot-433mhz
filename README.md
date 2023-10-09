@@ -53,9 +53,15 @@ or Clone this Repo:
 
 <code>git clone https://github.com/roccomuso/iot-433mhz.git</code>
 
-Then don't forget to install all the dependencies with <code>npm install</code> (on UNIX system root privileges are required).
+Then don't forget to use the right Node version (install *nvm* to handle Node.js versions) and install all the dependencies.
 
-Tested and fully-working with **Node 4.4**.
+Tested and fully-working with `Node 6.17.1` and `Yarn 1.10.0`:
+
+```
+nvm install 6.17.1
+npm i -g yarn@1.10.0
+yarn install
+```
 
 **Heads Up**: On Raspberry Pi, you can encounter some issue installing all the dependencies, due to permission errors. If that happens try this: <code>sudo chown -R $USER:$GROUP ~/.npm</code> combined with running <code>npm cache clean</code> to get any busted packages out of your cache. In addition, if the error still persist, try adding the flag <code>--unsafe-perm</code>:
 
