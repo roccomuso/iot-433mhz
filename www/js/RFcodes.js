@@ -1,6 +1,6 @@
 ;(function (window) {
 // events (publish subscribe) pattern [aka Event Emitter]
-  var _events = {
+  const _events = {
     events: {},
     on: function (eventName, fn) {
       this.events[eventName] = this.events[eventName] || []
@@ -8,7 +8,7 @@
     },
     off: function (eventName, fn) {
       if (this.events[eventName]) {
-        for (var i = 0; i < this.events[eventName].length; i++) {
+        for (let i = 0; i < this.events[eventName].length; i++) {
           if (this.events[eventName][i] === fn) {
             this.events[eventName].splice(i, 1)
             break
@@ -25,7 +25,7 @@
     }
   }
 
-  var Codes = function () { // Class RFcodes
+  const Codes = function () { // Class RFcodes
     // Attributes
     this.incoming_codes = {}
 
@@ -41,14 +41,14 @@
     }
 
     this.deleteCodes = function (codesArray) {
-      var self = this
+      const self = this
       codesArray.forEach(function (code) {
         self.deleteCode(code)
       })
     }
 
     this.getCodesInHTML = function () {
-      var html = '<option disabled selected> -- choose -- </option>'
+      let html = '<option disabled selected> -- choose -- </option>'
       Object.keys(this.incoming_codes).forEach(function (key) {
         html += '<option value="' + key + '">' + key + '</option>'
       })

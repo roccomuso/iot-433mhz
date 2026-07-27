@@ -1,6 +1,6 @@
 // set up your socket
 
-var socket = io.connect('//' + location.host, {
+const socket = io.connect('//' + location.host, {
   'reconnect': true,
   'reconnection delay': 50,
   'max reconnection attempts': 300
@@ -27,7 +27,7 @@ socket.on('initCards', function (initData) {
 
 // handle the new RFCode. Show a snackbar.
 socket.on('newRFCode', function (data) {
-  var _code = data.code
+  const _code = data.code
   events.emit('renderSnackbar', _code)
   ga('send', 'event', 'Core', 'newCode', 'New RF code', _code)
 })

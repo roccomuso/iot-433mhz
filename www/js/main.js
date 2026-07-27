@@ -11,7 +11,7 @@ $('#cards_container').mixItUp({animation: { animateResizeContainer: false}});
 (function () {
   // media query event handler
   if (matchMedia) { // matchMedia supported
-    var mq = window.matchMedia('(max-width: 600px)')
+    const mq = window.matchMedia('(max-width: 600px)')
     mq.addListener(WidthChange)
     WidthChange(mq)
   }
@@ -57,7 +57,7 @@ ion.sound({
 /* Handle Shake Event on Mobile Devices */
 
 // create a new instance of shake.js.
-var myShakeEvent = new Shake({
+const myShakeEvent = new Shake({
   threshold: 10
 })
 
@@ -75,7 +75,7 @@ function shakeEventDidOccur () {
 
 /* Init Favicon js */
 
-var favicon = new Favico({
+const favicon = new Favico({
   animation: 'popFade'
 })
-var badge = 0
+let badge = 0
