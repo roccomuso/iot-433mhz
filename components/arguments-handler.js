@@ -1,4 +1,4 @@
-var argv = require('yargs')
+const argv = require('yargs')
   .usage('Usage: iot-433mhz -s [serialPort] -d [debug] -p [serverPort] -u [username] -P [password]')
   .help('help')
   .alias('help', 'h')

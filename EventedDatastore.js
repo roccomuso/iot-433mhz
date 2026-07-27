@@ -1,208 +1,70 @@
-var util = require('util')
-var EventEmitter = require('events').EventEmitter
-var Datastore = require('nedb')
+const EventEmitter = require('events')
+const Datastore = require('@seald-io/nedb') // nedb doesn't provide listeners on DB events by default
 
-function EventedDatastore (options) {
-  var self = this
+// Wraps @seald-io/nedb's public insert/remove methods (instead of patching
+// private internals, which aren't part of the fork's stable API) to emit
+// 'inserted'/'removed' events with the affected document(s).
+class EventedDatastore extends Datastore {
+  constructor (options) {
+    super(options)
+    this.__events = new EventEmitter()
+  }
 
-  // Add EventEmitter capabilities
-  self.__events = new EventEmitter()
+  on (eventType, listener) {
+    return this.__events.on(eventType, listener)
+  }
 
-  options = options || {}
+  once (eventType, listener) {
+    return this.__events.once(eventType, listener)
+  }
 
-  var autoLoadOption = options.autoload || false
-  options.autoload = false
+  off (eventType, listener) {
+    return this.__events.removeListener(eventType, listener)
+  }
 
-  Datastore.call(self, options)
-  options.autoload = autoLoadOption
-  self.autoload = autoLoadOption
+  listeners (eventType) {
+    return this.__events.listeners(eventType)
+  }
 
-  // Temporary properties used to collect data for event emissions
-  self.__removedDocs = null
-  self.__modifications = null
+  insert (newDoc, callback) {
+    const cb = callback || function () {}
 
-  if (self.autoload) {
-    // Wait till the next tick to allow time for event listeners to be attached
-    process.nextTick(function () {
-      self.loadDatabase(options.onload || function (err) {
-        if (err) {
-          throw err
+    return super.insert(newDoc, (err, insertedDoc) => {
+      if (err) return cb(err)
+
+      if (this.__events.listeners('inserted').length > 0) {
+        const insertedDocs = Array.isArray(insertedDoc) ? insertedDoc : [insertedDoc]
+        insertedDocs.forEach((doc) => this.__events.emit('inserted', doc))
+      }
+
+      cb(null, insertedDoc)
+    })
+  }
+
+  remove (query, options, callback) {
+    if (typeof options === 'function') {
+      callback = options
+      options = {}
+    }
+    const cb = callback || function () {}
+
+    // nedb's remove() only returns the count of removed documents, so we
+    // need to look the matching docs up beforehand to emit their content.
+    super.find(query, (findErr, matchedDocs) => {
+      if (findErr) return cb(findErr)
+
+      super.remove(query, options, (err, numRemoved) => {
+        if (err) return cb(err)
+
+        if (this.__events.listeners('removed').length > 0 && numRemoved > 0) {
+          const removedDocs = options.multi ? matchedDocs : matchedDocs.slice(0, numRemoved)
+          removedDocs.forEach((doc) => this.__events.emit('removed', doc))
         }
+
+        cb(null, numRemoved)
       })
     })
   }
-}
-
-util.inherits(EventedDatastore, Datastore)
-
-EventedDatastore.prototype.on = function (eventType, listener) {
-  return this.__events.on(eventType, listener)
-}
-
-EventedDatastore.prototype.once = function (eventType, listener) {
-  return this.__events.once(eventType, listener)
-}
-
-EventedDatastore.prototype.listeners = function (eventType) {
-  return this.__events.listeners(eventType)
-}
-
-EventedDatastore.prototype.off = function (eventType, listener) {
-  return this.__events.removeListener(eventType, listener)
-}
-
-EventedDatastore.prototype._insert = function (newDoc, cb) {
-  var callback = cb || function () {}
-
-  var self = this
-
-  var eventedCallback = function (err, newDocs) {
-    if (err) {
-      return callback(err, newDocs)
-    }
-
-    var newDocsArr = util.isArray(newDocs) ? newDocs : [newDocs]
-
-    // Ensure there are listeners registered before making a bunch of unnecessary function calls to `emit`
-    if (self.listeners('inserted').length > 0) {
-      newDocsArr.forEach(function (newDoc) {
-        self.__events.emit('inserted', newDoc)
-      })
-    }
-
-    return callback(null, newDocs)
-  }
-
-  return Datastore.prototype._insert.call(self, newDoc, eventedCallback)
-}
-
-EventedDatastore.prototype._update = function (query, updateQuery, options, cb) {
-  var self = this
-
-  if (typeof options === 'function') {
-    cb = options
-    options = {}
-  }
-  var callback = cb || function () {}
-
-  var eventedCallback = function (err, numReplaced) {
-    if (err) {
-      return callback(err)
-    }
-
-    if (self.__modifications && self.__modifications.length > 0) {
-      var modifications = self.__modifications
-
-      // Remove the temporary property
-      self.__modifications = null
-
-      // Ensure there are listeners registered before making a bunch of unnecessary function calls to `emit`
-      if (self.listeners('updated').length > 0) {
-        modifications.forEach(function (mod) {
-          self.__events.emit('updated', mod.newDoc, mod.oldDoc)
-        })
-      }
-    }
-
-    return callback(null, numReplaced)
-  }
-
-  return Datastore.prototype._update.call(self, query, updateQuery, options, eventedCallback)
-}
-
-EventedDatastore.prototype.updateIndexes = function (modifications) {
-  // Add a new temporary property
-  this.__modifications = modifications
-
-  return Datastore.prototype.updateIndexes.apply(this, arguments)
-}
-
-EventedDatastore.prototype._remove = function (query, options, cb) {
-  var self = this
-
-  if (typeof options === 'function') {
-    cb = options
-    options = {}
-  }
-  var callback = cb || function () {}
-
-  // Add a new temporary property
-  if (!self.__removedDocs) {
-    self.__removedDocs = []
-  }
-
-  var eventedCallback = function (err, numRemoved) {
-    if (err) {
-      return callback(err)
-    }
-
-    if (self.__removedDocs && self.__removedDocs.length > 0) {
-      var removedDocs = self.__removedDocs
-
-      // Remove the temporary property
-      self.__removedDocs = null
-
-      // Ensure there are listeners registered before making a bunch of unnecessary function calls to `emit`
-      if (self.listeners('removed').length > 0) {
-        removedDocs.forEach(function (oldDoc) {
-          self.__events.emit('removed', oldDoc)
-        })
-      }
-    }
-
-    return callback(null, numRemoved)
-  }
-
-  return Datastore.prototype._remove.call(self, query, options, eventedCallback)
-}
-
-if (typeof Datastore.prototype._removedExpiredDocuments === 'function') {
-  EventedDatastore.prototype._removeExpiredDocuments = function (docs, cb) {
-    var self = this
-
-    var callback = cb || function () {}
-
-    // Add a new temporary property
-    if (!self.__removedDocs) {
-      self.__removedDocs = []
-    }
-
-    var eventedCallback = function (err, numExpired) {
-      if (err) {
-        return callback(err)
-      }
-
-      if (self.__removedDocs && self.__removedDocs.length > 0) {
-        var removedDocs = self.__removedDocs
-
-        // Remove the temporary property
-        self.__removedDocs = null
-
-        // Ensure there are listeners registered before making a bunch of unnecessary function calls to `emit`
-        if (self.listeners('removed').length > 0) {
-          removedDocs.forEach(function (oldDoc) {
-            self.__events.emit('removed', oldDoc)
-          })
-        }
-      }
-
-      return callback(null, numExpired)
-    }
-
-    return Datastore.prototype._removeExpiredDocuments.call(self, docs, eventedCallback)
-  }
-}
-
-EventedDatastore.prototype.removeFromIndexes = function (doc, cb) {
-  if (this.__removedDocs) {
-    if (util.isArray(doc)) {
-      this.__removedDocs.push.apply(this.__removedDocs, doc)
-    } else {
-      this.__removedDocs.push(doc)
-    }
-  }
-
-  return Datastore.prototype.removeFromIndexes.apply(this, arguments)
 }
 
 module.exports = EventedDatastore

@@ -1,14 +1,14 @@
-var path = require('path')
-var config = require('../config.json')
-var chalk = require('chalk')
+const path = require('path')
+const config = require('../config.json')
+const chalk = require('chalk')
 
 function noop () {}
-var firstCall = false
+let firstCall = false
 
-var PROJECT_NAME = config.debug_namespace // debug environment
+const PROJECT_NAME = config.debug_namespace // debug environment
 
 module.exports = function (customName) {
-  if (!module.parent) throw Error('module.parent not defined')
+  if (!module.parent) throw new Error('module.parent not defined')
 
   if (process.env.DEBUG === undefined && config.debug === true) { process.env.DEBUG = PROJECT_NAME + ':*' }
 
@@ -20,7 +20,7 @@ module.exports = function (customName) {
   }
 
   if (process.env.DEBUG) {
-    var sector = PROJECT_NAME + ':' + (customName || path.basename(module.parent.filename))
+    const sector = PROJECT_NAME + ':' + (customName || path.basename(module.parent.filename))
     return require('debug')(sector)
   } else { return noop }
 }

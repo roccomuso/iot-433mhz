@@ -1,4 +1,4 @@
-var crypto = require('crypto')
+const crypto = require('crypto')
 
 function _initializeRFcodes (data) { // data is the code received through serial
   if (typeof data === 'undefined') data = {}
@@ -14,7 +14,7 @@ function _initializeRFcodes (data) { // data is the code received through serial
 
 function _initializeCard (params, img_path) { // params received through API
   // Card table structure
-  var selected_device = {}
+  let selected_device = {}
   if (params.type === 'switch') {
     selected_device = {
       on_code: parseInt(params.on_code),
@@ -35,11 +35,11 @@ function _initializeCard (params, img_path) { // params received through API
     active: true,
     date: Math.floor(Date.now() / 1000),
     headline: params.headline,
-    shortname: params.shortname.trim().toLowerCase().replace(new RegExp(' ', 'g'), '-'),
+    shortname: params.shortname.trim().toLowerCase().replace(/ /g, '-'),
     card_body: params.card_body,
     background_color: params.background_color || '#FAFAFA',
     img: img_path || false, // false if card got no img.
-    room: params.room.trim().toLowerCase().replace(new RegExp(' ', 'g'), '-'),
+    room: params.room.trim().toLowerCase().replace(/ /g, '-'),
     type: params.type,
     device: selected_device
   }
@@ -47,8 +47,7 @@ function _initializeCard (params, img_path) { // params received through API
 
 function _initializeDBSettings () {
   // return settings DB structure
-
-  var settings = {
+  return {
     telegram: {
       notification_enabled: false,
       iot_uid: false
@@ -58,344 +57,238 @@ function _initializeDBSettings () {
       recipient_email: false
     }
   }
+}
 
-  return settings
+// Thin Promise wrappers around the callback-based nedb API. We deliberately
+// go through the plain callback methods (not the datastore's own
+// find/insert/updateAsync helpers) so that EventedDatastore's 'inserted' and
+// 'removed' events keep firing for insert()/remove() calls.
+function findAsync (collection, query) {
+  return new Promise((resolve, reject) => {
+    collection.find(query, (err, docs) => (err ? reject(err) : resolve(docs)))
+  })
+}
+
+function findSortedAsync (collection, query, sort) {
+  return new Promise((resolve, reject) => {
+    collection.find(query).sort(sort).exec((err, docs) => (err ? reject(err) : resolve(docs)))
+  })
+}
+
+function insertAsync (collection, doc) {
+  return new Promise((resolve, reject) => {
+    collection.insert(doc, (err, newDoc) => (err ? reject(err) : resolve(newDoc)))
+  })
+}
+
+function updateAsync (collection, query, update, options) {
+  return new Promise((resolve, reject) => {
+    collection.update(query, update, options || {}, (err, numAffected) => (err ? reject(err) : resolve(numAffected)))
+  })
+}
+
+function removeAsync (collection, query, options) {
+  return new Promise((resolve, reject) => {
+    collection.remove(query, options || {}, (err, numRemoved) => (err ? reject(err) : resolve(numRemoved)))
+  })
 }
 
 module.exports = function (db, config) {
   // exposed methods
-  var methods = {
-    putCodeInDB: function (data, callback) {
-      return new Promise(function (resolve, reject) {
-        // check if the given code is already in DB, if not, put it.
-        db.RFCODES.find({code: data.code}, function (err, doc) {
-          if (err) return reject(err)
-          if (doc.length !== 0) {
-            // already exists
-            resolve('Code already exists in DB')
-          } else {
-            // put it
-            db.RFCODES.insert(_initializeRFcodes(data), function (err, newDoc) {
-              if (err) return reject(err)
-              resolve(newDoc)
-            })
-          }
-        })
-	            })
+  const methods = {
+    putCodeInDB: async function (data) {
+      // check if the given code is already in DB, if not, put it.
+      const doc = await findAsync(db.RFCODES, { code: data.code })
+      if (doc.length !== 0) return 'Code already exists in DB' // already exists
+      return insertAsync(db.RFCODES, _initializeRFcodes(data))
     },
-    isCodeIgnored: function (code) {
-      return new Promise(function (resolve, reject) {
-        db.RFCODES.find({code: code, isIgnored: true}, function (err, doc) {
-          if (err) return reject(err)
-          if (doc.length === 0) resolve(false)
-          else resolve(true)
-        })
-      })
+    isCodeIgnored: async function (code) {
+      const doc = await findAsync(db.RFCODES, { code: code, isIgnored: true })
+      return doc.length !== 0
     },
-    isCodeAvailable: function (code) {
-      return new Promise(function (resolve, reject) {
-        db.RFCODES.find({code: code, isIgnored: false}, function (err, docs) {
-          if (err) return reject(err)
+    isCodeAvailable: async function (code) {
+      const docs = await findAsync(db.RFCODES, { code: code, isIgnored: false })
 
-          if (docs.length === 0) reject('no code found')
-          else if (docs.length === 1 && docs[0].assignedTo === 'none') { resolve({isAvailable: true, assignedTo: docs[0].assignedTo}) } else if (docs.length === 1 && docs[0].assignedTo !== 'none') { resolve({isAvailable: false, assignedTo: docs[0].assignedTo}) } else return reject('More than one code reference in DB')
-        })
-      })
+      if (docs.length === 0) throw new Error('no code found')
+      if (docs.length === 1 && docs[0].assignedTo === 'none') return { isAvailable: true, assignedTo: docs[0].assignedTo }
+      if (docs.length === 1 && docs[0].assignedTo !== 'none') return { isAvailable: false, assignedTo: docs[0].assignedTo }
+      throw new Error('More than one code reference in DB')
     },
     getAvailableCodes: function () {
-      return new Promise(function (resolve, reject) {
-        db.RFCODES.find({isIgnored: false, assignedTo: 'none'}, function (err, docs) {
-          if (err) return reject(err)
-          resolve(docs)
-        })
-      })
+      return findAsync(db.RFCODES, { isIgnored: false, assignedTo: 'none' })
     },
     ignoreCode: function (code, val) {
-      return new Promise(function (resolve, reject) {
-        db.RFCODES.update({ code: code }, {$set: {isIgnored: val} }, {}, function (err, numReplaced) {
-          if (err) return reject(err)
-          resolve(numReplaced) // 1
-        })
-      })
+      return updateAsync(db.RFCODES, { code: code }, { $set: { isIgnored: val } }) // numReplaced (1)
     },
     getIgnoredCodes: function () {
-      return new Promise(function (resolve, reject) {
-        db.RFCODES.find({isIgnored: true}, function (err, docs) {
-          if (err) return reject(err)
-          resolve(docs)
-        })
-      })
+      return findAsync(db.RFCODES, { isIgnored: true })
     },
     getAllCodes: function () {
-      return new Promise(function (resolve, reject) {
-        db.RFCODES.find({}, function (err, docs) {
-          if (err) return reject(err)
-          resolve(docs)
-        })
-      })
+      return findAsync(db.RFCODES, {})
     },
     getAllCards: function () {
-      return new Promise(function (resolve, reject) {
-        db.CARDS.find({}).sort({date: -1}).exec(function (err, docs) {
-          if (err) return reject(err)
-          resolve(docs)
-        })
-      })
+      return findSortedAsync(db.CARDS, {}, { date: -1 })
     },
     getCard: function (identifiers) {
-      return new Promise(function (resolve, reject) {
-        if (!identifiers.hasOwnProperty('_id') && !identifiers.hasOwnProperty('shortname')) return reject('No valid parameters.')
-        db.CARDS.find(identifiers, function (err, docs) {
-          if (err) return reject(err)
-          resolve(docs)
-        })
-      })
+      if (!Object.hasOwn(identifiers, '_id') && !Object.hasOwn(identifiers, 'shortname')) return Promise.reject(new Error('No valid parameters.'))
+      return findAsync(db.CARDS, identifiers)
     },
-    checkDatabaseCorrispondence: function (params) {
+    checkDatabaseCorrispondence: async function (params) {
       // CHECK THAT:
       // shortname is unique
       // codes are in db.RFCODES
-      return new Promise(function (resolve, reject) {
-        db.CARDS.find({shortname: params.shortname}, function (err, doc) {
-          if (err) return reject(err)
-          if (doc.length !== 0) reject('shortname already exists in DB, choose another one.')
-          else {
-            // check for codes
-            var query = {}
-            if (params.type === 'switch') query = { $or: [{ code: parseInt(params.on_code), isIgnored: false, assignedTo: 'none' }, { code: parseInt(params.off_code), isIgnored: false, assignedTo: 'none' }] }
-            else if (params.type === 'alarm') query = {code: parseInt(params.trigger_code), isIgnored: false, assignedTo: 'none'}
-            else if (params.type === 'info') query = {}
+      const doc = await findAsync(db.CARDS, { shortname: params.shortname })
+      if (doc.length !== 0) throw new Error('shortname already exists in DB, choose another one.')
 
-            db.RFCODES.find(query, function (err, docs) {
-              var len = (params.type === 'switch') ? 2 : 1 // should have found 2 records in codes' DB for switch type
-              if (params.type === 'info') return resolve(true)
+      // check for codes
+      let query = {}
+      if (params.type === 'switch') query = { $or: [{ code: parseInt(params.on_code), isIgnored: false, assignedTo: 'none' }, { code: parseInt(params.off_code), isIgnored: false, assignedTo: 'none' }] }
+      else if (params.type === 'alarm') query = { code: parseInt(params.trigger_code), isIgnored: false, assignedTo: 'none' }
+      else if (params.type === 'info') return true
 
-              if (docs.length === len) { resolve(true) } else { reject('Make sure to assign free not Ignored existing codes.') }
-            })
-          }
-        })
-      })
+      const codes = await findAsync(db.RFCODES, query)
+      const len = (params.type === 'switch') ? 2 : 1 // should have found 2 records in codes' DB for switch type
+      if (codes.length !== len) throw new Error('Make sure to assign free not Ignored existing codes.')
+      return true
     },
-    putCardInDatabase: function (req, destination_path) {
+    putCardInDatabase: async function (req, destination_path) {
       // req.body e req.file
-      return new Promise(function (resolve, reject) {
-        // normalize 'room' text before DB insertion
-        db.CARDS.insert(_initializeCard(req.body, destination_path), function (err, newDoc) {
-          if (err) return reject(err)
-          // set as assigned the codes in DB (handles both 'switch' and 'alarm' type)
-          db.RFCODES.update({ $or: [{ code: parseInt(req.body.on_code) }, { code: parseInt(req.body.off_code) }, {code: parseInt(req.body.trigger_code)}] }, { $set: { assignedTo: req.body.shortname } }, { multi: true }, function (err, numReplaced) {
-							  // numReplaced = 2
-							  resolve(newDoc) // return the new Card just inserted
-          })
-        })
-      })
+      const newDoc = await insertAsync(db.CARDS, _initializeCard(req.body, destination_path))
+
+      // set as assigned the codes in DB (handles both 'switch' and 'alarm' type)
+      // NB. must match the normalized shortname stored on the card itself (see _initializeCard),
+      // otherwise assignedTo would reference a shortname no card actually has.
+      try {
+        await updateAsync(
+          db.RFCODES,
+          { $or: [{ code: parseInt(req.body.on_code) }, { code: parseInt(req.body.off_code) }, { code: parseInt(req.body.trigger_code) }] },
+          { $set: { assignedTo: newDoc.shortname } },
+          { multi: true }
+        )
+      } catch (err) {
+        console.error('putCardInDatabase: error assigning codes to the new card', err)
+      }
+
+      return newDoc // return the new Card just inserted
     },
-    initDBCards: function (demo_cards) {
-      return new Promise(function (resolve, reject) {
-        // check if any cards already exists
-        methods.getAllCards().then(function (cards) {
-          if (cards.length) { return resolve(cards) }
-          // no cards, let's put demo cards in DB
-          db.CARDS.insert(demo_cards, function (err, newDocs) {
-            if (err) return reject(err)
-            resolve(newDocs)
-          })
-        }).catch(function (err) {
-          reject(err)
-        })
-      })
+    initDBCards: async function (demo_cards) {
+      // put default demo cards in DB if it's empty
+      const cards = await methods.getAllCards()
+      if (cards.length) return cards
+      return insertAsync(db.CARDS, demo_cards)
     },
     getDBSettings: function () {
-      return new Promise(function (resolve, reject) {
-        db.SETTINGS.find({}, function (err, docs) {
-          if (err) return reject(err)
-          resolve(docs)
-        })
-      })
+      return findAsync(db.SETTINGS, {})
     },
-    initDBSettings: function () {
-      return new Promise(function (resolve, reject) {
-        methods.getDBSettings().then(function (settings) {
-          if (settings.length) { return resolve(settings) }
-          // no settings, let's init settings DB
-          db.SETTINGS.insert(_initializeDBSettings(), function (err, newDocs) {
-            if (err) return reject(err)
-            resolve(newDocs)
-          })
-        }).catch(function (err) {
-          reject(err)
-        })
-      })
+    initDBSettings: async function () {
+      const settings = await methods.getDBSettings()
+      if (settings.length) return settings
+      // no settings, let's init settings DB
+      return insertAsync(db.SETTINGS, _initializeDBSettings())
     },
-    generateNewUID: function () {
-      return new Promise(function (resolve, reject) {
-        // generate and save a new IoT UID.
-        var new_uid = crypto.randomBytes(20).toString('hex')
-        db.SETTINGS.update({}, { $set: { 'telegram.iot_uid': new_uid } }, {}, function (err, numReplaced) {
-          if (err) return reject(err)
-          if (numReplaced === 1) resolve(new_uid)
-          else reject('error saving the new IoT UID')
-        })
-      })
+    generateNewUID: async function () {
+      // generate and save a new IoT UID.
+      const new_uid = crypto.randomBytes(20).toString('hex')
+      const numReplaced = await updateAsync(db.SETTINGS, {}, { $set: { 'telegram.iot_uid': new_uid } })
+      if (numReplaced !== 1) throw new Error('error saving the new IoT UID')
+      return new_uid
     },
-    getIotUID: function () { // sync function
-      return new Promise(function (resolve, reject) {
-        // get IoT UID from DB, it not exists let's create one:
-        db.SETTINGS.find({}, function (err, docs) {
-          if (err) return reject(err)
-          if (docs.length === 1) {
-            var _uid = docs[0].telegram.iot_uid
+    getIotUID: async function () {
+      // get IoT UID from DB, if it doesn't exist let's create one:
+      const docs = await findAsync(db.SETTINGS, {})
+      if (docs.length !== 1) throw new Error('No DB Structure found')
 
-            // doesn't exists let's generate one, save it and return it
-            if (_uid === false) {
-              methods.generateNewUID().then(function (uid) {
-                resolve(uid)
-              }).catch(function (err) {
-                reject(err)
-              })
-            } else resolve(_uid) // already exists, return it
-          } else reject('No DB Structure found')
-        })
-      })
+      const uid = docs[0].telegram.iot_uid
+      if (uid === false) return methods.generateNewUID() // doesn't exist yet, generate, save and return it
+      return uid // already exists, return it
     },
     deleteCard: function (identifiers) {
-      return new Promise(function (resolve, reject) {
-        // delete a single card, given his _id or shortname.
-        if (!identifiers.hasOwnProperty('_id') && !identifiers.hasOwnProperty('shortname')) return reject('No valid parameters.')
+      // delete a single card, given his _id or shortname.
+      if (!Object.hasOwn(identifiers, '_id') && !Object.hasOwn(identifiers, 'shortname')) return Promise.reject(new Error('No valid parameters.'))
+      return removeAsync(db.CARDS, identifiers, {})
+      // NB. the listener in index.js will delete the attached codes.
+    },
+    getSwitchCodes: async function (card_id) {
+      // get the switch codes for the specified card _id
+      const docs = await findAsync(db.CARDS, { _id: card_id })
+      if (!docs.length) throw new Error('no records found')
 
-        db.CARDS.remove(identifiers, {}, function (err, numRemoved) {
-					  if (err) return reject(err)
-					  resolve(numRemoved)
-					  // NB. the listener in index.js will delete the attached codes.
-        })
-      })
+      const card = docs[0]
+      if (card.type !== 'switch') throw new Error('Misleading card type.')
+      return { on_code: card.device.on_code, off_code: card.device.off_code, sound: card.device.notification_sound }
     },
-    getSwitchCodes: function (card_id) {
-      return new Promise(function (resolve, reject) {
-        // get the switch codes for the specified card _id
-        db.CARDS.find({_id: card_id}, function (err, docs) {
-          if (err) return reject(err)
-          if (docs.length) {
-            var card = docs[0]
-            if (card.type !== 'switch') return reject('Misleading card type.')
-            resolve({on_code: card.device.on_code, off_code: card.device.off_code, sound: card.device.notification_sound})
-          } else reject('no records found')
-        })
-      })
-    },
-    getSwitchStatus: function (identifiers) {
-      return new Promise(function (resolve, reject) {
-        // get switch status, given card _id or shortname.
-        if (!identifiers.hasOwnProperty('_id') && !identifiers.hasOwnProperty('shortname')) return reject('No valid parameters.')
-        identifiers.type = 'switch'
-        db.CARDS.find(identifiers, function (err, docs) {
-          if (err) return reject(err)
-          if (docs.length === 0) return reject('No card found for given identifiers')
-          resolve(docs[0].device.is_on)
-        })
-      })
+    getSwitchStatus: async function (identifiers) {
+      // get switch status, given card _id or shortname.
+      if (!Object.hasOwn(identifiers, '_id') && !Object.hasOwn(identifiers, 'shortname')) throw new Error('No valid parameters.')
+      identifiers.type = 'switch'
+      const docs = await findAsync(db.CARDS, identifiers)
+      if (docs.length === 0) throw new Error('No card found for given identifiers')
+      return docs[0].device.is_on
     },
     setSwitchStatus: function (card_id, is_on) {
-      return new Promise(function (resolve, reject) {
-        db.CARDS.update({ _id: card_id }, { $set: { 'device.is_on': is_on } }, {}, function (err, numReplaced) {
-					  if (err) return reject(err)
-					  resolve(numReplaced)
-        })
-      })
+      return updateAsync(db.CARDS, { _id: card_id }, { $set: { 'device.is_on': is_on } })
     },
-    alarmTriggered: function (cardShortname, type) {
-      return new Promise(function (resolve, reject) {
-        // check if it is an alarm card
-        db.CARDS.find({shortname: cardShortname, type: type}, function (err, docs) {
-          if (err) return reject(err)
-          if (docs.length) {
-            // it is an alarm card, update the DB last_alert field
-            var timestamp = Math.floor(Date.now() / 1000)
-            db.CARDS.update({ shortname: cardShortname }, { $set: { 'device.last_alert': timestamp } }, {}, function (err, numReplaced) {
-							  if (err) return reject(err)
-							  if (numReplaced) {
-							  	docs[0].device.last_alert = timestamp
-							  	resolve(docs[0])
-							  } else { reject('error updating last_alert') }
-            })
-          } else resolve(undefined)
-        })
-      })
-    },
-    muteCard: function (card_id) {
-      return new Promise(function (resolve, reject) {
-        // mute/unmute a card
-        db.CARDS.find({_id: card_id}, function (err, docs) {
-          if (docs.length) {
-            var new_val = !docs[0].device.notification_sound
-            db.CARDS.update({_id: card_id}, { $set: { 'device.notification_sound': new_val } }, {}, function (err, affected) {
-							  if (affected !== 1) return reject('error: no value updated')
-							  resolve(new_val)
-            })
-          } else return reject('error: no card found with _id', card_id)
-        })
-      })
-    },
-    armCard: function (identifiers) {
-      return new Promise(function (resolve, reject) {
-        // arm/disarm alarm type card
-        if (!identifiers.hasOwnProperty('_id') && !identifiers.hasOwnProperty('shortname')) return reject('No valid parameters.')
-        var query = (identifiers.hasOwnProperty('_id')) ? {_id: identifiers._id} : {shortname: identifiers.shortname}
-        query.type = 'alarm'
+    alarmTriggered: async function (cardShortname, type) {
+      // check if it is an alarm card
+      const docs = await findAsync(db.CARDS, { shortname: cardShortname, type: type })
+      if (!docs.length) return undefined
 
-        db.CARDS.find(query, function (err, docs) {
-          if (docs.length) {
-            var new_val = !docs[0].device.armed
-            if (typeof identifiers.arm === 'boolean') new_val = identifiers.arm // for api arm/disarm requests
-            db.CARDS.update(query, { $set: { 'device.armed': new_val } }, {}, function (err, affected) {
-							  if (affected !== 1) return reject('error: no value updated')
-							  resolve({card_id: docs[0]._id, affected: affected, is_armed: new_val})
-            })
-          } else return reject('error: no card found with given identifiers ', identifiers.toString())
-        })
-      })
+      // it is an alarm card, update the DB last_alert field
+      const timestamp = Math.floor(Date.now() / 1000)
+      const numReplaced = await updateAsync(db.CARDS, { shortname: cardShortname }, { $set: { 'device.last_alert': timestamp } })
+      if (!numReplaced) throw new Error('error updating last_alert')
+
+      docs[0].device.last_alert = timestamp
+      return docs[0]
     },
-    armDisarmAll: function (arm) {
-      return new Promise(function (resolve, reject) {
-        // arm/disarm all Alarm type cards.
-        db.CARDS.update({type: 'alarm'}, { $set: { 'device.armed': arm } }, {multi: true}, function (err, affected) {
-          if (err) return reject(err)
-					  var aff = affected || 'no cards affected'
-					  resolve({affected: aff})
-        })
-      })
+    muteCard: async function (card_id) {
+      // mute/unmute a card
+      const docs = await findAsync(db.CARDS, { _id: card_id })
+      if (!docs.length) throw new Error(`error: no card found with _id ${card_id}`)
+
+      const new_val = !docs[0].device.notification_sound
+      const affected = await updateAsync(db.CARDS, { _id: card_id }, { $set: { 'device.notification_sound': new_val } })
+      if (affected !== 1) throw new Error('error: no value updated')
+      return new_val
     },
-    toggleTelegram: function (status) {
-      return new Promise(function (resolve, reject) {
-        // enable/disable telegram notification
-        if (typeof status !== 'boolean') return reject('toggleTelegram: boolean expected')
-        db.SETTINGS.update({}, {$set: {'telegram.notification_enabled': status} }, {}, function (err, numReplaced) {
-          if (err) return reject(err)
-          if (numReplaced === 1) resolve(status)
-          else reject('Error: Zero or More than one telegram entry modified in settings.')
-        })
-      })
+    armCard: async function (identifiers) {
+      // arm/disarm alarm type card
+      if (!Object.hasOwn(identifiers, '_id') && !Object.hasOwn(identifiers, 'shortname')) throw new Error('No valid parameters.')
+      const query = Object.hasOwn(identifiers, '_id') ? { _id: identifiers._id } : { shortname: identifiers.shortname }
+      query.type = 'alarm'
+
+      const docs = await findAsync(db.CARDS, query)
+      if (!docs.length) throw new Error(`error: no card found with given identifiers ${JSON.stringify(identifiers)}`)
+
+      let new_val = !docs[0].device.armed
+      if (typeof identifiers.arm === 'boolean') new_val = identifiers.arm // for api arm/disarm requests
+      const affected = await updateAsync(db.CARDS, query, { $set: { 'device.armed': new_val } })
+      if (affected !== 1) throw new Error('error: no value updated')
+      return { card_id: docs[0]._id, affected: affected, is_armed: new_val }
     },
-    toggleEmail: function (status) {
-      return new Promise(function (resolve, reject) {
-        // enable/disable Email notification
-        if (typeof status !== 'boolean') return reject('toggleEmail: boolean expected')
-        db.SETTINGS.update({}, {$set: {'email.notification_enabled': status} }, {}, function (err, numReplaced) {
-          if (err) return reject(err)
-          if (numReplaced === 1) resolve(status)
-          else reject('Error: Zero or More than one Email entry modified in settings.')
-        })
-      })
+    armDisarmAll: async function (arm) {
+      // arm/disarm all Alarm type cards.
+      const affected = await updateAsync(db.CARDS, { type: 'alarm' }, { $set: { 'device.armed': arm } }, { multi: true })
+      return { affected: affected || 0 }
     },
-    isTelegramEnabled: function () {
-      return new Promise(function (resolve, reject) {
-        // check whether telegram is enabled or disabled.
-        db.SETTINGS.find({'telegram.notification_enabled': true}, function (err, docs) {
-          if (err) return reject(err)
-          if (docs.length) resolve(true)
-          else resolve(false)
-        })
-      })
+    toggleTelegram: async function (status) {
+      // enable/disable telegram notification
+      if (typeof status !== 'boolean') throw new Error('toggleTelegram: boolean expected')
+      const numReplaced = await updateAsync(db.SETTINGS, {}, { $set: { 'telegram.notification_enabled': status } })
+      if (numReplaced !== 1) throw new Error('Error: Zero or More than one telegram entry modified in settings.')
+      return status
+    },
+    toggleEmail: async function (status) {
+      // enable/disable Email notification
+      if (typeof status !== 'boolean') throw new Error('toggleEmail: boolean expected')
+      const numReplaced = await updateAsync(db.SETTINGS, {}, { $set: { 'email.notification_enabled': status } })
+      if (numReplaced !== 1) throw new Error('Error: Zero or More than one Email entry modified in settings.')
+      return status
+    },
+    isTelegramEnabled: async function () {
+      // check whether telegram is enabled or disabled.
+      const docs = await findAsync(db.SETTINGS, { 'telegram.notification_enabled': true })
+      return docs.length > 0
     }
   }
 

@@ -1,15 +1,14 @@
-var express = require('express') // Get the module
-var app = express()
-var bodyParser = require('body-parser')
-var server = require('http').Server(app)
-var io = require('socket.io')(server)
-var config = require('../config.json') // config file
-var basicAuth = require('basic-auth')
-var cons = require('consolidate')
-var cors = require('cors')
+const express = require('express') // Get the module
+const app = express()
+const server = require('http').Server(app)
+const io = require('socket.io')(server)
+const config = require('../config.json') // config file
+const basicAuth = require('basic-auth')
+const cons = require('consolidate')
+const cors = require('cors')
 
-var corsOptions = {
-  origin: function(origin, cb) {
+const corsOptions = {
+  origin: function (origin, cb) {
     cb(null, true)
   },
   optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
@@ -29,13 +28,13 @@ module.exports = function (argv, _cb) {
   app.use(cors(corsOptions))
 
   // Auth function
-  var auth = function (req, res, next) {
+  const auth = function (req, res, next) {
     function unauthorized (res) {
       res.set('WWW-Authenticate', 'Basic realm=Authorization Required')
       return res.status(401).send('Unauthorized')
     }
 
-    var user = basicAuth(req)
+    const user = basicAuth(req)
 
     if (!user || !user.name || !user.pass) {
       return unauthorized(res)
@@ -52,7 +51,7 @@ module.exports = function (argv, _cb) {
   app.use(auth)
 
   // set middleware
-  app.use(bodyParser.json())
+  app.use(express.json())
 
   // assign the mustache engine to .html files
   app.engine('html', cons.mustache)
@@ -62,19 +61,19 @@ module.exports = function (argv, _cb) {
   app.set('views', __dirname + '/../www/views')
 
   // API and Web Server + Socket part
-  _cb({http: app, io: io})
+  _cb({ http: app, io: io })
 }
 
 // utility function
 function getLocalIPAddress () {
   // synchronous method
-  var interfaces = require('os').networkInterfaces()
-  var IPs = []
-  for (var devName in interfaces) {
-    var iface = interfaces[devName]
+  const interfaces = require('os').networkInterfaces()
+  const IPs = []
+  for (const devName in interfaces) {
+    const iface = interfaces[devName]
 
-    for (var i = 0; i < iface.length; i++) {
-      var alias = iface[i]
+    for (let i = 0; i < iface.length; i++) {
+      const alias = iface[i]
       if (alias.family === 'IPv4' && alias.address !== '127.0.0.1' && !alias.internal) { IPs.push(alias.address) }
     }
   }

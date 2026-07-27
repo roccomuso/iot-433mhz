@@ -1,12 +1,12 @@
-var chai = require('chai');
-var expect = chai.expect;
-var should = chai.should();
-var debug = require('debug')('test-suite');
-var http = require('http');
-var fs = require('fs');
-var path = require('path');
-var iot;
-var emitter;
+const chai = require('chai')
+const expect = chai.expect
+const should = chai.should()
+const debug = require('debug')('test-suite')
+const http = require('http')
+const fs = require('fs')
+const path = require('path')
+let iot
+let emitter
 
 // IMPLEMENTED TESTS:
 
@@ -62,28 +62,24 @@ var emitter;
 
 */
 
+describe('Auth >', function () {
+  before(function (done) {
+    // TODO
+    // avoid the interactive serial-port prompt so `index.js` can boot unattended in CI
+    if (!process.env.SERIAL_PORT) process.env.SERIAL_PORT = '/dev/ttyVIRTUAL'
+    iot = require('../index')
+    done()
+  })
 
-describe('Auth >', function() {
+  it('...', function (done) {
+    // TODO
+    done()
+  })
+})
 
-    before(function(done) {
-        // TODO
-        iot = require('../index');
-        done();
-
-    });
-
-    it('...', function(done) {
-        // TODO
-        done();
-    });
-
-});
-
-describe('Serial Port >', function(){
-
-    after(function(done) {
-        // TODO
-        done();
-    });
-
-});
+describe('Serial Port >', function () {
+  after(function (done) {
+    // TODO
+    done()
+  })
+})
