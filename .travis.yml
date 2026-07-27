@@ -3,11 +3,13 @@ language: node_js
 sudo: required
 
 node_js:
-  - "0.10"
-  - "0.12"
-  - "4.4.7"
-  - "6.2.1"
+  - "22"
 
 cache:
+  yarn: true
   directories:
     - node_modules
+
+install:
+  - corepack enable
+  - yarn install --frozen-lockfile

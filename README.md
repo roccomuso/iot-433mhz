@@ -55,13 +55,15 @@ or Clone this Repo:
 
 Then don't forget to use the right Node version (install *nvm* to handle Node.js versions) and install all the dependencies.
 
-Tested and fully-working with `Node 6.17.1` and `Yarn 1.10.0`:
+Requires `Node.js >= 22` and `Yarn`:
 
 ```
-nvm install 6.17.1
-npm i -g yarn@1.10.0
+nvm install 22
+corepack enable   # or: npm i -g yarn
 yarn install
 ```
+
+The project pins its package manager via the `packageManager` field in `package.json` (Yarn Classic `1.22.22`), so if you have [Corepack](https://nodejs.org/api/corepack.html) enabled (bundled with Node.js), running `yarn` in this repo automatically uses the right version - no separate global Yarn install needed.
 
 **Heads Up**: On Raspberry Pi, you can encounter some issue installing all the dependencies, due to permission errors. If that happens try this: <code>sudo chown -R $USER:$GROUP ~/.npm</code> combined with running <code>npm cache clean</code> to get any busted packages out of your cache. In addition, if the error still persist, try adding the flag <code>--unsafe-perm</code>:
 
@@ -77,7 +79,7 @@ If running on different platforms follow the platform-specific setup below:
 
 ![IE](https://cloud.githubusercontent.com/assets/398893/3528325/20373e76-078e-11e4-8e3a-1cb86cf506f0.png "Internet Explorer") | ![Chrome](https://cloud.githubusercontent.com/assets/398893/3528328/23bc7bc4-078e-11e4-8752-ba2809bf5cce.png "Google Chrome") | ![Firefox](https://cloud.githubusercontent.com/assets/398893/3528329/26283ab0-078e-11e4-84d4-db2cf1009953.png "Firefox") | ![Opera](https://cloud.githubusercontent.com/assets/398893/3528330/27ec9fa8-078e-11e4-95cb-709fd11dac16.png "Opera") | ![Safari](https://cloud.githubusercontent.com/assets/398893/3528331/29df8618-078e-11e4-8e3e-ed8ac738693f.png "Safari")
 --- | --- | --- | --- | --- |
-IE 11+ ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
+✘ (unsupported) | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
 
 # Specific Setup
 
@@ -117,10 +119,10 @@ To use iot-433mhz on Raspberry Pi first do a **system update**:
 - <code>sudo rpi-update</code>.
 - Reboot.
 
-Then install Node.js:
+Then install Node.js (the old `node-arm.herokuapp.com` .deb is long dead - use `nvm` instead, it works fine on Raspberry Pi's ARM architecture):
 
-    wget http://node-arm.herokuapp.com/node_latest_armhf.deb
-    sudo dpkg -i node_latest_armhf.deb
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+    nvm install 22
     # Check installation
     node -v
 
